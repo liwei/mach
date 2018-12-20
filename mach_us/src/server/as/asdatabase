@@ -1,0 +1,17 @@
+#
+# Database format:
+#     Primary groups:   <user-name>:<group-id>:P:<full-name>:<owner-id>:<encry-password>:<membership-list>
+#     Secondary groups: <group-name>:<group-id>:S:<full-name>:<owner-id>:<member-list>:<membership-list>
+#
+sysop:1:S:System Administrator Group:1:11,12,13,14,15,16,10::
+anon:2:S:Default Group:1:::
+mach:3:S:Mach Group:1:4::
+us:4:S:User Space Group:1:11,12,13,14,15,16:3:
+ufsroot:10:P:UFS root user:1:<7d2}^d{N%3]m%,5:1:
+mbj:11:P:Michael Jones:1:j!zX{4@pH5${51b-:1,4:
+rds:12:P:Robert Sansom:1:/0-;eu\4&6UIw;IU:1,4:
+rfr:13:P:Rick Rashid:1:*w"#o/ dLN(z!M;0:1,4:
+dpj:14:P:Dan Julin:1:X~PXF} d([05&K0?:1,4:
+dorr:15:P:Doug Orr:1:EI>Ws6&tEI>Ws6&t:1,4:
+sanzi:16:P:Rich Sanzi:1:u@;~.2.Q68j<*%92:1,4:
+random:17:P:J. Random User:1:pm#`b)M9;M4;6*+*::

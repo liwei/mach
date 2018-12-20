@@ -1,0 +1,1995 @@
+%!PS-Adobe-2.0
+%%Title: fs_fork_tcp_tour.mss
+%%DocumentFonts: (atend)
+%%Creator: Mary Thompson and Scribe 7(1700)
+%%CreationDate: 27 July 1994 15:17
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale
+    /showpage {} def
+    /letter {} def
+    /lettersmall {} def
+    /note {} def
+    } bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: 0 1
+BS
+0 SI
+13 /Helvetica-Bold AF
+11062 8148 MT
+(A Tour of Mach_US: Open/Read/Write, Fork/Exec, TCP Connect)SH
+10 /Helvetica AF
+8312 10681 MT
+(Authors: J. Mark Stevenson, Daniel P. Julin)SH
+12 /Helvetica-Bold AF
+7200 14436 MT
+(1. Intro)SH
+10 /Helvetica AF
+8312 15862 MT
+(The following is a quick and dirty not to describe the)
+459 W( flow of control/logic that occurs for)458 W
+7200 17288 MT
+(Open/Read/Write, Fork/Exec, TCP Connect.)SH
+8312 19855 MT
+(It's purpose is to give)
+58 W( people with a basic understanding of the structure and nature of Mach_US how)59 W
+7200 21281 MT
+(these individual actions happen, and by extrapolation, learn more about the system on the whole.)SH
+12 /Helvetica-Bold AF
+7200 25036 MT
+(2. File Open/Read/Write Tour)SH
+11 SS 
+7200 28718 MT
+(2.1. An Open Happens)SH
+10 /Symbol AF
+9242 30190 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Enter at emul_open\050pathname\051)SH
+/Symbol SF
+9242 32005 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Clean-up the pathname so that it can be compared against entries)
+270 W( in the prefix table:)269 W
+9980 33148 MT
+("foo//bar" -> "foo/bar","./foo" -> "foo", "foo/./bar" -> "foo/bar".  Do NOT remove "..")454 W
+9980 34291 MT
+(components, unless you are emulating a system other than vanilla)
+36 W( UNIX, where you need to)35 W
+9980 35434 MT
+(be very careful about symbolic links.)SH
+11 /Helvetica-Bold AF
+7200 39116 MT
+(2.2. Prefix Table)SH
+10 /Helvetica AF
+8312 40542 MT
+(Pathname matched against prefix)
+114 W( table, to find the longest matching prefix. This gives you a pointer)115 W
+7200 41968 MT
+(\050usName proxy\051 for a server where to start looking for the file)SH
+8312 44535 MT
+(The prefix table contains three types of entries: system, user, cache.)SH
+/Symbol SF
+9242 46007 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(System)SH
+7 /Symbol AF
+12160 47258 MT
+(\267)SH
+10 /Helvetica AF
+12760 47408 MT
+("system": permanent entries that configure the shape of the name)
+265 W( space for this)264 W
+12760 48551 MT
+(particular user:)SH
+7 /Symbol AF
+12160 50216 MT
+(\267)SH
+10 /Helvetica AF
+12760 50366 MT
+("/" -> server that handles the root of the UFS name space)SH
+7 /Symbol AF
+12160 52031 MT
+(\267)SH
+10 /Helvetica AF
+12760 52181 MT
+("/usr2", "/usr3", etc. -> other UFS servers in the system)SH
+7 /Symbol AF
+12160 53846 MT
+(\267)SH
+10 /Helvetica AF
+12760 53996 MT
+("/server" -> "root name server", that contains)
+291 W( mount points for other servers not)292 W
+12760 55139 MT
+(necessarily interesting in the UFS world)SH
+7 /Symbol AF
+12160 56804 MT
+(\267)SH
+10 /Helvetica AF
+12760 56954 MT
+(any other servers and prefixes that)
+45 W( you care to configure in the system, for example a)44 W
+12760 58097 MT
+(special server handling a super-fast "/tmp" file system, servers for other kinds of)
+125 W( file)126 W
+12760 59240 MT
+(systems \050"/afs"\051, etc.)SH
+7 /Symbol AF
+12160 60905 MT
+(\267)SH
+10 /Helvetica AF
+12760 61055 MT
+(the "system" entries effectively constitute)
+502 W( multiple roots for the name space,)501 W
+12760 62198 MT
+(independent of each other. You never need to go through one system entry to)
+29 W( reach a)30 W
+12760 63341 MT
+(server hanging behind another system entry)SH
+7 /Symbol AF
+12160 65006 MT
+(\267)SH
+10 /Helvetica AF
+12760 65156 MT
+(conversely, since)
+100 W( each system entry is independent of the others, there is no way to)99 W
+12760 66299 MT
+(establish a new system entry by)
+294 W( designating a server through previously-defined)295 W
+12760 67442 MT
+(entries. Each system entry must be established by "god", who provides a)
+48 W( hard pointer)47 W
+12760 68585 MT
+(\050proxy\051 to the target server, obtained through initialization magic \050or netname)
+148 W( for us)149 W
+12760 69728 MT
+(simple people...\051)SH
+7 /Symbol AF
+12160 71393 MT
+(\267)SH
+10 /Helvetica AF
+12760 71543 MT
+(note that each user/process may have a different set of system)
+20 W( entries in his/her prefix)19 W
+ES
+%%Page: 1 2
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(1)SH
+/Helvetica SF
+12760 7929 MT
+(table, and thus a different name)
+88 W( space. The config server is in charge of giving each)89 W
+12760 9072 MT
+(user this initial prefix table. Currently, everybody gets the same initial prefix table.)SH
+/Helvetica-Bold SF
+9980 10473 MT
+(User)SH
+/Helvetica SF
+12481 XM
+("user" entries: these can be manipulated by the user.)SH
+7 /Symbol AF
+12160 11724 MT
+(\267)SH
+10 /Helvetica AF
+12760 11874 MT
+(created by specifying a prefix and a path to an existing location in the name space:)SH
+/Symbol SF
+14802 13346 MT
+(\267)SH
+/Helvetica SF
+15540 XM
+(the path is)
+103 W( interpreted according to the current contents of the prefix table, i.e.)102 W
+15540 14489 MT
+(system entries and previously-created user entries.)SH
+/Symbol SF
+14802 16304 MT
+(\267)SH
+/Helvetica SF
+15540 XM
+(the existence of that path \050called "canonical path"\051 is the)
+42 W( big difference between)43 W
+15540 17447 MT
+(user entries and system entries.)
+144 W( System entries don't have one, and must be)143 W
+15540 18590 MT
+(installed by "god".)SH
+12760 19991 MT
+(after a user entry has been created, it acts like an alias to an "interesting" place in the)43 W
+12760 21134 MT
+(name space where the user like to go often)SH
+7 /Symbol AF
+12160 22799 MT
+(\267)SH
+10 /Helvetica AF
+12760 22949 MT
+(only example of system)
+220 W( entry in UNIX: "", pointing to the current directory for the)219 W
+12760 24092 MT
+(process. Note that since there exists a system entry named "/",)
+93 W( and since the rule of)94 W
+12760 25235 MT
+(prefix table operation is to look for the longest)
+107 W( matching prefix, absolute path names)106 W
+12760 26378 MT
+(will naturally go through the root,)
+107 W( and relative pathnames naturally go through this "")108 W
+12760 27521 MT
+(entry. You don't need any special-case code.)SH
+7 /Symbol AF
+12160 29186 MT
+(\267)SH
+10 /Helvetica AF
+12760 29336 MT
+(other systems may have additional user entries:  VMS)
+57 W( logical names, "tilde" names in)56 W
+12760 30479 MT
+(someone's paper, I forgot who.)SH
+/Helvetica-Bold SF
+9980 31880 MT
+(Cache)SH
+7 /Symbol AF
+12160 33131 MT
+(\267)SH
+10 /Helvetica AF
+12760 33281 MT
+(As described below, the pathname resolving logic will sometimes)
+300 W( iterate through)301 W
+12760 34424 MT
+(servers while traversing)
+91 W( a pathname. The "cache" entries are automatically managed)90 W
+12760 35567 MT
+(by the prefix table object to try and remember those steps)
+111 W( \050mount points/symlinks/..\051)112 W
+12760 36710 MT
+(taken in resolving a long pathname, and jump directly to the right server.)SH
+7 /Symbol AF
+12160 38375 MT
+(\267)SH
+10 /Helvetica AF
+12760 38525 MT
+(Also used to cache the evaluation of symbolic)
+273 W( links encountered during previous)272 W
+12760 39668 MT
+(pathname operations.)SH
+7200 41094 MT
+(Main advantages of the prefix table approach:)SH
+/Symbol SF
+9242 42566 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(easy customization of name spaces, which is a goal of many modern systems)SH
+/Symbol SF
+9242 44381 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(independence between servers: no need for one server to contain a)
+47 W( mount point for another)48 W
+9980 45524 MT
+(\050unless you want to\051)SH
+7 /Symbol AF
+12160 46775 MT
+(\267)SH
+10 /Helvetica AF
+12760 46925 MT
+(simplifies server implementation)SH
+7 /Symbol AF
+12160 48590 MT
+(\267)SH
+10 /Helvetica AF
+12760 48740 MT
+(no bottleneck at the server containing the mount point\050s\051)SH
+7 /Symbol AF
+12160 50405 MT
+(\267)SH
+10 /Helvetica AF
+12760 50555 MT
+(different users may see different mount points)SH
+9980 51956 MT
+(caching provides best possible performance in a multi-server world)SH
+8312 54523 MT
+(Main issue with prefix table approach is:)SH
+/Symbol SF
+9242 55995 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(the naming context is large, and potentially different)
+119 W( for each user. Difficult to transfer it to)118 W
+9980 57138 MT
+(another process that must operate on your behalf.)SH
+/Symbol SF
+9242 58953 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Some cached entries can be made incorrect by name motion.)SH
+11 /Helvetica-Bold AF
+7200 62635 MT
+(2.3. NS_Resolve Loop)SH
+10 /Helvetica AF
+8312 64061 MT
+(strip the prefix from the pathname, and invoke ns_resolve\050\051 with the remainder against)
+135 W( the usName)136 W
+7200 65487 MT
+(proxy obtained from the prefix table.)SH
+8312 68054 MT
+(emul_resolve\050\051 will return one of four results:)SH
+/Symbol SF
+9242 69526 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+("I have traversed the whole path, and found a file/tty/whatever at the)
+25 W( end. Here is a proxy for)24 W
+9980 70669 MT
+(this object."  We have found what we need; see below.)SH
+ES
+%%Page: 2 3
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(2)SH
+/Symbol SF
+9242 8000 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+("After traversing n characters in the path,)
+74 W( I have encountered a special "mount point" entry.)75 W
+9980 9143 MT
+(Here is a proxy for a usName object that was stored in the mount point.")SH
+7 /Symbol AF
+12160 10394 MT
+(\267)SH
+10 /Helvetica AF
+12760 10544 MT
+(Strip the first n characters off the path.)SH
+7 /Symbol AF
+12160 12209 MT
+(\267)SH
+10 /Helvetica AF
+12760 12359 MT
+(Call emul_resolve\050\051 with the new proxy.)SH
+/Symbol SF
+9242 14174 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+("After traversing n characters in the path, I have encountered a special "symbolic link" entry.)43 W
+9980 15317 MT
+(Here is a proxy for the directory corresponding to)
+121 W( these first n characters of the path, and)122 W
+9980 16460 MT
+(here is the string stored in the symbolic link entry.")SH
+7 /Symbol AF
+12160 17711 MT
+(\267)SH
+10 /Helvetica AF
+12760 17861 MT
+(Strip the first n characters off the path.)SH
+7 /Symbol AF
+12160 19526 MT
+(\267)SH
+10 /Helvetica AF
+12760 19676 MT
+(Prepend the symbolic link string to the rest)
+119 W( of the path, or do whatever your system)118 W
+12760 20819 MT
+(requires to interpret symbolic links \050evaluate embedded)
+60 W( environment variables, @sys,)61 W
+12760 21962 MT
+(etc.\051)SH
+7 /Symbol AF
+12160 23627 MT
+(\267)SH
+10 /Helvetica AF
+12760 23777 MT
+(if the symlink is absolute \050begins with "/"\051, go back to the prefix table and)
+105 W( restart the)104 W
+12760 24920 MT
+(whole name resolution process with the new pathname.)SH
+7 /Symbol AF
+12160 26585 MT
+(\267)SH
+10 /Helvetica AF
+12760 26735 MT
+(if the symlink is)
+282 W( relative, call emul_resolve\050\051 with the proxy corresponding to the)283 W
+12760 27878 MT
+(directory containing the symlink, as returned previously.)SH
+9980 29279 MT
+("After traversing n characters of the path, I have run into a component)
+82 W( that does not match)81 W
+9980 30422 MT
+(any existing name in)
+448 W( my name space. Here is a usName proxy for the directory)449 W
+9980 31565 MT
+(corresponding to the first n characters of the path.")SH
+7 /Symbol AF
+12160 32816 MT
+(\267)SH
+10 /Helvetica AF
+12760 32966 MT
+(if the next component in)
+168 W( the path name is "..", interpret it according to the rules of)167 W
+12760 34109 MT
+(whichever system)
+9 W( you are emulating, construct a modified pathname, and continue the)10 W
+12760 35252 MT
+(name resolution with it, as you would for a symlink or mount point.)SH
+7 /Symbol AF
+12160 36917 MT
+(\267)SH
+10 /Helvetica AF
+12760 37067 MT
+(if the next component in the)
+56 W( path name is some other string that you want to interpret)55 W
+12760 38210 MT
+(specially \050e.g.  "@sys"\051, interpret it and proceed as above)SH
+7 /Symbol AF
+12160 39875 MT
+(\267)SH
+10 /Helvetica AF
+12760 40025 MT
+(otherwise, declare "NAME_NOT_FOUND" and abort)SH
+8312 42592 MT
+(in UNIX, the handling of ".." through symbolic)
+97 W( links requires some tricky hackery. While processing a)98 W
+7200 44018 MT
+(full pathname, the emulation library logic actually constructs)
+211 W( a "canonical path" corresponding to the)210 W
+7200 45444 MT
+(original path, but with all the symlinks expanded. "..")
+240 W( is actually interpreted as a backspace in that)241 W
+7200 46870 MT
+(canonical path instead of the original path, and the resolving loop proceeds with)
+89 W( the modified canonical)88 W
+7200 48296 MT
+(path after the ".."  has been interpreted. The beauty of this)
+50 W( is that it works, even though the NS interface)51 W
+7200 49722 MT
+(knows nothing about this complexity)SH
+8312 52289 MT
+(Main advantages of this form of resolving loop:)SH
+/Symbol SF
+9242 53761 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(same user-centered approach)
+126 W( as found in NFS: the user-side code \050emulation library\051 can)125 W
+9980 54904 MT
+(interpret various funny components in pathnames)
+394 W( in a UNIX-dependent way, without)395 W
+9980 56047 MT
+(hardwiring anything into the servers. However, since a server may choose to traverse)
+167 W( as)166 W
+9980 57190 MT
+(much or as little of the path as it wants before returning, you can use hardwired server-side)66 W
+9980 58333 MT
+(semantics if you want.)SH
+/Symbol SF
+9242 60148 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(unlike NFS, we)
+101 W( try to process as many pathname components in the server as possible or)100 W
+9980 61291 MT
+(reasonable before returning)
+43 W( to the user. This minimizes the number of RPC's. NFS makes a)44 W
+9980 62434 MT
+(server RPC for each individual component, because it needs to)
+4 W( check its mount table at each)3 W
+9980 63577 MT
+(step. We don't have to, because the prefix table took care of that for us.)SH
+/Symbol SF
+9242 65392 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Standard case your prefix table directs you to the proper "top level" directory object for)
+97 W( the)98 W
+9980 66535 MT
+(correct server and it returns the OS item that you wanted.)
+33 W( The)
+343 W( exceptions only occur for the)32 W
+9980 67678 MT
+(first time though a given path to a server.)SH
+/Symbol SF
+9242 69493 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(servers are still)
+25 W( largely independent, and never talk to each other. Failure of one server does)26 W
+9980 70636 MT
+(not prevent another from functioning.)SH
+ES
+%%Page: 3 4
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(3)SH
+11 SS 
+7200 8002 MT
+(2.4. Authentication)SH
+10 /Symbol AF
+9242 9474 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(each proxy is associated with a set of credentials representing the user to which this)
+89 W( proxy)88 W
+9980 10617 MT
+(has been handed-out)SH
+/Symbol SF
+9242 12432 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(there is one special set of credentials, called the "ANON" credentials, that represent nobody.)SH
+/Symbol SF
+9242 14247 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(you can give a proxy with ANON credentials to any user, but the server will refuse)
+13 W( to execute)14 W
+9980 15390 MT
+(any operation invoked on that proxy except)
+40 W( for ns_authenticate\050\051. In effect, such a proxy lets)39 W
+9980 16533 MT
+(a user designate an item, but no do anything with it.)SH
+/Symbol SF
+9242 18348 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(whenever a)
+89 W( user receives a ANON proxy from somewhere, it invokes ns_authenticate on it)90 W
+9980 19491 MT
+(and supplies an authentication token. This returns a new proxy with)
+366 W( real credentials)365 W
+9980 20634 MT
+(corresponding to the authentication token supplied by the user. A server will)
+34 W( normally accept)35 W
+9980 21777 MT
+(various requests invoked on such a proxy,)
+64 W( in accordance with the proxy credentials and the)63 W
+9980 22920 MT
+(item's ACL.)SH
+/Symbol SF
+9242 24735 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(whenever a)
+40 W( server returns a proxy as part of the name resolving process, it normally returns)41 W
+9980 25878 MT
+(an ANON proxy. It is up to the user to use that ANON)
+9 W( proxy to get a new authenticated proxy)8 W
+9980 27021 MT
+(before proceeding with the resolving loop.)SH
+/Symbol SF
+9242 28836 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(as an optimization, when a server involved in a)
+222 W( resolving loop returns a usName proxy)223 W
+9980 29979 MT
+(corresponding to a directory managed by this server itself, it may elect to return a)
+178 W( proxy)177 W
+9980 31122 MT
+(already associated with the same)
+431 W( credentials as those on the proxy on which the)432 W
+9980 32265 MT
+(ns_resolve\050\051 came. But such)
+319 W( "credentials inheritance" never takes place across server)318 W
+9980 33408 MT
+(boundaries.)SH
+8312 35975 MT
+(Main advantages of this approach:)SH
+/Symbol SF
+9242 37447 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(each server is independent of all other servers)SH
+/Symbol SF
+9242 39262 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(servers need not trust each other)SH
+/Symbol SF
+9242 41077 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(different server might use different authentication servers,)
+333 W( authentication domains, etc.)334 W
+9980 42220 MT
+(Authentication is a private matter between each particular user and each particular server.)SH
+7200 43646 MT
+(Main issues with this approach:  there)
+254 W( is no automatic or standard way for a server to inherit the)253 W
+7200 45072 MT
+(authentication credentials of)
+71 W( a client and act on his/her behalf when talking to other servers. All this can)72 W
+7200 46498 MT
+(be done, but it must be specifically hacked.)SH
+11 /Helvetica-Bold AF
+7200 50180 MT
+(2.5. Access Modes)SH
+10 /Helvetica AF
+8312 51606 MT
+(Independent of authentication and access control, it may be)
+56 W( necessary for a server to know what kind)55 W
+7200 53032 MT
+(of operations a client intends to invoke on one of its)
+99 W( items. For example, the server may not return the)100 W
+7200 54458 MT
+(same kind of proxy to a client that only wants to stat\050\051 a file, to)
+86 W( one that wants to read it, or to one that)85 W
+7200 55884 MT
+(wants to write it. Or even if)
+18 W( everyone gets the same kind of proxy, the server might simply want to know if)19 W
+7200 57310 MT
+(there exists clients that have the file open for write, or if the file)
+97 W( is currently read-only across the whole)96 W
+7200 58736 MT
+(system. To that effect, each proxy is also associated with a set of "access mode")
+87 W( bits that specify what)88 W
+7200 60162 MT
+(the client intends to do.)
+77 W( These bits are simply specified by the client in all primitives that return a proxy,)76 W
+7200 61588 MT
+(such as ns_resolve\050\051 and ns_authenticate\050\051.)SH
+11 /Helvetica-Bold AF
+7200 65270 MT
+(2.6. Accessing a File)SH
+10 /Helvetica AF
+8312 66696 MT
+(Once the pathname has been resolved)
+13 W( and the user has received a \050authenticated\051 proxy for the target)14 W
+7200 68122 MT
+(file, it may start invoking io_read\050\051 and io_write\050\051 operations on that file.)SH
+/Symbol SF
+9242 69594 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(files are purely random-access objects. They do not support io_read_sequential\050\051 and)339 W
+9980 70737 MT
+(friends. Conversely, only purely sequential)
+120 W( objects \050those for which there is an INTRINSIC)121 W
+9980 71880 MT
+(notion of sequence, such as pipes,)
+268 W( tty's, etc.\051 support io_read/write_sequential and not)267 W
+ES
+%%Page: 4 5
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(4)SH
+/Helvetica SF
+9980 7929 MT
+(io_read/write.)SH
+/Symbol SF
+9242 9744 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(If the user \050emulation library\051 wants to simulate sequential access)
+24 W( to a file, it must keep track)25 W
+9980 10887 MT
+(of the current offset him/herself, and supply it with each io_read\050\051 call.)SH
+/Symbol SF
+9242 12702 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(there are two special mechanisms to share a "current offset" between two user processes:)SH
+7 /Symbol AF
+12160 13953 MT
+(\267)SH
+10 /Helvetica AF
+12760 14103 MT
+(store the offset in a blackboard object \050not implemented\051)SH
+7 /Symbol AF
+12160 15768 MT
+(\267)SH
+10 /Helvetica AF
+12760 15918 MT
+(hack for appending to LOG files with multiple writers \050eg. compiling\051)SH
+7200 17344 MT
+(advantages of this approach:)SH
+/Symbol SF
+9242 18816 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(files may be accessed concurrently by many different groups of users, which)
+139 W( independent)138 W
+9980 19959 MT
+(notions of "current offset".  This approach avoids the need to keep track)
+10 W( of all these offsets in)11 W
+9980 21102 MT
+(the server, and makes the server more "stateless".)SH
+/Symbol SF
+9242 22917 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(any funny semantics of offset sharing,)
+193 W( seek\050\051 or whatever are pushed in the OS-specific)192 W
+9980 24060 MT
+(emulation library, and out of the generic server)SH
+/Symbol SF
+9242 25875 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(seek\050\051 can be really fast!)SH
+8312 28442 MT
+(Issues with this approach:)SH
+8312 31009 MT
+(offset sharing is tough, and maybe expensive. Note that there is no)
+133 W( reason why offset manipulation)134 W
+7200 32435 MT
+(need be expensive when no sharing takes place.)SH
+11 /Helvetica-Bold AF
+7200 36117 MT
+(2.7. Mapped Files)SH
+10 /Helvetica AF
+8312 37543 MT
+(Default file access is done by mapping the file into the)
+70 W( users emulator space.  A mapped file is just a)69 W
+7200 38969 MT
+(special kind of proxy)SH
+/Symbol SF
+9242 40441 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(a file server that wishes to use mapped files simply)
+373 W( returns a mapped-file proxy in)374 W
+9980 41584 MT
+(ns_resolve\050\051 instead of just)
+117 W( a default usIO_proxy. The remote invocation mechanism takes)116 W
+9980 42727 MT
+(care of)
+65 W( instantiating the right kind of proxy on the client side \050the proxy string name actually)66 W
+9980 43870 MT
+(travels in the Mach message\051)SH
+/Symbol SF
+9242 45685 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(when a mapped-file proxy is instantiated and activated, it calls back)
+33 W( its "home" server asking)32 W
+9980 46828 MT
+(for a pager port and)
+3 W( some house-keeping information. It then simply maps the file \050invisibly to)4 W
+9980 47971 MT
+(the user\051 and away we go!)SH
+7 /Symbol AF
+12160 49222 MT
+(\267)SH
+10 /Helvetica AF
+12760 49372 MT
+(the call to)
+260 W( obtain the pager port is lazy-evaluated until someone actually invokes)259 W
+12760 50515 MT
+(io_read\050\051 or io_write\050\051 on the proxy. This is because)
+75 W( many files are opened but never)76 W
+12760 51658 MT
+(read, and also because a parent process might open a file and just pass it to)
+62 W( its child)61 W
+12760 52801 MT
+(without reading it itself.)SH
+7 /Symbol AF
+12160 54466 MT
+(\267)SH
+10 /Helvetica AF
+12760 54616 MT
+(the remote invocation facility should be extended to pass the)
+31 W( pager port and other info)32 W
+12760 55759 MT
+(along with the basic proxy specification in the return)
+218 W( from ns_resolve\050\051, instead of)217 W
+12760 56902 MT
+(forcing such a call-back.)SH
+9980 58303 MT
+(mapped-file proxies are)
+252 W( careful when cloning, since mapped-file areas are not normally)253 W
+9980 59446 MT
+(inherited across task_create\050\051)SH
+/Symbol SF
+9242 61261 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(in addition)
+152 W( to the pager port, a proxy also needs to know the actual size of the file when)151 W
+9980 62404 MT
+(reading from the mapped area, and must inform the server when changing that size when)119 W
+9980 63547 MT
+(appending or truncating the file. Ideally, the file size)
+115 W( should be managed as a shared data)114 W
+9980 64690 MT
+(element through)
+72 W( a blackboard server. For now, we just use a heuristic to let proxies keep a)73 W
+9980 65833 MT
+(private copy of the size:)SH
+7 /Symbol AF
+12160 67084 MT
+(\267)SH
+10 /Helvetica AF
+12760 67234 MT
+(when activating the proxy, the server indicates the current size)SH
+7 /Symbol AF
+12160 68899 MT
+(\267)SH
+10 /Helvetica AF
+12760 69049 MT
+(when touching data inside the "current)
+61 W( size", the proxy simply assumes that the file is)60 W
+12760 70192 MT
+(never truncated, and goes ahead locally)SH
+ES
+%%Page: 5 6
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(5)SH
+7 /Symbol AF
+12160 7779 MT
+(\267)SH
+10 /Helvetica AF
+12760 7929 MT
+(when reading past the assumed end of file, the proxy first)
+210 W( checks with the server)211 W
+12760 9072 MT
+(before returning an)
+84 W( eof indication to the user. If the file has grown since the last time)83 W
+12760 10215 MT
+(we checked, the proxy updates its notion of the "current size".)SH
+7 /Symbol AF
+12160 11880 MT
+(\267)SH
+10 /Helvetica AF
+12760 12030 MT
+(when appending)
+158 W( to the file, the proxy writes the data in the mapped area, but also)159 W
+12760 13173 MT
+(sends a short)
+10 W( message to the server to inform it of the change in size. I'm not sure, but)9 W
+12760 14316 MT
+(I may not)
+19 W( have implemented this completely, and the whole io_write\050\051 may just be sent)20 W
+12760 15459 MT
+(to the server without writing to the mapped area.)SH
+7 /Symbol AF
+12160 17124 MT
+(\267)SH
+10 /Helvetica AF
+12760 17274 MT
+(NOTE that this issue is different)
+71 W( from the issue of shared seek offsets. There may be)70 W
+12760 18417 MT
+(different seek offsets for different groups of processes that have opened the)
+282 W( file)283 W
+12760 19560 MT
+(independently. But there is only one file size!)SH
+12 /Helvetica-Bold AF
+7200 23315 MT
+(3. Fork Exec Tour)SH
+10 /Helvetica AF
+8312 24741 MT
+(Note: Both "fork" and "exec" are)
+86 W( primarily emulation library activities with the mach kernel.  Very little)85 W
+7200 26167 MT
+(server participation is needed.)SH
+11 /Helvetica-Bold AF
+7200 29849 MT
+(3.1. Before the Fork)SH
+10 /Helvetica AF
+8312 31275 MT
+(Whenever an)
+117 W( emulation lib receives OS item proxy obj or creates its own complex object, the obj is)118 W
+7200 32701 MT
+(registered with the Clone Master \050an emulation side object\051.  Either directly, or indirectly via)
+63 W( a registered)62 W
+7200 34127 MT
+(emul_lib object like the file descriptor table.)SH
+8312 36694 MT
+(Each of these registered objects has the methods: clone_init, clone_abort, clone_complete)
+171 W( used to)172 W
+7200 38120 MT
+(recreate an object within a new task \050more below\051.)SH
+11 /Helvetica-Bold AF
+7200 41802 MT
+(3.2. Forking in the Parent)SH
+10 /Symbol AF
+9242 43274 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Fork request comes in.)SH
+/Symbol SF
+9242 45089 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Prepare cthreads for a task_create)SH
+/Symbol SF
+9242 46904 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Do the mach task_create which makes the new task)
+129 W( with a logical copy of both the users)128 W
+9980 48047 MT
+(program and the emulation system.  That task is not yet running.)SH
+/Symbol SF
+9242 49862 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The cthreads is told that the task create is over, fixup for the parent.)SH
+/Symbol SF
+9242 51677 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Make the initial thread in the child, and set its registers to startup in the right way/place.)SH
+/Symbol SF
+9242 53492 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(PreRegister the new child with the process_manager.)
+66 W( Getting)
+412 W( a task_obj for the child to be)67 W
+9980 54635 MT
+(used by the parent.)SH
+/Symbol SF
+9242 56450 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Insert some special ID tokens\050ports\051 into the child and Call all of the clone_inits methods,)139 W
+9980 57593 MT
+(These primarily insert needed ports \050like the remote server)
+122 W( port for a proxy\051 into the child.)123 W
+9980 58736 MT
+(Since each process has its own port space, then)
+22 W( all of the ports can be inserted as the same)21 W
+9980 59879 MT
+(port_name \050number\051 into the child space hence,)
+39 W( all references to those ports in the inherited)40 W
+9980 61022 MT
+(memory of the child will work when the child starts up.  Note:  these inserts should be done)
+3 W( in)2 W
+9980 62165 MT
+(mass, but there is no way to do that in Mach3.0 at this time.)SH
+/Symbol SF
+9242 63980 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(If any of the above fails, kill)
+27 W( the child, call all the appropriate clone_abort methods and return)28 W
+9980 65123 MT
+(failure.)SH
+/Symbol SF
+9242 66938 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Actually start the child \050task_resume\051.)SH
+/Symbol SF
+9242 68753 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Return the pid from the child's task obj.)SH
+ES
+%%Page: 6 7
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(6)SH
+11 SS 
+7200 8002 MT
+(3.3. Forking in the Child)SH
+10 /Symbol AF
+9242 9474 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The child task starts running.)SH
+/Symbol SF
+9242 11289 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Cthreads is told that we are running)
+25 W( in the child.  This will cleanup cthread internal structures)24 W
+9980 12432 MT
+(and logically was away all threads that are not the primary running thread.)SH
+/Symbol SF
+9242 14247 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Emulation lib stacks are cleaned up.  \050emulated syscalls are run on emul_lib stacks\051.)SH
+/Symbol SF
+9242 16062 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The "clone_complete" methods are executed for the various registered objects.  Note:)
+82 W( The)443 W
+9980 17205 MT
+(protection "agents" in the servers representing the active OS item)
+17 W( proxies held by the parent,)16 W
+9980 18348 MT
+(are now also representing those OS items for the child.)
+260 W( Note:)
+800 W( As a general rule, the)261 W
+9980 19491 MT
+("clone_{init,abort,complete}" do not need to contact)
+33 W( the server associated with a proxy obj.  I)32 W
+9980 20634 MT
+(can think of none that do at this time.)SH
+/Symbol SF
+9242 22449 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(There is a special)
+192 W( object called the notify_obj.  It is used by an emulation lib to receive)193 W
+9980 23592 MT
+(upcalls of various events.  When it is)
+145 W( clone_completed, it starts a thread to receive these)144 W
+9980 24735 MT
+(events. Most)
+618 W( notably interrupts)
+170 W( which the emulation lib translates into unix signals.  The)171 W
+9980 25878 MT
+(notify_obj is the only emulation side object which has proxies in remote processes.)SH
+/Symbol SF
+9242 27693 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The "task_obj" is translated to be its parent_task_obj,)
+571 W( and we register with the)570 W
+9980 28836 MT
+(process_manager to get our)
+170 W( own object task_obj and tell it about our reconstituted notify)171 W
+9980 29979 MT
+(object. The)
+344 W( process_manager)
+33 W( puts it into the process name space/job group/ process/group)32 W
+9980 31122 MT
+(directories.)SH
+/Symbol SF
+9242 32937 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Return through the appropriate place in the users call stack.)SH
+11 /Helvetica-Bold AF
+7200 36619 MT
+(3.4. Forking Methodology: Notes, Strengths and Weaknesses)SH
+10 /Helvetica AF
+8312 38045 MT
+(Strengths:)SH
+/Symbol SF
+9242 39517 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The emulation lib driven nature of forking implementation assure data locality.)SH
+/Symbol SF
+9242 41332 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Since none of the servers,)
+114 W( except the process_manager, even need to be notified that the)115 W
+9980 42475 MT
+(fork has occurred, there is)
+40 W( fire storm of messages to do said fork, no context switches to the)39 W
+9980 43618 MT
+(servers, and no need to page in inactive server parts.)SH
+8312 46185 MT
+(Weaknesses:)SH
+/Symbol SF
+9242 47657 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The inability to install/inherit a set of)
+237 W( ports instead of one at a time makes for a lot of)238 W
+9980 48800 MT
+(unnecessary kernel interaction.  Such a feature should be in the mach kernel but)
+137 W( has not)136 W
+9980 49943 MT
+(been added to date because of various religious conflicts.)SH
+/Symbol SF
+9242 51758 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The possibility of shared "agents" makes interrupting active server requests a)
+265 W( bit more)266 W
+9980 52901 MT
+(challenging.)SH
+/Symbol SF
+9242 54716 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Problems and)
+104 W( violations of the emulation-lib space get continued to the new process.  The)103 W
+9980 55859 MT
+(sins of the parent are meted upon the child.)SH
+/Symbol SF
+9242 57674 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Since the user controls his/her own cthreads lib, it is up to)
+149 W( said user to manipulate those)150 W
+9980 58817 MT
+(threads for forking.  All threads other than the forking thread will not exist after the fork.)SH
+11 /Helvetica-Bold AF
+7200 62499 MT
+(3.5. Exec)SH
+10 /Symbol AF
+9242 63971 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Exec is called)SH
+/Symbol SF
+9242 65786 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(We resolve the file name)SH
+/Symbol SF
+9242 67601 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Check if it is a script or a real executable.)
+99 W( If)
+475 W( it is a script, get the name and the args, and)98 W
+9980 68744 MT
+(iterate.)SH
+/Symbol SF
+9242 70559 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Copy the args and env into contiguous mem.)SH
+ES
+%%Page: 7 8
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(7)SH
+/Symbol SF
+9242 8000 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Clean the address space of the users text/data.)SH
+/Symbol SF
+9242 9815 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Load the new program.)SH
+/Symbol SF
+9242 11630 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Setup the new argv, user stack, etc.)SH
+/Symbol SF
+9242 13445 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Reset some some stuff in the emul_lib \050signal vector, primary thread, ...\051)SH
+/Symbol SF
+9242 15260 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Notify the process_mgr of program about to be executed \050for "ps" uses\051.)
+82 W( No)
+444 W( reply needed.)83 W
+9980 16403 MT
+(\050TBD\051)SH
+/Symbol SF
+9242 18218 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Return to the start address of the new program.)SH
+7200 19644 MT
+(The strength of this methodology:)SH
+/Symbol SF
+9242 21116 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Fairly straight forward,)
+1 W( emul_lib driven with server involvement only to get the executable and)SH
+9980 22259 MT
+(tell the process_mgr what happened.)SH
+8312 24826 MT
+(There are some weaknesses to this methodology:)SH
+/Symbol SF
+9242 26298 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Again, as with forking, it is the users problem to cope with with multiple user)
+59 W( space threads.)60 W
+9980 27441 MT
+(No action is taken about said threads \050the emulator may never have seen them\051)
+7 W( and the user)6 W
+9980 28584 MT
+(probably doesn't what them active in the new executable.)SH
+12 /Helvetica-Bold AF
+7200 32339 MT
+(4. TCP Connect Tour)SH
+10 /Helvetica AF
+8312 33765 MT
+(By the nature of the)
+30 W( BSD UNIX socket interface, there is much pain that must be suffered between the)31 W
+7200 35191 MT
+(time one decides that one wants to)
+21 W( read data at a well known attachment point, and the time one actually)20 W
+7200 36617 MT
+(has data.  This section will lead us thru that pain and describe the details involved in doing so)
+50 W( in MACH-)51 W
+7200 38043 MT
+(US for a TCP connection.)SH
+8312 40610 MT
+(From a)
+179 W( high level perspective, there are three layers of interface involved:  BSD sockets, XTI-OSI)178 W
+7200 42036 MT
+(transport layer interface, and the)
+207 W( University of AZ xkernel network protocol system \050not related to X)208 W
+7200 43462 MT
+(windows in anyway\051.)SH
+/Symbol SF
+9242 44934 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(BSD sockets are what we are emulating to enable the classic BSD applications to run)
+26 W( \050inetd,)25 W
+9980 46077 MT
+(telnet\050d\051, ftp\050d\051,...\051.)SH
+/Symbol SF
+9242 47892 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The XTI-OSI interface)
+20 W( is supported by the network server as a more "generic" transport layer)21 W
+9980 49035 MT
+(interface so that it can)
+45 W( be reasonably used to support emulations other than BSD sockets or)44 W
+9980 50178 MT
+(possibly other variants on the socket logic.  XTI is)
+4 W( the "X/Open" standards group definition for)5 W
+9980 51321 MT
+(a OSI compliant transport layer interface.  This interface is not completely XTI)
+32 W( compliant, but)31 W
+9980 52464 MT
+(is based upon that spec.  There is a part of the XTI)
+58 W( layer of code which supplies an xkernel)59 W
+9980 53607 MT
+("anchor" or "up" protocol for the xkernel to)
+80 W( call into.  These protocols are currently supplied)79 W
+9980 54750 MT
+(for both UDP and TCP and are called by the)
+202 W( corresponding xkernel protocols to handle)203 W
+9980 55893 MT
+(udp/tcp protocol upcalls.  These protocols are referred to as)
+76 W( "ustcp" and "usudp".  They act)75 W
+9980 57036 MT
+(as an xkernel data/request sink instead of)
+151 W( a pass through layer, hence they only need to)152 W
+9980 58179 MT
+(support the appropriate half of the xkernel protocol semantics.)
+36 W( They)
+348 W( then support the Mach-)35 W
+9980 59322 MT
+(US/XTI interfaces.)SH
+/Symbol SF
+9242 61137 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Finally, the)
+39 W( AZ "xkernel" is used as a protocol engine.  This choice was made to both supply)40 W
+9980 62280 MT
+(us with the protocols we need and to leverage their)
+171 W( current/research.  most notably their)170 W
+9980 63423 MT
+(netIPC protocol for the Mach3.0)
+209 W( IPC netmsgsvr.  This netmsgsvr is implemented as yet)210 W
+9980 64566 MT
+(another xkernel protocol.)SH
+8312 67133 MT
+(Lets now go thru a "server side" TCP connection and initial data receive.)SH
+ES
+%%Page: 8 9
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(8)SH
+11 SS 
+7200 8002 MT
+(4.1. socket)SH
+10 /Symbol AF
+9242 9474 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The "socket")
+109 W( syscall occurs, and the corresponding emul_lib routine is called.  This syscall)108 W
+9980 10617 MT
+(just returns a file)
+100 W( descriptor \050FD\051 to be acted upon later, some initialization is also done as)101 W
+9980 11760 MT
+(well as description of what the socket will be used for.)SH
+/Symbol SF
+9242 13575 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Determine if we to be a UNIX local socket or an internet)
+53 W( \050INET\051 socket.  no other families of)52 W
+9980 14718 MT
+(sockets are supported at this time.)SH
+/Symbol SF
+9242 16533 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Then we the)
+68 W( determine if we are "STREAM" \050TCP\051 or "DGRAM" \050UDP\051 oriented.  From this)69 W
+9980 17676 MT
+(we know that path to the Mach-US directory which represents)
+19 W( this kind of communication.  In)18 W
+9980 18819 MT
+(this case "/servers/net/tcp")SH
+/Symbol SF
+9242 20634 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Call "ns_resolve_fully" to invoke the name resolution software described above in the)
+115 W( "File)116 W
+9980 21777 MT
+(Open" section above to get a directory object)
+13 W( for that path.  This directory will be represented)12 W
+9980 22920 MT
+(in the emul_lib)
+5 W( by a proxy for the directory object that resides in the net server.  This is where)6 W
+9980 24063 MT
+(we die if there is no net server running, or it is brain dead.)SH
+/Symbol SF
+9242 25878 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Create a nameless uxio_socket object containing the information we have learned.)
+190 W( This)656 W
+9980 27021 MT
+(object is a emul_lib only object and is associated with a FD)
+52 W( number which is returned to the)53 W
+9980 28164 MT
+(user for future use.)SH
+/Symbol SF
+9242 29979 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(At this point, a "setsockopt")
+109 W( syscall may be made to do further initialization.  The sockopts)108 W
+9980 31122 MT
+(often are for tweaking things specific to the implementation of BSD sockets.  There is some)63 W
+9980 32265 MT
+(support for the more meaningful opts in the xkernel, but at this time,the emulation)
+52 W( lib merely)51 W
+9980 33408 MT
+(returns success for any)
+25 W( sockopt request, and takes no action.  This appears sufficient for the)26 W
+9980 34551 MT
+(for the time being.)SH
+11 /Helvetica-Bold AF
+7200 38233 MT
+(4.2. bind)SH
+10 /Helvetica AF
+8312 39659 MT
+(The syscall "bind" is then called by the user to associate an IP address with the socket in question.)SH
+8312 42226 MT
+(Convert the address to Mach-US XTI format.)SH
+8312 44793 MT
+(Call the "net_create" method of the TCP directory object to)
+161 W( get a "usNetConnector" class transport)160 W
+7200 46219 MT
+(level end point for the address in question.  This may fail because of protection or namespace conflicts.)SH
+8312 48786 MT
+(The net server creates the connector object, sets up queues for pending connections and creates)
+122 W( a)123 W
+7200 50212 MT
+(xkernel "participants list" for the address of the endpt.)SH
+8312 52779 MT
+(The object)
+36 W( is placed in the tcp directory with a name that corresponds to the bind address.  The object)35 W
+7200 54205 MT
+(is a "tmp_object" this)
+215 W( means that when all other references to it disappear, the object automatically)216 W
+7200 55631 MT
+(disappears from the directory.)SH
+8312 58198 MT
+(The xkernel is then informed of the existence of)
+109 W( the end point thru its "xOpenEnable" routine for the)108 W
+7200 59624 MT
+(TCP protocol.  It is now ready to receive connection requests.)SH
+8312 62191 MT
+(An agent is created for the connector object and that agent is returned)
+212 W( to the emul_lib for future)213 W
+7200 63617 MT
+(reference via the uxio object for the socket.)SH
+ES
+%%Page: 9 10
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(9)SH
+11 SS 
+7200 8002 MT
+(4.3. listen)SH
+10 /Helvetica AF
+8312 9428 MT
+(The listen syscall does nothing useful accept)
+4 W( set max number pending connections that can wait on the)3 W
+7200 10854 MT
+(connector without being rejected.)SH
+8312 13421 MT
+(This corresponds to a server call to do the)
+114 W( same, within the XTI implementation, but has no xkernel)115 W
+7200 14847 MT
+(level effect.  The xkernel does not appear to do this kind of service restriction)
+96 W( itself.  Extra connections)95 W
+7200 16273 MT
+(made by the xkernel are explicitly killed if there is no room for them in the queue.)SH
+11 /Helvetica-Bold AF
+7200 19955 MT
+(4.4. select)SH
+10 /Helvetica AF
+8312 21381 MT
+(At this point, the "inetd" application does a "select" on the file descriptor which)
+309 W( represents the)310 W
+7200 22807 MT
+(connector \050as well as)
+18 W( other descriptors\051.  Other applications would go directly to the "accept" phase in the)17 W
+7200 24233 MT
+(next subsection.)SH
+8312 26800 MT
+(In the emulation lib, the select implementation works as follows:)SH
+/Symbol SF
+9242 28272 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Translate the descriptors into the uxio objects \050emulation side\051 they represent.)SH
+/Symbol SF
+9242 30087 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Ask each one if it locally already)
+32 W( knows if it ready for the read/write/except requested.  If any)33 W
+9980 31230 MT
+(are, return them in the select.)SH
+/Symbol SF
+9242 33045 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(If not, get a cthread for each read/write query and have them call a io_read/io_write with the)45 W
+9980 34188 MT
+(special "probe")
+237 W( mode flag set.  \050unless there is currently such a probe pending from a)238 W
+9980 35331 MT
+(previous request\051)SH
+/Symbol SF
+9242 37146 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The io_read/io_write probe methods are executed in the server and)
+28 W( wait there until the given)27 W
+9980 38289 MT
+(object is is ready to be read or written.)SH
+/Symbol SF
+9242 40104 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Upon probe)
+237 W( completion of a probe, a probing thread marks that it has succeeded, and)238 W
+9980 41247 MT
+(causes the main thread to stop waiting.  It then returns itself to be recycled for later use.)SH
+/Symbol SF
+9242 43062 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The main thread then checks to see)
+30 W( who has finished since it went to sleep \050may actually be)29 W
+9980 44205 MT
+(more than one descriptor is ready by this point\051 and returns this info to the reader.)SH
+/Symbol SF
+9242 46020 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The remaining probe threads are left to try and get lucky.)
+42 W( This)
+364 W( is an optimization noting that)43 W
+9980 47163 MT
+(selects are generally found in loops.  It is also cheaper to leave them go than to try and kill)73 W
+9980 48306 MT
+(them off.)SH
+/Symbol SF
+9242 50121 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Other actions upon the uxio objects)
+88 W( associated with the free probes may cause the data to)89 W
+9980 51264 MT
+(be invalidated or the probe canceled.)SH
+8312 53831 MT
+(The io_read "probe" on a TCP connector does the following:)SH
+/Symbol SF
+9242 55303 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The uxio object for a connector invokes the "net_listen" method for a read)
+86 W( probe instead of)85 W
+9980 56446 MT
+(the default io_read probe.)SH
+/Symbol SF
+9242 58261 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The XTI "listen" semantics are unrelated to those of the BSD semantics.  Its)
+11 W( semantics are to)12 W
+9980 59404 MT
+(wait for a connection request on)
+35 W( the connector in question, and then to return info about that)34 W
+9980 60547 MT
+(connection request and an identifier)
+145 W( for it.  That identifier may later be used to either XTI)146 W
+9980 61690 MT
+("accept" or "reject" the connection.)SH
+/Symbol SF
+9242 63505 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Executing the net_listen in the server, just checks to see if there)
+397 W( are any pending)396 W
+9980 64648 MT
+(connections, and then waits for one to arrive from the xkernel.)SH
+/Symbol SF
+9242 66463 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(When the xkernel receives)
+166 W( a request for a TCP connection \050lets save ourselves the gory)167 W
+9980 67606 MT
+(details of)
+184 W( that\051 it calls the "OpenDone" routine in the "ustcp" protocol.  Note: the xkernel)183 W
+9980 68749 MT
+(automatically accepts connection requests,)
+138 W( even before telling us it has one.  There is no)139 W
+9980 69892 MT
+(way to actually reject a connection for an enabled address.)SH
+/Symbol SF
+9242 71707 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(A new object is created to represent the connection.)
+287 W( It is a "ustcp_cots" object which)286 W
+ES
+%%Page: 10 11
+BS
+0 SI
+10 /Helvetica-Bold AF
+30044 4329 MT
+(10)SH
+/Helvetica SF
+9980 7929 MT
+(supports the)
+295 W( "usNetCOTS" interface.  COTS stands for Connection Oriented Transport)296 W
+9980 9072 MT
+(Service.)SH
+/Symbol SF
+9242 10887 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(We then queue the request on)
+15 W( the request queue of the appropriate connector and wake any)14 W
+9980 12030 MT
+(waiting listeners.)SH
+/Symbol SF
+9242 13845 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(At this point, our)
+62 W( earlier friend, net_listen returns to the emulation lib, and the io_read probe)63 W
+9980 14988 MT
+(succeeds.)SH
+11 /Helvetica-Bold AF
+7200 18670 MT
+(4.5. accept)SH
+10 /Helvetica AF
+8312 20096 MT
+(The "accept" syscall is made:)SH
+/Symbol SF
+9242 21568 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The emul_lib first does a "net_listen" as described above for select.)SH
+/Symbol SF
+9242 23383 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(It invokes the "net_accept" method on the)
+155 W( connector for the connection described by that)154 W
+9980 24526 MT
+(listen.)SH
+/Symbol SF
+9242 26341 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(In the)
+176 W( server, we dequeue that connection, and place it in the tcp directory with a name)177 W
+9980 27484 MT
+(which describes the two ends of the connection.)SH
+/Symbol SF
+9242 29299 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(An agent is)
+84 W( created for it, and the agent is returned to the emul_lib to be associated with a)83 W
+9980 30442 MT
+(new FD and returned to the user.)SH
+11 /Helvetica-Bold AF
+7200 34124 MT
+(4.6. recv)SH
+10 /Helvetica AF
+8312 35550 MT
+(The "recv" syscall is used to receive data from a socket.)SH
+/Symbol SF
+9242 37022 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The uxio_socket object translates this into a normal ux_read,)
+118 W( just like a read on any other)119 W
+9980 38165 MT
+(uxio object.)SH
+/Symbol SF
+9242 39980 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Since a usNetCOTS is a sequential IO)
+108 W( object \050can't seek on it\051, an io_read_seq method is)107 W
+9980 41123 MT
+(invoked against it, and brings us to the server.)SH
+/Symbol SF
+9242 42938 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(In the server, the ustcp_cots object being invoked against is uses the)
+81 W( Mach-US bytestream)82 W
+9980 44081 MT
+(object to implement its data enqueuing.  Hence a read is done on the bytestream.)
+36 W( This)
+348 W( may)35 W
+9980 45224 MT
+(wait as appropriate until there is data available.)SH
+/Symbol SF
+9242 47039 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(When the)
+22 W( xkernel receives data on the connection in question it calls "Demux" routine on the)23 W
+9980 48182 MT
+("ustcp" protocol.)SH
+/Symbol SF
+9242 49997 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(The ustcp_demux routine does the following:)SH
+7 /Symbol AF
+12160 51248 MT
+(\267)SH
+10 /Helvetica AF
+12760 51398 MT
+(Determine the target usNetCOTS object for the data.)SH
+7 /Symbol AF
+12160 53063 MT
+(\267)SH
+10 /Helvetica AF
+12760 53213 MT
+(Translate the data from xkernel message format to MachUS IO block list format.  \050This)24 W
+12760 54356 MT
+(currently requires a copy may be possibly to eliminate)
+63 W( this copy.  Outgoing data does)64 W
+12760 55499 MT
+(not require a copy for this translation.\051)SH
+7 /Symbol AF
+12160 57164 MT
+(\267)SH
+10 /Helvetica AF
+12760 57314 MT
+(Append the list)
+159 W( to the bytestream associated with the usNetCOTS object.  This will)158 W
+12760 58457 MT
+(cause waiting reads to be awakened.  The amount of data that can be held by)
+201 W( a)202 W
+12760 59600 MT
+(bytestream can be bounded, and this)
+60 W( bounding can be reflected back into the xkernel)59 W
+12760 60743 MT
+(TCP causing the standard TCP halt of service for lack of space ion the)
+111 W( current TCP)112 W
+12760 61886 MT
+(window.)SH
+/Symbol SF
+9242 63701 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Back to the waiting)
+206 W( io_read_seq, it dequeues data min\050requested,available\051 amount, and)205 W
+9980 64844 MT
+(returns is to the caller in the emulation lib.)SH
+/Symbol SF
+9242 66659 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(This data then get placed into the user buffer and the recv returns.)SH
+ES
+%%Page: i 12
+BS
+0 SI
+10 /Helvetica-Bold AF
+30461 4329 MT
+(i)SH
+12 SS 
+25533 8075 MT
+(Table of Contents)SH
+11 SS 
+9036 9319 MT
+(1. Intro)SH
+53388 XM
+(0)SH
+9036 10563 MT
+(2. File Open/Read/Write Tour)SH
+53388 XM
+(0)SH
+10 SS 
+11092 11712 MT
+(2.1. An Open Happens)SH
+53444 XM
+(0)SH
+11092 12861 MT
+(2.2. Prefix Table)SH
+53444 XM
+(0)SH
+11092 14010 MT
+(2.3. NS_Resolve Loop)SH
+53444 XM
+(1)SH
+11092 15159 MT
+(2.4. Authentication)SH
+53444 XM
+(3)SH
+11092 16308 MT
+(2.5. Access Modes)SH
+53444 XM
+(3)SH
+11092 17457 MT
+(2.6. Accessing a File)SH
+53444 XM
+(3)SH
+11092 18606 MT
+(2.7. Mapped Files)SH
+53444 XM
+(4)SH
+11 SS 
+9036 19850 MT
+(3. Fork Exec Tour)SH
+53388 XM
+(5)SH
+10 SS 
+11092 20999 MT
+(3.1. Before the Fork)SH
+53444 XM
+(5)SH
+11092 22148 MT
+(3.2. Forking in the Parent)SH
+53444 XM
+(5)SH
+11092 23297 MT
+(3.3. Forking in the Child)SH
+53444 XM
+(6)SH
+11092 24446 MT
+(3.4. Forking Methodology: Notes, Strengths and Weaknesses)SH
+53444 XM
+(6)SH
+11092 25595 MT
+(3.5. Exec)SH
+53444 XM
+(6)SH
+11 SS 
+9036 26839 MT
+(4. TCP Connect Tour)SH
+53388 XM
+(7)SH
+10 SS 
+11092 27988 MT
+(4.1. socket)SH
+53444 XM
+(8)SH
+11092 29137 MT
+(4.2. bind)SH
+53444 XM
+(8)SH
+11092 30286 MT
+(4.3. listen)SH
+53444 XM
+(9)SH
+11092 31435 MT
+(4.4. select)SH
+53444 XM
+(9)SH
+11092 32584 MT
+(4.5. accept)SH
+52888 XM
+(10)SH
+11092 33733 MT
+(4.6. recv)SH
+52888 XM
+(10)SH
+ES
+%%Trailer
+%%Pages: 12
+%%DocumentFonts: Helvetica Helvetica-Bold Symbol

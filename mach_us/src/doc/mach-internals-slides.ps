@@ -1,0 +1,7227 @@
+%!PS-Adobe-2.0
+%%Title: /work/doc/mach3-slides/mach-internals.frame
+%%Creator: FrameMaker
+%%CreationDate: Fri Apr 10 13:21:24 1992
+%%For: dpj
+%%DocumentFonts: (atend)
+%%Pages: (atend) 1
+%%BoundingBox: (atend)
+%%DocumentPaperSizes: Letter
+%%Orientation: Landscape
+%%EndComments
+
+%%BeginDocument: /usr/lib/NextStep/printPackage.ps
+%!PS-Adobe-2.0
+%%Title: Printing Package
+%%EndComments
+%Version: 2.0
+%Copyright: 1988, NeXT, Inc.
+
+/__NXdef{1 index where{pop pop pop}{def}ifelse}bind def
+/__NXbdef{1 index where{pop pop pop}{bind def}ifelse}bind def
+/UserObjects 10 array __NXdef
+/defineuserobject{
+	exch dup 1 add dup UserObjects length gt{
+		array dup 0 UserObjects putinterval
+		/UserObjects exch def
+	}{pop}ifelse UserObjects exch 3 -1 roll put
+}__NXbdef
+/undefineuserobject{UserObjects exch null put}__NXbdef
+/execuserobject{UserObjects exch get exec}__NXbdef
+/__NXRectPath{4 2 roll moveto 1 index 0 rlineto
+0 exch rlineto neg 0 rlineto closepath}__NXbdef
+/__NXProcessRectArgs{
+	1 index type /arraytype eq{
+		exch 0 4 2 index length 1 sub{
+			dup 3 add 1 exch{1 index exch get exch}for
+			5 1 roll 5 index exec
+		}for pop pop
+	}{exec}ifelse
+}__NXbdef
+/rectfill{gsave newpath {__NXRectPath fill} __NXProcessRectArgs grestore}__NXbdef
+/rectclip{newpath {__NXRectPath} __NXProcessRectArgs clip newpath}__NXbdef
+/rectstroke{
+	gsave newpath dup type /arraytype eq{dup length 6 eq}{false}ifelse{
+		{gsave __NXRectPath null concat stroke grestore}
+		dup length array cvx copy dup 2 4 -1 roll put __NXProcessRectArgs
+	}{{__NXRectPath stroke} __NXProcessRectArgs}ifelse grestore
+}__NXbdef
+/xyshow{
+	0 1 3 index length 1 sub{
+		currentpoint 4 index 3 index 1 getinterval show
+		3 index 3 index 2 mul 1 add get add exch
+		3 index	3 index 2 mul get add exch moveto pop
+	}for pop pop
+}__NXbdef
+/xshow{
+	0 1 3 index length 1 sub{
+		currentpoint 4 index 3 index 1 getinterval show
+		exch 3 index 3 index get add exch moveto pop
+	}for pop pop
+}__NXbdef
+/yshow{
+	0 1 3 index length 1 sub{
+		currentpoint 4 index 3 index 1 getinterval show
+		3 index 3 index get add moveto pop
+	}for pop pop
+}__NXbdef
+/arct{arcto pop pop pop pop}__NXbdef
+/setbbox{pop pop pop pop}__NXbdef
+/ucache{}__NXbdef
+/ucachestatus{mark 0 0 0 0 0}__NXbdef
+/setucacheparams{cleartomark}__NXbdef
+/uappend{systemdict begin cvx exec end}__NXbdef
+/ueofill{gsave newpath uappend eofill grestore}__NXbdef
+/ufill{gsave newpath uappend fill grestore}__NXbdef
+/ustroke{
+	gsave newpath dup length 6 eq
+	{exch uappend concat}{uappend}ifelse
+	stroke grestore
+}__NXbdef
+/__NXustrokepathMatrix dup where {pop pop}{matrix def}ifelse
+/ustrokepath{
+	newpath dup length 6 eq{
+		exch uappend __NXustrokepathMatrix currentmatrix exch concat
+		strokepath setmatrix
+	}{uappend strokepath}ifelse
+} __NXbdef
+/upath{
+	[exch {/ucache cvx}if pathbbox /setbbox cvx
+	 {/moveto cvx}{/lineto cvx}{/curveto cvx}{/closepath cvx}pathforall]cvx
+} __NXbdef
+/setstrokeadjust{pop}__NXbdef
+/currentstrokeadjust{false}__NXbdef
+/selectfont{exch findfont exch
+dup type /arraytype eq {makefont}{scalefont}ifelse setfont}__NXbdef
+/_NXCombineArrays{
+	counttomark dup 2 add index dup length 3 -1 roll {
+		2 index length sub dup 4 1 roll 1 index exch 4 -1 roll putinterval exch
+	}repeat pop pop pop
+}__NXbdef
+/setcmykcolor{
+	1.0 exch sub dup dup 6 -1 roll
+	sub dup 0 lt{pop 0}if 5 1 roll
+	4 -1 roll sub dup 0 lt{pop 0}if 3 1 roll
+	exch sub dup 0 lt{pop 0}if setrgbcolor
+}__NXbdef
+/currentcmykcolor{currentrgbcolor 3{1.0 exch sub 3 1 roll}repeat 0}__NXbdef
+/flushgraphics{}def
+/setwindowtype{pop pop}def
+/currentwindowtype{pop 0}def
+/setalpha{pop}def
+/currentalpha{1.0}def
+/hidecursor{}def
+/obscurecursor{}def
+/revealcursor{}def
+/setcursor{4 {pop}repeat}bind def
+/showcursor{}def
+/NextStepEncoding where not{
+/NextStepEncoding StandardEncoding 256 array copy def
+0 [129/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/Ccedilla/Egrave
+/Eacute/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex/Idieresis
+/Eth/Ntilde/Ograve/Oacute/Ocircumflex/Otilde/Odieresis/Ugrave/Uacute
+/Ucircumflex/Udieresis/Yacute/Thorn/mu/multiply/divide/copyright
+176/registered 181/brokenbar 190/logicalnot 192/onesuperior 201/twosuperior
+204/threesuperior 209/plusminus/onequarter/onehalf/threequarters/agrave
+/aacute/acircumflex/atilde/adieresis/aring/ccedilla/egrave/eacute
+/ecircumflex/edieresis/igrave 226/iacute 228/icircumflex/idieresis/eth
+/ntilde 236/ograve/oacute/ocircumflex/otilde/odieresis 242/ugrave/uacute
+/ucircumflex 246/udieresis/yacute 252/thorn/ydieresis]
+{dup type /nametype eq
+ {NextStepEncoding 2 index 2 index put pop 1 add}{exch pop}ifelse
+}forall pop
+/NextStepEncoding NextStepEncoding readonly def   
+/_NXfstr 128 string dup 0 (_NX) putinterval def   
+/findfont{
+ % Because we can never let NextStepEncoding get into
+ % SharedFontDirectory, we cannot reencode a font to NextStepEncoding
+ % if we are in shared mode.  So if currentshared is true,
+ % we call the normal findfont and return that
+ /currentshared where {pop currentshared} {false} ifelse
+ {//findfont exec}
+ {dup _NXfstr 3 125 getinterval cvs length 3 add _NXfstr 0 3 -1 roll
+  getinterval cvn exch FontDirectory 2 index known 
+  {pop FontDirectory exch get}
+  {//findfont exec dup /Encoding get StandardEncoding eq
+   {	dup length dict exch
+	{1 index /FID ne {2 index 3 1 roll put}{pop pop}ifelse}forall
+	 dup /Encoding NextStepEncoding put definefont
+	}{exch pop} ifelse
+   }ifelse
+ }ifelse
+}bind def
+}{pop}ifelse
+/_NXProcArray 5 array __NXdef
+/_NXChannels 0 __NXdef
+/_NXTotalBytes 0 __NXdef
+/_NXDoImageOp{
+	1 index{dup}{1}ifelse /_NXChannels exch store
+	_NXChannels 2 add 2 roll _NXProcArray 0 _NXChannels getinterval astore pop
+	5 index 4 index mul 2 index{1 sub 8 idiv 1 add mul}{mul 1 sub 8 idiv 1 add}ifelse
+	4 index mul /_NXTotalBytes exch store pop exch pop
+	gsave matrix invertmatrix concat 0.5 setgray 0 0 4 2 roll rectfill grestore
+	{	0 1 _NXChannels 1 sub{
+			_NXProcArray exch get exec
+			length _NXTotalBytes exch sub /_NXTotalBytes exch store}for
+		_NXTotalBytes 0 le{exit}if
+	}loop /_NXProcArray 5 array def
+}__NXbdef
+/colorimage{_NXDoImageOp}__NXbdef
+/alphaimage{1 add _NXDoImageOp}def
+%%EndDocument
+
+
+
+/landscape false def
+
+/t300 [0.000 0.006 0.011 0.017 0.022 0.028 0.033 0.039 0.045 0.050 0.056 0.061 0.067 0.073 0.078 0.084 0.089 0.095 0.101 0.117 0.133 0.148 0.164 0.179 0.195 0.210 0.225 0.240 0.255 0.270 0.285 0.299 0.314 0.329 0.344 0.359 0.374 0.389 0.404 0.419 0.435 0.451 0.466 0.482 0.498 0.513 0.529 0.544 0.560 0.576 0.591 0.610 0.632 0.654 0.677 0.699 0.721 0.744 0.766 0.788 0.821 0.866 0.911 0.955 1.000 ] def
+
+/t400 [0.000 0.003 0.006 0.009 0.012 0.014 0.017 0.020 0.023 0.026 0.029 0.032 0.035 0.038 0.041 0.043 0.046 0.049 0.056 0.063 0.071 0.079 0.087 0.095 0.104 0.117 0.130 0.143 0.157 0.173 0.189 0.205 0.225 0.245 0.259 0.272 0.285 0.298 0.314 0.329 0.345 0.361 0.376 0.392 0.407 0.423 0.439 0.454 0.470 0.486 0.502 0.528 0.554 0.580 0.605 0.628 0.650 0.672 0.695 0.727 0.762 0.796 0.857 0.922 1.000 ] def
+
+/tlinear [0.000 0.016 0.031 0.047 0.062 0.078 0.094 0.109 0.125 0.141 0.156 0.172 0.188 0.203 0.219 0.234 0.250 0.266 0.281 0.297 0.312 0.328 0.344 0.359 0.375 0.391 0.406 0.422 0.438 0.453 0.469 0.484 0.500 0.516 0.531 0.547 0.562 0.578 0.594 0.609 0.625 0.641 0.656 0.672 0.688 0.703 0.719 0.734 0.750 0.766 0.781 0.797 0.812 0.828 0.844 0.859 0.875 0.891 0.906 0.922 0.938 0.953 0.969 0.984 1.000 ] def
+
+/dmatrix matrix def
+/desiredpat 0 def
+/dpi    72 0 dmatrix defaultmatrix dtransform
+    dup mul exch   dup mul add   sqrt round
+def
+/freq dpi 18.75 div 8 div round dup 0 eq { pop 1 } if 8 mul dpi exch div def
+/sangle 1 0 dmatrix defaultmatrix dtransform exch atan def
+/graymode true def
+/pats 16 array def
+/mymatrix matrix def
+/savedgray 0 def
+/F /fill load def
+/rc /rectclip load def
+/GS /gsave load def
+/GR /grestore load def
+/SL /setlinewidth load def
+/SC /setlinecap load def
+/CS { closepath S } bind def
+/A /strokepath load def
+/TR /translate load def
+/M /moveto load def
+/C /closepath load def
+/smat { mymatrix currentmatrix pop } bind def
+/rmat { mymatrix setmatrix } bind def
+/sp { P exch get exec } bind def
+
+systemdict /setshared known 
+	{ 300 dpi eq { /tran t300 def } { /tran t400 def } ifelse }
+	{ /tran tlinear def }
+	ifelse
+
+systemdict /xshow known not {
+	/xhow {
+		/pts exch def /str exch def
+		0 1 str length 1 sub 
+			{ currentpoint 3 -1 roll str 1 index 1 getinterval show
+			 3 1 roll moveto
+		     pts exch get 0 rmoveto } for
+		} bind def
+	} 
+	{ /xhow { checkink xshow } bind def }
+	ifelse
+
+systemdict /xyshow known not {
+	/xyhow {
+		/pts exch def /str exch def
+		0 1 str length 1 sub 
+			{ currentpoint 3 -1 roll str 1 index 1 getinterval show
+			 3 1 roll moveto 2 mul
+		     pts 1 index get pts 3 -1 roll 1 add get rmoveto } for
+		} bind def
+	} 
+	{ /xyhow { checkink xyshow } bind def }
+	ifelse
+
+
+
+
+/PrintInColor systemdict /colorimage known def
+PrintInColor	
+	{
+	/HUE 0 def
+	/SAT 0 def
+	/BRIGHT 0 def
+	
+	/Colors   
+	[[0    0  ]    
+	 [0    0  ]    
+	 [0.00 1.0]    
+	 [0.37 1.0]    
+	 [0.60 1.0]    
+	 [0.50 1.0]    
+	 [0.83 1.0]    
+	 [0.16 1.0]    
+	 ] def
+      
+	/K { 
+		Colors exch get dup
+		0 get /HUE exch store 
+		1 get /BRIGHT exch store
+		  HUE 0 eq BRIGHT 0 eq and
+			{1.0 SAT sub setgray }
+			{HUE SAT BRIGHT sethsbcolor } 
+		  ifelse
+		} def
+	/mysetgray { 
+		/SAT exch 1.0 exch sub store 
+		  HUE 0 eq BRIGHT 0 eq and
+			{1.0 SAT sub setgray }
+			{HUE SAT BRIGHT sethsbcolor } 
+		  ifelse
+		} bind def
+	}
+	
+	{
+	/mysetgray /setgray load def
+	/K /pop load def
+	} 
+ifelse
+
+/setpattern { 
+
+     /bwidth  exch def
+     /bpside  exch def
+     /bstring exch def
+     /onbits 0 def  /offbits 0 def
+     freq sangle landscape {90 add} if
+        {/y exch def
+         /x exch def
+         /xindex x 1 add 2 div bpside mul cvi def
+         /yindex y 1 add 2 div bpside mul cvi def
+         bstring yindex bwidth mul xindex 8 idiv add get
+         1 7 xindex 8 mod sub bitshift and 0 ne
+         {/onbits  onbits  1 add def 1}
+         {/offbits offbits 1 add def 0}
+         ifelse
+        }
+        setscreen
+     tran offbits 64 mul offbits onbits add div cvi get mysetgray
+    } bind def
+
+
+/myfonts [] def
+/procarray 30 array def
+3.86 setmiterlimit
+
+currentscreen cvlit 
+/orgproc exch def
+/organgle exch def /orgfreq exch def
+/currentpat -1 def
+
+
+
+
+
+/checkpat {
+	graymode currentpat desiredpat ne or
+		{ pats desiredpat get exec 
+		  /graymode false store 
+		  /currentpat desiredpat store
+ 		} if
+    } bind def
+
+/Z { checkpat fill } bind def
+
+
+
+
+/checkink { 
+  graymode not 
+	{ orgfreq organgle orgproc cvx setscreen
+	  /graymode true store 
+      savedgray mysetgray
+	} if
+  } bind def
+
+
+/F {     
+   checkink fill
+   } bind def
+
+/dorectfill {     
+   checkink rectfill
+   } bind def
+
+/dorectstroke {     
+   checkink rectstroke
+   } bind def
+
+/S {     
+   checkink stroke
+   } bind def
+
+
+
+
+
+/G { /savedgray exch def savedgray mysetgray } def
+
+/makecontextpattern { 
+	exch pop
+	[null 8 1 /setpattern cvx] 4 array copy  dup 
+	0 5 -1 roll put cvx                         
+    pats 3 1 roll put 
+	} def
+
+
+
+
+
+/P [ 0 1 15 { [ /desiredpat 3 -1 roll /store cvx ] cvx } for ] def
+
+/patoffsetx 0 def
+/patoffsety 0 def
+/currentpat null def
+
+/DiacriticEncoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef /space /exclam /quotedbl
+/numbersign /dollar /percent /ampersand /quotesingle /parenleft
+/parenright /asterisk /plus /comma /hyphen /period /slash /zero /one
+/two /three /four /five /six /seven /eight /nine /colon /semicolon
+/less /equal /greater /question /at /A /B /C /D /E /F /G /H /I /J /K
+/L /M /N /O /P /Q /R /S /T /U /V /W /X /Y /Z /bracketleft /backslash
+/bracketright /asciicircum /underscore /grave /a /b /c /d /e /f /g /h
+/i /j /k /l /m /n /o /p /q /r /s /t /u /v /w /x /y /z /braceleft /bar
+/braceright /asciitilde /.notdef /Adieresis /Aring /Ccedilla /Eacute
+/Ntilde /Odieresis /Udieresis /aacute /agrave /acircumflex /adieresis
+/atilde /aring /ccedilla /eacute /egrave /ecircumflex /edieresis
+/iacute /igrave /icircumflex /idieresis /ntilde /oacute /ograve
+/ocircumflex /odieresis /otilde /uacute /ugrave /ucircumflex
+/udieresis /dagger /.notdef /cent /sterling /section /bullet
+/paragraph /germandbls /registered /copyright /trademark /acute
+/dieresis /.notdef /AE /Oslash /.notdef /.notdef /.notdef /.notdef
+/yen /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef
+/ordfeminine /ordmasculine /.notdef /ae /oslash /questiondown
+/exclamdown /logicalnot /.notdef /florin /.notdef /.notdef
+/guillemotleft /guillemotright /ellipsis /.notdef /Agrave /Atilde
+/Otilde /OE /oe /endash /emdash /quotedblleft /quotedblright
+/quoteleft /quoteright /.notdef /.notdef /ydieresis /Ydieresis
+/fraction /currency /guilsinglleft /guilsinglright /fi /fl /daggerdbl
+/periodcentered /quotesinglbase /quotedblbase /perthousand
+/Acircumflex /Ecircumflex /Aacute /Edieresis /Egrave /Iacute
+/Icircumflex /Idieresis /Igrave /Oacute /Ocircumflex /.notdef /Ograve
+/Uacute /Ucircumflex /Ugrave /dotlessi /circumflex /tilde /macron
+/breve /dotaccent /ring /cedilla /hungarumlaut /ogonek /caron
+] def
+
+/DiacriticEncode {
+	/basefontdict exch def
+
+	/newfontdict basefontdict maxlength 2 add dict def
+	basefontdict
+	{exch dup 
+	/FID ne
+		{dup /Encoding eq
+			{exch pop DiacriticEncoding }
+			{exch}
+			ifelse
+			newfontdict 3 1 roll put
+			}
+		{pop pop}
+		ifelse
+		} forall
+	newfontdict
+	} def
+
+/line { 
+	pop pop pop pop
+	} def
+ 
+/rrectpath { 
+    smat
+    4 2 roll TR			
+	/h exch def /w exch def /r exch def
+	mark
+	    r 0 M
+	    w 0 w h r arcto w h 0 h r arcto
+	    0 h 0 0 r arcto 0 0 w 0 r arcto C
+	cleartomark
+    rmat
+} def
+
+/RF { 
+	rrectpath F
+	} bind def
+
+/RP { 
+	checkpat rrectpath fill
+	} bind def
+
+/RS { 
+	rrectpath S
+	} bind def
+
+/RQ { 
+	checkpat rrectpath A fill
+	} bind def
+
+/NF { 
+	dorectfill
+	} bind def 
+
+/NR { 
+	checkpat
+	4 2 roll
+	rectfill
+	} bind def 
+	
+/W { 
+	savedgray 5 1 roll 1.0 G  dorectfill G } bind def
+
+/invertbox { 
+pop pop pop pop } def
+
+/highbox { 
+pop pop pop pop } def
+
+/PP { 
+	newpath
+	3 1 roll M 1 sub
+	{ lineto } repeat
+	} bind def
+
+/SP { 
+	3 1 roll M 3 div cvi
+	{ curveto } repeat
+	} bind def
+
+/rectpath  { 
+	M dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto C
+	} def
+
+/N { 
+	dorectstroke
+	} bind def
+
+/NQ { 
+	checkpat 
+	4 2 roll
+	rectstroke
+	} bind def
+
+/drawip { 
+	pop pop pop
+	} bind def
+
+/eraseip  { 
+	pop pop pop
+	} bind def
+
+/highip { pop pop pop pop } def
+/insideedgebox { pop pop pop pop pop } def
+
+
+/replbox { pop pop pop pop pop pop } def
+/pop4 { pop pop pop pop } def
+/graybox { pop4 } def
+/darkgraybox { pop4 } def
+
+/arcpath { 
+	newpath
+	TR
+	/h exch def
+	/w exch def
+	/dth exch def
+	/th exch def
+	90 th dth add sub 90 th sub       
+	dth 0 lt 
+		{ exch } if
+	1 h w div neg scale 
+	0 0 w 2 div 5 -2 roll arc
+	} def
+ 
+/AS { 
+	smat
+	arcpath
+	rmat
+	S
+	} bind def
+
+/AP { 
+	checkpat
+	smat
+	arcpath
+	rmat
+	A fill
+	} bind def
+
+/AF { 
+	smat
+	arcpath
+	0 0 lineto
+	rmat
+	F
+	} bind def
+
+/AQ { 
+	checkpat
+	smat
+	arcpath
+	0 0 lineto
+	rmat
+	fill
+	} bind def
+
+/mymakefont { 
+	/size exch def
+	/name exch def
+	/i exch def
+	/myfontdict name cvn findfont def
+	myfontdict /Encoding get dup
+	StandardEncoding eq exch		
+	/NextStepEncoding where
+	{
+		pop NextStepEncoding eq		
+		or
+	}{
+		pop
+	} ifelse
+	{
+		myfontdict DiacriticEncode
+		/gfontdict exch def
+	         /gfontdict (F   ) dup 1 i (   ) cvs putinterval cvn gfontdict definefont def
+	}
+	{
+		/gfontdict myfontdict def
+	}
+	ifelse
+
+	/myfonts [ myfonts aload pop null ] def
+ 	myfonts i  gfontdict  [size 0 0 size neg 0 0 ] makefont put
+	} def
+
+/FF { 
+	myfonts exch get setfont
+ } bind def
+
+
+/CR { 
+
+
+
+initclip
+newpath
+4 2 roll M dup 0 exch rlineto exch 0 rlineto 0 exch neg rlineto 
+C clip newpath
+	} bind def
+
+/cliptowindow {
+	initclip
+	} def
+
+/beginprintcode { 
+	GS
+	newpath 1 setlinewidth 0 SL 0 setlinejoin
+	[] 0 setdash 0 setgray 10 setmiterlimit
+	/FMdicttop countdictstack 1 add def 
+	/FMoptop count 7 sub def 
+	200 dict begin 
+
+	TR      				
+	dup neg scale                
+	0.0 0.0 M
+	} def
+
+/endprintcode {
+	count -1 FMoptop {pop pop} for 
+	countdictstack -1 FMdicttop {pop end} for 
+
+	GR
+} def
+
+/beginPSInsetprintcode {
+	/pinsetsave save def
+	newpath 1 setlinewidth 0 setlinecap 0 setlinejoin
+	[] 0 setdash 0 setgray 10 setmiterlimit
+	/showpage {} def
+	/FMdicttop countdictstack 1 add def 
+	/FMoptop count def 
+	200 dict begin 
+	/showimage {} def
+} def
+
+/endPSInsetprintcode {
+	count -1 FMoptop {pop pop} for 
+	countdictstack -1 FMdicttop {pop end} for 
+	pinsetsave restore
+} def
+
+/cacheimage { 
+/flip exch def
+/theta exch def
+/bps exch def
+/h exch def
+/w exch def
+/destHeight exch def
+/destWidth exch def
+/destY exch def
+/destX exch def
+/rowbytes w bps mul 7 add 8 idiv def
+/buffer rowbytes string def
+
+	GS
+	destX destY TR
+	theta rotate
+	flip
+		{destWidth neg destHeight scale}
+		{destWidth destHeight scale}
+		ifelse
+	w h bps
+
+    	[w 0 0 h 0 h ]
+	{ currentfile buffer readhexstring pop } bind
+	image
+	GR
+	} def
+
+
+<0f1e3c78f0e1c387> (I17e658) 8 makecontextpattern
+<0f87c3e1f0783c1e> (I17e674) 9 makecontextpattern
+<cccccccccccccccc> (I17e690) 10 makecontextpattern
+<ffff0000ffff0000> (I17e6ac) 11 makecontextpattern
+<8142241818244281> (I17e6c8) 12 makecontextpattern
+<03060c183060c081> (I17e6e4) 13 makecontextpattern
+<8040201008040201> (I17e700) 14 makecontextpattern
+gsave
+-1 -9 translate
+ /__NXbasematrix matrix currentmatrix def
+grestore
+%%EndProlog
+%%BeginSetup
+%%PaperSize: Letter
+%%Feature: *ManualFeed False
+%%EndSetup
+
+%%Page: 1 1
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Roman) 40 mymakefont
+1 FF
+396 107.67 M ( )
+[0 ] xhow
+2 (Times-Roman) 36 mymakefont
+2 FF
+396 147 M ( )
+[0 ] xhow
+396 185 M ( )
+[0 ] xhow
+136.54 215 M (The Multi-server Emulation System )
+[21.99 18 15.98 9 32 18 10.01 10.01 10.01 11.99 14 15.98 11.99 18 15.98 11.99 9 21.99 28 18 10.01 15.98 10.01 10.01 18 18 9 20.01 18 14 10.01 15.98 28 0 ] xhow
+3 (Times-Roman) 24 mymakefont
+3 FF
+396 241 M ( )
+[0 ] xhow
+396 267 M ( )
+[0 ] xhow
+325.04 293 M (Daniel P. Julin )
+[17.32 10.65 11.99 6.67 10.65 6.67 6 13.34 6 6 9.33 11.99 6.67 6.67 11.99 0 ] xhow
+258.42 319 M (School of Computer Science )
+[13.34 10.65 11.99 11.99 11.99 6.67 6 11.99 7.99 6 16 11.99 18.66 11.99 11.99 6.67 10.65 7.99 6 13.34 10.65 6.67 10.65 11.99 10.65 10.65 0 ] xhow
+261.42 345 M (Carnegie Mellon University )
+[16 10.65 7.99 11.99 10.65 11.99 6.67 10.65 6 21.32 10.65 6.67 6.67 11.99 11.99 6 17.32 11.99 6.67 11.99 10.65 7.99 9.33 6.67 6.67 11.99 0 ] xhow
+292.38 371 M (Pittsburgh, PA 15213 )
+[13.34 6.67 6.67 6.67 9.33 11.99 11.99 7.99 11.99 11.99 6 6 13.34 17.32 6 11.99 11.99 11.99 11.99 11.99 0 ] xhow
+315.67 397 M (dpj@cs.cmu.edu )
+[11.99 11.99 6.67 22.09 10.65 9.33 6 10.65 18.66 11.99 6 10.65 11.99 11.99 0 ] xhow
+4 (Times-Bold) 24 mymakefont
+4 FF
+99 423 M ( )
+[0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 2 2
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+309.72 97 M (Mach Emulators )
+[22.64 11.99 10.65 13.34 6 16 19.98 13.34 6.67 11.99 7.99 11.99 10.65 9.33 0 ] xhow
+1 FF
+171 141 M (-  )
+[7.99 6 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+190.98 141 M (Single-server BSD 4.3 )
+[10 5 9 9 5 7.99 5.99 7 7.99 5.99 8.73 7.99 5.99 4.5 12 10 12.99 4.5 9 4.5 9 0 ] xhow
+1 FF
+171 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 171 M (Single-server BSD 4.4 )
+[10 5 9 9 5 7.99 5.99 7 7.99 5.99 8.73 7.99 5.99 4.5 12 10 12.99 4.5 9 4.5 9 0 ] xhow
+1 FF
+171 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 201 M (Single-server OSF/1 )
+[10 5 9 9 5 7.99 5.99 7 7.99 5.99 8.73 7.99 5.99 4.5 12.99 10 10 5 9 0 ] xhow
+1 FF
+171 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 231 M (Single-server SVR4 )
+[10 5 9 9 5 7.99 5.99 7 7.99 5.99 8.73 7.99 5.99 4.5 10 12.99 12 9 0 ] xhow
+1 FF
+171 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 261 M (POE )
+[10 12.99 10.99 0 ] xhow
+1 FF
+171 291 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 291 M (VMS )
+[12.99 15.99 10 0 ] xhow
+1 FF
+171 321 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 321 M (DOS )
+[12.99 12.99 10 0 ] xhow
+1 FF
+171 351 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 351 M (MacMach )
+[15.99 7.99 7.99 15.99 7.99 7.99 9 0 ] xhow
+1 FF
+171 381 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 381 M (GNU )
+[12.99 12.99 12.99 0 ] xhow
+1 FF
+171 411 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 411 M (Mach/MC )
+[15.99 7.99 7.99 9 5 15.99 12 0 ] xhow
+1 FF
+171 441 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 441 M (OS/2 )
+[12.99 10 5 9 0 ] xhow
+1 FF
+171 471 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 471 M (Trusted Mach )
+[10.36 5.99 9 7 5 7.99 9 4.5 15.99 7.99 7.99 9 0 ] xhow
+1 FF
+171 501 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+190.98 501 M (CMU Multi-server )
+[12 15.99 12.99 4.5 15.99 9 5 5 5 5.99 7 7.99 5.99 8.73 7.99 5.99 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 3 3
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+331.04 97 M (Major Goals )
+[22.64 11.99 7.99 11.99 10.65 6 18.66 11.99 11.99 6.67 9.33 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (modularity )
+[14 9 9 9 5 7.99 5.99 5 5 9 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (multiple system configurations - specialization )
+[14 9 5 5 5 9 5 7.99 4.5 7 9 7 5 7.99 14 4.5 7.99 9 9 5 5 9 9 5.99 7.99 5 5 9 9 7 4.5 5.99 4.5 7 9 7.99 7.99 5 7.99 5 5 7.99 7.99 5 5 9 9 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (third-party servers )
+[5 9 5 5.99 9 5.99 9 7.99 5.99 5 9 4.5 7 7.99 5.99 8.73 7.99 5.99 7 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (simpler maintenance )
+[7 5 14 9 5 7.99 5.99 4.5 14 7.99 5 9 5 7.99 9 7.99 9 7.99 7.99 0 ] xhow
+99 267 M (clean, extensible design )
+[7.99 5 7.99 7.99 9 4.5 4.5 7.72 9 5 7.99 9 7 5 9 5 7.99 4.5 9 7.99 7 5 9 9 0 ] xhow
+1 FF
+135 297 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 297 M (add functionality )
+[7.99 9 9 4.5 5.99 9 9 7.99 5 5 9 9 7.99 5 5 5 9 0 ] xhow
+1 FF
+135 327 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 327 M (integrate modified functionality )
+[5 9 5 7.72 9 5.99 7.99 5 7.99 4.5 14 9 9 5 5 5 7.99 9 4.5 5.99 9 9 7.99 5 5 9 9 7.99 5 5 5 9 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (support for multiple emulations / OS personalities )
+[7 9 9 9 9 5.99 5 4.5 5.99 9 5.99 4.5 14 9 5 5 5 9 5 7.99 4.5 7.99 14 9 5 7.99 5 5 9 9 7 4.5 5 4.5 12.99 10 4.5 9 7.99 5.99 7 9 9 7.99 5 5 5 5 7.99 7 0 ] xhow
+99 393 M (security )
+[7 7.99 7.99 9 5.99 5 5 9 0 ] xhow
+99 429 M (practical, useful system )
+[9 5.99 7.99 7.99 5 5 7.99 7.99 5 4.5 4.5 9 7 7.99 5.99 9 5 4.5 7 9 7 5 7.99 14 0 ] xhow
+1 FF
+135 459 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 459 M (performance )
+[9 7.99 5.99 5.99 9 5.99 14 7.99 9 7.99 7.99 0 ] xhow
+1 FF
+135 489 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 489 M (sensible licensing )
+[7 7.99 9 7 5 9 5 7.99 4.5 5 5 7.99 7.99 9 7 5 9 9 0 ] xhow
+1 FF
+99 514 M ( )
+[0 ] xhow
+grestore
+0 0 612 792 rectclip
+[1 0 0 -1 0 792] concat
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 4 4
+%%PageBoundingBox: 0 0 612 792
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 612 792 rectclip
+[1 0 0 -1 0 792] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 612 792 rectclip
+/landscape false def
+0 0 612 792 CR
+1 G
+333 54 270 729 NF
+0 G
+0 (Times-Roman) 18 mymakefont
+0 FF
+333 66 M (Issues )
+[5.99 7 7 9 7.99 7 0 ] xhow
+1 (Times-Bold) 24 mymakefont
+1 FF
+369 96 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 96 M (separation of functions -- )
+[7 7.99 9 7.99 5.99 7.99 5 5 9 9 4.5 9 5.99 4.5 5.99 9 9 7.99 5 5 9 9 7 4.5 5.99 5.99 0 ] xhow
+390.6 117 M (specialized servers )
+[7 9 7.99 7.99 5 7.99 5 5 7.99 7.99 9 4.5 7 7.99 5.99 8.73 7.99 5.99 7 0 ] xhow
+1 FF
+369 147 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 147 M (coordination / shared state )
+[7.99 9 9 5.99 9 5 9 7.99 5 5 9 9 4.5 5 4.5 7 9 7.99 5.99 7.99 9 4.5 7 5 7.99 5 7.99 0 ] xhow
+390.6 168 M (\(all / some accesses\) )
+[5.99 7.99 5 5 4.5 5 4.5 7 9 14 7.99 4.5 7.99 7.99 7.99 7.99 7 7 7.99 7 5.99 0 ] xhow
+1 FF
+369 198 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 198 M (generic vs. OS-specific )
+[9 7.99 9 7.99 5.99 5 7.99 4.5 9 7 4.5 4.5 12.99 10 5.99 7 9 7.99 7.99 5 5 5 7.99 0 ] xhow
+390.6 219 M (components and interfaces )
+[7.99 9 14 9 9 9 7.99 9 5 7 4.5 7.99 9 9 4.5 5 9 5 7.99 5.99 5.81 7.99 7.99 7.99 7 0 ] xhow
+1 FF
+369 249 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 249 M (in-kernel vs. out-of kernel )
+[5 9 5.99 8.82 7.99 5.99 9 7.99 5 4.5 9 7 4.5 4.5 9 9 5 5.99 9 5.99 4.5 8.82 7.99 5.99 9 7.99 5 0 ] xhow
+1 FF
+369 279 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 279 M (protected components )
+[9 5.99 9 5 7.99 7.99 5 7.99 9 4.5 7.99 9 14 9 9 9 7.99 9 5 7 0 ] xhow
+390.6 300 M (\(emulation library, etc.\) )
+[5.99 7.99 14 9 5 7.99 5 5 9 9 4.5 5 5 9 5.99 7.99 5.99 7.83 4.5 4.5 7.99 5 7.99 4.5 5.99 0 ] xhow
+1 FF
+369 330 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 330 M (... )
+[4.5 4.5 4.5 0 ] xhow
+333 366 M (Solutions )
+[10 9 5 9 5 5 9 9 7 0 ] xhow
+1 FF
+369 396 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 396 M (single-server )
+[7 5 9 9 5 7.99 5.99 7 7.99 5.99 8.73 7.99 5.99 0 ] xhow
+1 FF
+369 426 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 426 M (2-level multi-server )
+[9 5.99 5 7.54 8.73 7.99 5 4.5 14 9 5 5 5 5.99 7 7.99 5.99 8.73 7.99 5.99 0 ] xhow
+1 FF
+369 456 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 456 M ( )
+[0 ] xhow
+388.98 456 M (2-level + kernel support )
+[9 5.99 5 7.54 8.73 7.99 5 4.5 10.15 4.5 8.82 7.99 5.99 9 7.99 5 4.5 7 9 9 9 9 5.99 5 0 ] xhow
+1 FF
+369 486 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 486 M (symmetric multi-server )
+[7 9 14 14 7.99 5 5.99 5 7.99 4.5 14 9 5 5 5 5.99 7 7.99 5.99 8.73 7.99 5.99 0 ] xhow
+1 FF
+369 516 M (-  )
+[7.99 6 0 ] xhow
+0 FF
+388.98 516 M (... )
+[4.5 4.5 4.5 0 ] xhow
+1 G
+9 18 594 27 NF
+0 G
+1 FF
+192.42 34 M (Possible Architectures )
+[14.18 11.99 9.33 9.33 6.67 13.34 6.67 10.65 6 17.32 10.22 10.65 13.34 6.67 7.99 10.65 10.65 7.99 13.34 10.22 10.65 9.33 0 ] xhow
+9 54 315 729 CR
+1 G
+9 54 315 729 NF
+3 SL
+3.86 setmiterlimit
+0 G
+36 185.999527 261 21.000473 N
+40.5 63 54 35.999863 N
+238.5 63 54 35.999863 N
+0 360 99 65.999756 166.5 137.99971 AS
+235.25 115.75 
+214.59 119.5 
+230.13 105.37 
+232.69 110.56 
+4 PP
+CS
+256.5 99 
+232.69 110.56 
+2 PP
+S
+102.87 105.37 
+118.4 119.5 
+97.74 115.75 
+100.3 110.56 
+4 PP
+CS
+76.5 99 
+100.31 110.56 
+2 PP
+S
+36 365.999512 261 21.000473 N
+40.5 243 54 35.999863 N
+238.5 243 54 35.999863 N
+0 360 54 35.999863 256.5 338.999634 AS
+0 360 54 35.999863 76.5 338.999634 AS
+0 360 54 35.999863 166.5 302.999756 AS
+118.66 283.18 
+136.22 294.71 
+115.22 294.23 
+116.94 288.71 
+4 PP
+CS
+85.5 279 
+116.95 288.72 
+2 PP
+S
+217.73 294.21 
+196.74 294.66 
+214.3 283.15 
+216.02 288.68 
+4 PP
+CS
+247.5 279 
+216.02 288.69 
+2 PP
+S
+126.26 328.21 
+105.27 328.61 
+122.86 317.15 
+124.56 322.68 
+4 PP
+CS
+147.41 315.73 
+124.57 322.69 
+2 PP
+S
+210.36 316.86 
+227.94 328.35 
+206.94 327.93 
+208.65 322.4 
+4 PP
+CS
+185.59 315.73 
+208.66 322.41 
+2 PP
+S
+71.65 295.17 
+74.34 315.99 
+61.03 299.75 
+66.34 297.46 
+4 PP
+11 sp
+C A Z
+58.5 279 
+66.34 297.47 
+2 PP
+A Z
+271.96 299.75 
+258.65 315.99 
+261.33 295.17 
+266.65 297.46 
+4 PP
+C A Z
+274.5 279 
+266.66 297.47 
+2 PP
+A Z
+0 360 54 35.809723 256.5 496.869446 AS
+0 360 54 35.809723 76.5 496.869446 AS
+0 360 45 11.936569 166.5 553.568176 AS
+153.24 524.9 
+162.78 543.61 
+144.78 532.8 
+149.01 528.85 
+4 PP
+CS
+85.5 461.06 
+149.01 528.87 
+2 PP
+S
+188.22 532.8 
+170.21 543.61 
+179.75 524.9 
+183.98 528.85 
+4 PP
+CS
+247.5 461.06 
+183.99 528.87 
+2 PP
+S
+224.05 521.73 
+244.45 516.77 
+229.77 531.79 
+226.91 526.76 
+4 PP
+CS
+184.5 550.58 
+226.92 526.79 
+2 PP
+S
+103.91 531.78 
+89.35 516.65 
+109.71 521.76 
+106.81 526.77 
+4 PP
+CS
+148.5 550.58 
+106.82 526.79 
+2 PP
+S
+238.5 425.25 54 35.809723 N
+40.5 425.25 54 35.809723 N
+36 546.107788 261 20.892197 N
+36 725.999512 261 21.000473 N
+40.5 603 54 35.999863 N
+238.5 603 54 35.999863 N
+0 360 54 35.999863 256.5 692.999634 AS
+0 360 54 35.999863 76.5 692.999634 AS
+0 360 54 35.999863 171 692.999634 AS
+82.29 649.37 
+76.5 669.56 
+70.71 649.37 
+76.5 649.37 
+4 PP
+CS
+76.5 639 
+76.5 649.37 
+2 PP
+S
+144.53 660.24 
+161.03 673.22 
+140.15 670.96 
+142.34 665.6 
+4 PP
+CS
+76.5 639 
+142.35 665.62 
+2 PP
+S
+226.44 664.47 
+244.97 674.34 
+224.02 675.79 
+225.23 670.13 
+4 PP
+CS
+76.5 639 
+225.23 670.14 
+2 PP
+S
+262.29 649.37 
+256.5 669.56 
+250.71 649.37 
+256.5 649.37 
+4 PP
+CS
+256.5 639 
+256.5 649.37 
+2 PP
+S
+202.12 669.95 
+181.35 673.08 
+197.3 659.42 
+199.71 664.69 
+4 PP
+CS
+256.5 639 
+199.71 664.7 
+2 PP
+S
+109.21 675.81 
+88.26 674.37 
+106.79 664.49 
+108 670.15 
+4 PP
+CS
+256.5 639 
+108 670.17 
+2 PP
+S
+18 54 297 162 N
+18 234 297 162 N
+18 414 297 162 N
+18 594 297 162 N
+grestore
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 5 5
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+69 70 656 22 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+332.16 86 M (Architecture )
+[17.32 10.22 10.65 13.34 6.67 7.99 10.65 10.65 7.99 13.34 10.22 10.65 0 ] xhow
+1 G
+408 103 310 429 NF
+0 G
+2 (Times-Roman) 18 mymakefont
+2 FF
+408 115 M (Revolution, not evolution )
+[12 7.54 8.64 9 5 9 5 5 9 9 4.5 4.5 9 9 5 4.5 7.54 8.64 9 5 9 5 5 9 9 0 ] xhow
+408 151 M (Key ideas )
+[12.54 7.72 9 4.5 5 9 7.99 7.99 7 0 ] xhow
+1 FF
+444 181 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+463.98 181 M (everything out of kernel )
+[7.54 8.73 7.99 5.99 9 5 9 5 9 9 4.5 9 9 5 4.5 9 5.99 4.5 8.82 7.99 5.99 9 7.99 5 0 ] xhow
+1 FF
+444 211 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+463.98 211 M (modular services )
+[14 9 9 9 5 7.99 5.99 4.5 7 7.99 5.99 9 5 7.99 7.99 7 0 ] xhow
+1 FF
+444 241 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+463.98 241 M (coordination through emul lib. )
+[7.99 9 9 5.99 9 5 9 7.99 5 5 9 9 4.5 5 9 5.99 9 9 9 9 4.5 7.99 14 9 5 4.5 5 5 8.28 4.5 0 ] xhow
+1 FF
+444 271 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+463.98 271 M (generic services / layering )
+[9 7.99 9 7.99 5.99 5 7.99 4.5 7 7.99 5.99 9 5 7.99 7.99 7 4.5 5 4.5 5 7.99 9 7.99 5.99 5 9 9 0 ] xhow
+1 FF
+444 301 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+463.98 301 M (common facilities )
+[7.99 9 14 14 9 9 4.5 5.81 7.99 7.99 5 5 5 5 5 7.99 7 0 ] xhow
+1 FF
+444 331 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+463.98 331 M (object-oriented approach )
+[9 9 5 7.99 7.99 5 5.99 9 5.99 5 7.99 9 5 7.99 9 4.5 7.99 9 9 5.99 9 7.99 7.99 9 0 ] xhow
+1 FF
+444 361 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+463.98 361 M (build tools as needed )
+[8.64 9 5 5 9 4.5 5 9 9 5 7 4.5 7.99 7 4.5 9 7.99 7.99 9 7.99 9 0 ] xhow
+408 397 M (Approach )
+[12.99 9 9 5.99 9 7.99 7.99 9 0 ] xhow
+1 FF
+444 427 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+463.98 427 M (general design )
+[9 7.99 9 7.99 5.99 7.99 5 4.5 9 7.99 7 5 9 9 0 ] xhow
+1 FF
+444 457 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+463.98 457 M (BSD 4.3 prototype )
+[12 10 12.99 4.5 9 4.5 9 4.5 9 5.99 9 5 9 5 9 9 7.99 0 ] xhow
+1 FF
+444 487 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+463.98 487 M (successive refinements )
+[7 9 7.99 7.99 7.99 7 7 4.55 8.73 7.99 4.5 5.99 7.99 5 5 9 7.99 14 7.99 9 5 7 0 ] xhow
+1 FF
+563 512 M ( )
+[0 ] xhow
+71 122 326.59198 388.944 CR
+1 G
+71 122 326.59198 388.944 NF
+3 SL
+0 G
+164.007431 457.650665 226.834824 42.349335 N
+176.178162 150.642944 70.395172 163.250641 N
+2 SL
+0.5 G
+179.650803 155.334656 62.573486 66.509537 N
+180.120285 233.936829 62.573486 61.962875 N
+3 SL
+0 G
+308.708618 149.288345 70.395172 164.60524 N
+2 SL
+0.5 G
+312.619446 155.334656 62.573486 66.509537 N
+312.619446 233.936829 62.573486 61.962875 N
+0 G
+0 360 3.910858 6.046326 188.364304 295.875519 AS
+0 360 3.910843 6.046341 207.793381 295.923889 AS
+0 360 3.910828 6.046341 198.094482 295.923889 AS
+0 360 3.910843 6.046341 233.010513 295.923889 AS
+0 360 3.910858 6.046341 320.269348 295.923889 AS
+0 360 3.910843 6.046341 329.968231 295.923889 AS
+0 360 3.910843 6.046341 364.884277 295.923889 AS
+0 360 3.910858 6.046356 180.636459 379.846924 AS
+0 360 3.910873 6.046356 374.583191 379.846924 AS
+0 360 3.910858 6.046326 190.304077 379.895264 AS
+0 360 3.910843 6.046356 362.975769 379.846924 AS
+0 360 3.910843 6.046326 258.227661 379.895264 AS
+0 360 3.910828 6.046326 267.926575 379.895264 AS
+0 360 3.910843 6.046356 277.625458 379.846924 AS
+185.29 370.37 
+180.62 376.87 
+177.33 369.57 
+181.31 369.97 
+4 PP
+F
+188.38 298.9 
+181.31 369.98 
+2 PP
+0.5 SL
+S
+255.3 368.92 
+256.27 376.87 
+248.9 373.74 
+252.1 371.33 
+4 PP
+F
+198.08 298.9 
+252.11 371.34 
+2 PP
+S
+265.27 369.72 
+266.22 377.67 
+258.86 374.52 
+262.06 372.12 
+4 PP
+F
+207.78 298.9 
+262.07 372.12 
+2 PP
+S
+357.21 369.83 
+361.01 376.86 
+353.01 376.64 
+355.11 373.23 
+4 PP
+F
+232.99 298.9 
+355.12 373.24 
+2 PP
+S
+377.7 369.49 
+374.59 376.87 
+369.76 370.49 
+373.73 369.99 
+4 PP
+F
+364.9 298.9 
+373.74 370 
+2 PP
+S
+200.25 376.64 
+192.26 376.86 
+196.06 369.83 
+198.16 373.23 
+4 PP
+F
+320.28 298.9 
+198.16 373.24 
+2 PP
+S
+275.59 374.71 
+268.15 377.66 
+269.31 369.75 
+272.45 372.23 
+4 PP
+F
+329.98 298.9 
+272.46 372.24 
+2 PP
+S
+0 FF
+182 143.37 M (Process A)
+[8 3.99 6.67 6 6.67 6 6 3.33 0 ] xhow
+313.35 143.37 M (Process B)
+[8 3.99 6.67 6 6.67 6 6 3.33 0 ] xhow
+243 486.19 M (Mach Kernel)
+[9.99 6.67 6 6.67 3.33 8 6.67 3.99 6.67 6.67 0 ] xhow
+173.17 397.85 M (TTY )
+[7.33 7.33 8 0 ] xhow
+250.85 397.59 M (File )
+[7.33 2.66 2.66 6.67 0 ] xhow
+329.61 395.97 M (Process )
+[8 3.99 6.67 6 6.67 6 6 0 ] xhow
+182.7 180.93 M (User code)
+[8.66 6 6.67 3.99 3.33 6 6.67 6.67 0 ] xhow
+317.55 177.93 M (User code)
+[8.66 6 6.67 3.99 3.33 6 6.67 6.67 0 ] xhow
+188.07 262.02 M (Emul. lib)
+[8 9.99 6.67 2.66 3.33 3.33 2.66 2.66 0 ] xhow
+317.98 263.02 M (Emul. lib)
+[8 9.99 6.67 2.66 3.33 3.33 2.66 2.66 0 ] xhow
+130.19 499.83 
+163.16 499.83 
+2 PP
+1 SL
+S
+130.19 445.85 
+167.04 445.85 
+2 PP
+S
+130.19 295.9 
+176.74 295.9 
+2 PP
+S
+176.74 226.92 
+130.19 226.92 
+2 PP
+S
+176.74 148.95 
+130.19 148.95 
+2 PP
+S
+129.01 161.07 
+136.01 148.95 
+143.01 161.07 
+136.01 161.07 
+4 PP
+0.5 G
+F
+143.01 214.8 
+136.01 226.92 
+129.01 214.8 
+136.01 214.8 
+4 PP
+F
+136.01 161.07 
+136.01 214.8 
+2 PP
+3 SL
+S
+129.21 239.81 
+136.25 227.72 
+143.21 239.87 
+136.21 239.84 
+4 PP
+F
+143.05 283.79 
+136 295.89 
+129.05 283.74 
+136.05 283.77 
+4 PP
+F
+136.21 239.84 
+136.05 283.78 
+2 PP
+S
+129.01 308.02 
+136.01 295.9 
+143.01 308.02 
+136.01 308.02 
+4 PP
+F
+143.01 433.72 
+136.01 445.85 
+129.01 433.72 
+136.01 433.72 
+4 PP
+F
+136.01 308.02 
+136.01 433.72 
+2 PP
+S
+129.01 457.97 
+136.01 445.85 
+143.01 457.97 
+136.01 457.97 
+4 PP
+F
+143.01 487.71 
+136.01 499.83 
+129.01 487.71 
+136.01 487.71 
+4 PP
+F
+136.01 457.97 
+136.01 487.71 
+2 PP
+S
+0 G
+74 192.29 M (Application)
+[8 6.67 6.67 2.66 2.66 6 6.67 3.33 2.66 6.67 0 ] xhow
+78.21 268.27 M (Emulation)
+[8 9.99 6.67 2.66 6.67 3.33 2.66 6.67 0 ] xhow
+92.71 375.43 M (Service)
+[8 6.67 3.99 6 2.66 6 0 ] xhow
+98.38 477.4 M (Kernel)
+[8 6.67 3.99 6.67 6.67 0 ] xhow
+202.66 224.52 
+211.66 208.93 
+220.66 224.52 
+211.66 224.52 
+4 PP
+0.666 G
+F
+220.66 232.33 
+211.66 247.92 
+202.66 232.33 
+211.66 232.33 
+4 PP
+F
+211.66 224.52 
+211.66 232.33 
+2 PP
+5 SL
+S
+336.5 224.52 
+345.5 208.93 
+354.5 224.52 
+345.5 224.52 
+4 PP
+F
+354.5 232.33 
+345.5 247.92 
+336.5 232.33 
+345.5 232.33 
+4 PP
+F
+345.5 224.52 
+345.5 232.33 
+2 PP
+S
+189.08 434.45 
+198.08 418.86 
+207.08 434.45 
+198.08 434.45 
+4 PP
+F
+207.08 457.25 
+198.08 472.84 
+189.08 457.25 
+198.08 457.25 
+4 PP
+F
+198.08 434.45 
+198.08 457.25 
+2 PP
+S
+268.61 434.45 
+277.61 418.86 
+286.61 434.45 
+277.61 434.45 
+4 PP
+F
+286.61 457.25 
+277.61 472.84 
+268.61 457.25 
+277.61 457.25 
+4 PP
+F
+277.61 434.45 
+277.61 457.25 
+2 PP
+S
+346.2 434.45 
+355.2 418.86 
+364.2 434.45 
+355.2 434.45 
+4 PP
+F
+364.2 457.25 
+355.2 472.84 
+346.2 457.25 
+355.2 457.25 
+4 PP
+F
+355.2 434.45 
+355.2 457.25 
+2 PP
+S
+0 G
+189.17 410.85 M (server)
+[6 6.67 3.99 6 6.67 0 ] xhow
+268.85 408.59 M (server)
+[6 6.67 3.99 6 6.67 0 ] xhow
+335.61 408.97 M (manager)
+[9.99 6.67 6.67 6.67 6.67 6.67 0 ] xhow
+3 SL
+0 360 72 81 197 396.5 AS
+0 360 72 81 278 396.5 AS
+0 360 72 81 359 396.5 AS
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 6 6
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+309.3 97 M (Design Overview )
+[17.32 10.65 9.33 6.67 11.99 13.34 6 18.66 11.75 10.65 10.41 11.99 6.67 10.65 17.32 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (Components )
+[12 9 14 9 9 9 7.99 9 5 7 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (Servers )
+[10 7.99 5.99 8.73 7.99 5.99 7 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (Emulation library )
+[10.99 14 9 5 7.99 5 5 9 9 4.5 5 5 9 5.99 7.99 5.99 9 0 ] xhow
+99 237 M (System framework )
+[10 9 7 5 7.99 14 4.5 5.99 5.99 7.99 14 7.54 12.81 9 5.99 9 0 ] xhow
+1 FF
+135 267 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 267 M (client-server interactions / object model )
+[7.99 5 5 7.99 9 5 5.99 7 7.99 5.99 8.73 7.99 5.99 4.5 5 9 5 7.99 5.99 7.99 7.99 5 5 9 9 7 4.5 5 4.5 9 9 5 7.99 7.99 5 4.5 14 9 9 7.99 5 0 ] xhow
+1 FF
+135 297 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 297 M (common facilities )
+[7.99 9 14 14 9 9 4.5 5.81 7.99 7.99 5 5 5 5 5 7.99 7 0 ] xhow
+1 FF
+135 327 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 327 M (common service interfaces )
+[7.99 9 14 14 9 9 4.5 7 7.99 5.99 9 5 7.99 7.99 4.5 5 9 5 7.99 5.99 5.81 7.99 7.99 7.99 7 0 ] xhow
+99 363 M (Low-level facilities / class library )
+[10.99 8.55 12.99 5.99 5 7.54 8.73 7.99 5 4.5 5.81 7.99 7.99 5 5 5 5 5 7.99 7 4.5 5 4.5 7.99 5 7.99 7 7 4.5 5 5 9 5.99 7.99 5.99 9 0 ] xhow
+99 399 M (Support tools )
+[10 9 9 9 9 5.99 5 4.5 5 9 9 5 7 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 7 7
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+99 93 M ( )
+[0 ] xhow
+1 G
+90 72 612 36 NF
+0 G
+321.98 88 M (Major Servers )
+[22.64 11.99 7.99 11.99 10.65 6 13.34 10.65 10.41 11.75 10.65 10.65 9.33 0 ] xhow
+1 G
+90 117 297 423 NF
+0 G
+2 (Times-Roman) 18 mymakefont
+2 FF
+90 129 M (direct user service:  )
+[9 5 5.99 7.99 7.99 5 4.5 9 7 7.99 5.99 4.5 7 7.99 5.99 9 5 7.99 7.99 5 4.5 0 ] xhow
+1 FF
+126 159 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+145.98 159 M (file )
+[5 5 5 7.99 0 ] xhow
+1 FF
+126 189 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+145.98 189 M (terminal \(TTY\) )
+[5 7.99 5.99 14 5 9 7.99 5 4.5 5.99 10.99 10.99 12.99 5.99 0 ] xhow
+1 FF
+126 219 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+145.98 219 M (local IPC \(pipes, sockets\) )
+[5 9 7.99 7.99 5 4.5 5.99 10 12 4.5 5.99 9 5 9 7.99 7 4.5 4.5 7 9 7.99 8.82 7.99 5 7 5.99 0 ] xhow
+1 FF
+126 249 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+145.98 249 M (process management )
+[9 5.99 9 7.99 7.99 7 7 4.5 14 7.99 9 7.99 9 7.99 14 7.99 9 5 0 ] xhow
+1 FF
+126 279 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+145.98 279 M (network )
+[9 7.99 5 12.81 9 5.99 9 0 ] xhow
+1 FF
+126 309 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+145.98 309 M (devices )
+[9 7.54 9 5 7.99 7.99 7 0 ] xhow
+3 (Times-Roman) 12 mymakefont
+3 FF
+90 326 M ( )
+[0 ] xhow
+1 G
+405 117 297 423 NF
+0 G
+2 FF
+405 129 M (support: )
+[7 9 9 9 9 5.99 5 5 0 ] xhow
+1 FF
+441 159 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+460.98 159 M (root name service )
+[5.99 9 9 5 4.5 9 7.99 14 7.99 4.5 7 7.99 5.99 9 5 7.99 7.99 0 ] xhow
+1 FF
+441 189 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+460.98 189 M (authentication )
+[7.99 9 5 9 7.99 9 5 5 7.99 7.99 5 5 9 9 0 ] xhow
+1 FF
+441 219 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+460.98 219 M (shared state \(blackboard\) )
+[7 9 7.99 5.99 7.99 9 4.5 7 5 7.99 5 7.99 4.5 5.99 9 5 7.99 7.99 9 9 9 7.99 5.99 9 5.99 0 ] xhow
+1 FF
+441 249 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+460.98 249 M (startup / admin )
+[7 5 7.99 5.99 5 9 9 4.5 5 4.5 7.99 9 14 5 9 0 ] xhow
+1 FF
+441 279 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+460.98 279 M (diagnostics )
+[9 5 7.99 9 9 9 7 5 5 7.99 7 0 ] xhow
+1 FF
+441 309 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+460.98 309 M (Mach services )
+[15.99 7.99 7.99 9 4.5 7 7.99 5.99 9 5 7.99 7.99 7 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 8 8
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+298.37 97 M (Emulation Library )
+[16 19.98 13.34 6.67 11.99 7.99 6.67 11.99 13.34 6 16 6.67 13.34 10.65 11.99 10.65 11.99 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (OS-specific )
+[12.99 10 5.99 7 9 7.99 7.99 5 5 5 7.99 0 ] xhow
+99 177 M (Inside the process address space )
+[5.99 9 7 5 9 7.99 4.5 5 9 7.99 4.5 9 5.99 9 7.99 7.99 7 7 4.5 7.99 9 9 5.99 7.99 7 7 4.5 7 9 7.99 7.99 7.99 0 ] xhow
+1 FF
+135 207 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 207 M ( )
+[0 ] xhow
+154.98 207 M (performance gains \(copyin/copyout, etc.\) )
+[9 7.99 5.99 5.99 9 5.99 14 7.99 9 7.99 7.99 4.5 8.91 7.99 5 9 7 4.5 5.99 7.99 9 8.82 9 5 9 5 7.99 9 8.82 9 9 9 5 4.5 4.5 7.99 5 7.99 4.5 5.99 0 ] xhow
+1 FF
+135 237 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 237 M (robustness concerns but NOT security \(unforgeable Mach ports\) )
+[5.99 9 8.64 9 7 5 9 7.99 7 7 4.5 7.99 9 9 7.99 7.99 5.99 9 7 4.5 8.64 9 5 4.5 12.99 12.27 10.99 4.5 7 7.99 7.99 9 5.99 5 5 9 4.5 5.99 9 9 5.99 9 5.67 9 7.99 7.99 9 5 7.99 4.5 15.99 7.99 7.99 9 4.5 9 9 5.99 5 7 5.99 0 ] xhow
+99 273 M (Local repository for almost all process state )
+[10.99 9 7.99 7.99 5 4.5 5.99 7.99 9 9 7 5 5 9 5.99 9 4.5 5.99 9 5.99 4.5 7.99 5 14 9 7 5 4.5 7.99 5 5 4.5 9 5.99 9 7.99 7.99 7 7 4.5 7 5 7.99 5 7.99 0 ] xhow
+1 FF
+135 303 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 303 M (external mechanisms for shared info )
+[7.72 9 5 7.99 5.99 9 7.99 5 4.5 14 7.99 7.99 9 7.99 9 5 7 14 7 4.5 5.99 9 5.99 4.5 7 9 7.99 5.99 7.99 9 4.5 5 9 5.99 9 0 ] xhow
+1 FF
+135 333 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 333 M (automatic state inheritance for UNIX )
+[7.99 9 5 9 14 7.99 5 5 7.99 4.5 7 5 7.99 5 7.99 4.5 5 9 9 7.99 5.99 5 5 7.99 9 7.99 7.99 4.5 5.99 9 5.99 4.5 12.99 12.99 5.99 12.99 0 ] xhow
+3 (Times-Italic) 18 mymakefont
+3 FF
+427.26 333 M (fork\()
+[5 9 7 7.99 0 ] xhow
+2 FF
+462.23 333 M (\) )
+[5.99 0 ] xhow
+99 369 M (Direct access to each individual system entity \()
+[12.99 5 5.99 7.99 7.99 5 4.5 7.99 7.99 7.99 7.99 7 7 4.5 5 9 4.5 7.99 7.99 7.99 9 4.5 5 9 9 4.55 9 5 9 9 7.99 5 4.5 7 9 7 5 7.99 14 4.5 7.99 9 5 5 5 9 4.5 0 ] xhow
+3 FF
+437.81 369 M (items)
+[5 5 7.99 12.99 0 ] xhow
+2 FF
+475.78 369 M (\) through separate Mach port )
+[5.99 4.5 5 9 5.99 9 9 9 9 4.5 7 7.99 9 7.99 5.99 7.99 5 7.99 4.5 15.99 7.99 7.99 9 4.5 9 9 5.99 5 0 ] xhow
+99 405 M (Active threads for signals, async I/O, etc. )
+[12.99 7.99 5 4.55 8.73 7.99 4.5 5 9 5.99 7.99 7.99 9 7 4.5 5.99 9 5.99 4.5 7 5 9 9 7.99 5 7 4.5 4.5 7.99 7 9 9 7.99 4.5 5.99 5 12.99 4.5 4.5 7.99 5 7.99 4.5 0 ] xhow
+99 441 M (Optimization: maximize client-side processing )
+[12.99 9 5 5 14 5 7.99 7.99 5 5 9 9 5 4.5 14 7.99 9 5 14 5 7.99 7.99 4.5 7.99 5 5 7.99 9 5 5.99 7 5 9 7.99 4.5 9 5.99 9 7.99 7.99 7 7 5 9 9 0 ] xhow
+1 FF
+135 471 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 471 M (specification of server interfaces )
+[7 9 7.99 7.99 5 5 5 7.99 7.99 5 5 9 9 4.5 9 5.99 4.5 7 7.99 5.99 8.73 7.99 5.99 4.5 5 9 5 7.99 5.99 5.81 7.99 7.99 7.99 7 0 ] xhow
+1 FF
+135 501 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 501 M (complex proxy objects )
+[7.99 9 14 9 5 7.72 9 4.5 9 5.99 9 9 9 4.5 9 9 5 7.99 7.99 5 7 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 9 9
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+99 93 M ( )
+[0 ] xhow
+72 72 648 468 CR
+1 G
+72 72 648 468 NF
+GS
+72 72 648 468 W
+GS
+72 72 TR
+-270 rotate
+beginPSInsetprintcode
+%%BeginDocument: EPSgraphic
+0.858716 -0.921764 scale
+-5 5 TR
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: unixemul.draw
+%%Creator: Draw
+%%CreationDate: Thu Jan 31 17:47:38 1991
+%%For: dpj
+%%DocumentFonts: (atend)
+%%Pages: 0 1
+%%BoundingBox: 5 -5 550 698
+%%EndComments
+
+%%BeginDocument: /usr/lib/NextStep/printPackage.ps
+%!PS-Adobe-2.0
+%%Title: Printing Package
+%%EndComments
+%Version: 2.0
+%Copyright: 1988, NeXT, Inc.
+
+/__NXdef{1 index where{pop pop pop}{def}ifelse}bind def
+/__NXbdef{1 index where{pop pop pop}{bind def}ifelse}bind def
+/UserObjects 10 array __NXdef
+/defineuserobject{
+	exch dup 1 add dup UserObjects length gt{
+		array dup 0 UserObjects putinterval
+		/UserObjects exch def
+	}{pop}ifelse UserObjects exch 3 -1 roll put
+}__NXbdef
+/undefineuserobject{UserObjects exch null put}__NXbdef
+/execuserobject{UserObjects exch get exec}__NXbdef
+/__NXRectPath{4 2 roll moveto 1 index 0 rlineto
+0 exch rlineto neg 0 rlineto closepath}__NXbdef
+/__NXProcessRectArgs{
+	1 index type /arraytype eq{
+		exch 0 4 2 index length 1 sub{
+			dup 3 add 1 exch{1 index exch get exch}for
+			5 1 roll 5 index exec
+		}for pop pop
+	}{exec}ifelse
+}__NXbdef
+/rectfill{gsave newpath {__NXRectPath fill} __NXProcessRectArgs grestore}__NXbdef
+/rectclip{newpath {__NXRectPath} __NXProcessRectArgs clip newpath}__NXbdef
+/rectstroke{
+	gsave newpath dup type /arraytype eq{dup length 6 eq}{false}ifelse{
+		{gsave __NXRectPath null concat stroke grestore}
+		dup length array cvx copy dup 2 4 -1 roll put __NXProcessRectArgs
+	}{{__NXRectPath stroke} __NXProcessRectArgs}ifelse grestore
+}__NXbdef
+/xyshow{
+	0 1 3 index length 1 sub{
+		currentpoint 4 index 3 index 1 getinterval show
+		3 index 3 index 2 mul 1 add get add exch
+		3 index	3 index 2 mul get add exch moveto pop
+	}for pop pop
+}__NXbdef
+/xshow{
+	0 1 3 index length 1 sub{
+		currentpoint 4 index 3 index 1 getinterval show
+		exch 3 index 3 index get add exch moveto pop
+	}for pop pop
+}__NXbdef
+/yshow{
+	0 1 3 index length 1 sub{
+		currentpoint 4 index 3 index 1 getinterval show
+		3 index 3 index get add moveto pop
+	}for pop pop
+}__NXbdef
+/arct{arcto pop pop pop pop}__NXbdef
+/setbbox{pop pop pop pop}__NXbdef
+/ucache{}__NXbdef
+/ucachestatus{mark 0 0 0 0 0}__NXbdef
+/setucacheparams{cleartomark}__NXbdef
+/uappend{systemdict begin cvx exec end}__NXbdef
+/ueofill{gsave newpath uappend eofill grestore}__NXbdef
+/ufill{gsave newpath uappend fill grestore}__NXbdef
+/ustroke{
+	gsave newpath dup length 6 eq
+	{exch uappend concat}{uappend}ifelse
+	stroke grestore
+}__NXbdef
+/__NXustrokepathMatrix dup where {pop pop}{matrix def}ifelse
+/ustrokepath{
+	newpath dup length 6 eq{
+		exch uappend __NXustrokepathMatrix currentmatrix exch concat
+		strokepath setmatrix
+	}{uappend strokepath}ifelse
+} __NXbdef
+/upath{
+	[exch {/ucache cvx}if pathbbox /setbbox cvx
+	 {/moveto cvx}{/lineto cvx}{/curveto cvx}{/closepath cvx}pathforall]cvx
+} __NXbdef
+/setstrokeadjust{pop}__NXbdef
+/currentstrokeadjust{false}__NXbdef
+/selectfont{exch findfont exch
+dup type /arraytype eq {makefont}{scalefont}ifelse setfont}__NXbdef
+/_NXCombineArrays{
+	counttomark dup 2 add index dup length 3 -1 roll {
+		2 index length sub dup 4 1 roll 1 index exch 4 -1 roll putinterval exch
+	}repeat pop pop pop
+}__NXbdef
+/setcmykcolor{
+	1.0 exch sub dup dup 6 -1 roll
+	sub dup 0 lt{pop 0}if 5 1 roll
+	4 -1 roll sub dup 0 lt{pop 0}if 3 1 roll
+	exch sub dup 0 lt{pop 0}if setrgbcolor
+}__NXbdef
+/currentcmykcolor{currentrgbcolor 3{1.0 exch sub 3 1 roll}repeat 0}__NXbdef
+/flushgraphics{}def
+/setwindowtype{pop pop}def
+/currentwindowtype{pop 0}def
+/setalpha{pop}def
+/currentalpha{1.0}def
+/hidecursor{}def
+/obscurecursor{}def
+/revealcursor{}def
+/setcursor{4 {pop}repeat}bind def
+/showcursor{}def
+/NextStepEncoding where not{
+/NextStepEncoding StandardEncoding 256 array copy def
+0 [129/Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/Ccedilla/Egrave
+/Eacute/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex/Idieresis
+/Eth/Ntilde/Ograve/Oacute/Ocircumflex/Otilde/Odieresis/Ugrave/Uacute
+/Ucircumflex/Udieresis/Yacute/Thorn/mu/multiply/divide/copyright
+176/registered 181/brokenbar 190/logicalnot 192/onesuperior 201/twosuperior
+204/threesuperior 209/plusminus/onequarter/onehalf/threequarters/agrave
+/aacute/acircumflex/atilde/adieresis/aring/ccedilla/egrave/eacute
+/ecircumflex/edieresis/igrave 226/iacute 228/icircumflex/idieresis/eth
+/ntilde 236/ograve/oacute/ocircumflex/otilde/odieresis 242/ugrave/uacute
+/ucircumflex 246/udieresis/yacute 252/thorn/ydieresis]
+{dup type /nametype eq
+ {NextStepEncoding 2 index 2 index put pop 1 add}{exch pop}ifelse
+}forall pop
+/NextStepEncoding NextStepEncoding readonly def   
+/_NXfstr 128 string dup 0 (_NX) putinterval def   
+/findfont{
+ % Because we can never let NextStepEncoding get into
+ % SharedFontDirectory, we cannot reencode a font to NextStepEncoding
+ % if we are in shared mode.  So if currentshared is true,
+ % we call the normal findfont and return that
+ /currentshared where {pop currentshared} {false} ifelse
+ {//findfont exec}
+ {dup _NXfstr 3 125 getinterval cvs length 3 add _NXfstr 0 3 -1 roll
+  getinterval cvn exch FontDirectory 2 index known 
+  {pop FontDirectory exch get}
+  {//findfont exec dup /Encoding get StandardEncoding eq
+   {	dup length dict exch
+	{1 index /FID ne {2 index 3 1 roll put}{pop pop}ifelse}forall
+	 dup /Encoding NextStepEncoding put definefont
+	}{exch pop} ifelse
+   }ifelse
+ }ifelse
+}bind def
+}{pop}ifelse
+/_NXProcArray 5 array __NXdef
+/_NXChannels 0 __NXdef
+/_NXTotalBytes 0 __NXdef
+/_NXDoImageOp{
+	1 index{dup}{1}ifelse /_NXChannels exch store
+	_NXChannels 2 add 2 roll _NXProcArray 0 _NXChannels getinterval astore pop
+	5 index 4 index mul 2 index{1 sub 8 idiv 1 add mul}{mul 1 sub 8 idiv 1 add}ifelse
+	4 index mul /_NXTotalBytes exch store pop exch pop
+	gsave matrix invertmatrix concat 0.5 setgray 0 0 4 2 roll rectfill grestore
+	{	0 1 _NXChannels 1 sub{
+			_NXProcArray exch get exec
+			length _NXTotalBytes exch sub /_NXTotalBytes exch store}for
+		_NXTotalBytes 0 le{exit}if
+	}loop /_NXProcArray 5 array def
+}__NXbdef
+/colorimage{_NXDoImageOp}__NXbdef
+/alphaimage{1 add _NXDoImageOp}def
+%%EndDocument
+
+/__NXbasematrix matrix currentmatrix def
+%%EndProlog
+%%BeginSetup
+/oval {
+    translate scale newpath 0.5 0.5 0.5 0 360 arc
+} def /fillandframeoval {
+    oval gsave eofill grestore 0 setgray matrix defaultmatrix setmatrix stroke
+} def /fillandframerectangle {
+    4 copy rectfill 0 setgray rectstroke
+} def /line {
+    moveto rlineto stroke
+} def /setup {
+    setgray setlinewidth setlinecap setlinejoin gsave
+} def /arrow {
+    newpath moveto dup rotate -13 6 rlineto 4 -6 rlineto -4 -6 rlineto closepath gsave 0 setlinejoin stroke grestore fill neg rotate
+} def
+%%EndSetup
+gsave
+5 -5 545 702.459961 rectclip
+5 -5 545 702.459961 rectclip
+0 0 0 0 setup
+<fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffaaa0fffffaa83fffffffffffffffa0fffffffffffffffffffffffffffffaa01fffea8013fffffffffffffaa01ffffffffffffffffffffffffffffaa004ffaa80047ffffffffffffea004fffffffffffffffffffffffffffaa1111eaa011113fffffffffffea0111ffffffffffffffffffffffffff8a00456aa0045557ffffffffffe800555ffffffffffffffffffffffffe8a8111a2a11111567fffffffffe8111156fffffffffffffffffffffffe8a80468aa00155559bffffffffa80045559ffffffffffffffffffffffe1a81128a81111566667fffffffa01a115666fffffffffffffffffffffe0a800a0a800456aaa2abeaa3ffa0aa80559aaffffffffffffffffffffa0a81280a81111a8aa12ba9283ea2a2811666abfffffffffffffffffffa0a80682a0045a802a046802806aa8280459aaaeffffffffffffffffff81a81a02a0112a112a11a112812aa0a8111266bbbfffffffffffffffff80a82802a00568006802a004406a80a800555aaefffffffffffffffffe81a82812a011a011a812901115aa11a0111566bbbffffffffffffffffe802aa00a8006a004a80a800455aa00a0045559aefffffffffffffffffe012a811a8112a112a11a111116a812a111116666bbfffffffffffffffe006a804a8046a00aa00a004555a00280055555aaaffffffffffffffffa112a102a8012802aa21a111816a0128a1115666abbfffffffffffffffa0028002a0006a02a8a8a806a068006aa005559aaaaffffffffffffffea012811aa8112aaa2aa1a81a8028112a801166666abbbffffffffffffaaa0600aaaa805aa02a002aaa002804680004555aaaaeffffffffffffff0101011101011101110111010111111111111266abbbbffffffffffffff04044454040455045404540404540554045555aaaefffffffffffffffff111151111111261115115511111511651115666bbbbffffffffffffffff5555955555555a55555555555555555955559aaafffffffffffffffffff56565666565666566656665656665666566666bbfffffffffffffffffff595999a95959aa59a959a95959a959a959aaaafffffffffffffffffffff6666a66666667b6666666a66666a66ba666abbbffffffffffffffffffffaaaaeaaaaaaaafaaaaaaaaaaaaaaaaaeaaaaeffffffffffffffffffffffabababbbababbbabbbabbbababbbabbbabbbbbfffffffffffffffffffffaeaeeefeaeaeffaebeaefeaeaefeaefeaefffffffffffffffffffffffffbbbbfbbbbbbbbfbbbbbbbfbbbbbfbbffbbbfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff>
+115
+56
+2
+[1 0 0 -1 -430 56]
+ {}  image
+grestore
+0 0 0 0 setup
+<fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03ffffffffffffffffffffffffffffffffffffffff0fffffffffffffffffffffffffffffffffffffffff0bbbbfffffffffffffffffffffffffffffffffffff0aaaeffcffffffffffffffffffffffffffffffffff066abbbbbcffffffffffffffffffffffffffffffff0569aaaaaeffffffffffffffffffffffffffffffff05666666abbbbbffffffffffffffffffffffffffff0555559aaaaaefff3fffffffffffffffffffffffff01111566666abbbbbf3ffffffffffffffffffffffffc0004555559aaaaaefffffffffffffffffffffffffffc011111566666abbbbbffffffffffffffffffffffffff00055555800aaaaeffcfffffc3ffffffffffffffffff1111156506067abbbb8fffffffffffffffffffffffff0004555509aa8282330f03c003c0ffffffffffffffff011111560666208030c0330cc30cffffffffffffffffc0045555099a8082e0c0030cc300ffffffffffffffffc011111502062083b0803fc0c30fffffffffffffffffc0045555402a0002f0c0030fc3c0ffffffffffffffffc11111166666aabbbbbfff00fffffffffffffffffffff0004555559aaaaaeffcff3cfffffffffffffffffffff011111566666abbbbbcff00fffffffffffffffffffff004155500502aa000fffffffffffffffffffffffffff011111540406aa830bbfffffffffffffffffffffffffc0045554410a80820f0330ffffffffffffffffffffffc11111544206088308300c3fffffffffffffffffffffc0004554410a00820c300c3fffffffffffffffffffffc011111462060a8308300c3ffffffffffffffffffffff0044550150280820f000c0ffffffffffffffffffffff11111526666a6abbbb8fffffffffffffffffffffffff0004555559aaaaaeffffffffffffffffffffffffffff011111566666abbbbbffffffffffffffffffffffffffc0045555559aaaaaeff3ffffffffffffffffffffffffc011111566666abbbbb3ffffffffffffffffffffffffc004555559aaaaaeffffffffffffffffffffffffffffc111115566666bbbbbbffffffffffffffffffffffffff0004555559aaaaaeff0fffffffffffffffffffffffff011111566666abbb0fffffffffffffffffffffffffff00454555569aaa0fffffffffffffffffffffffffffff0111115666660fffffffffffffffffffffffffffffffc0045555590fffffffffffffffffffffffffffffffffc11111560fffffffffffffffffffffffffffffffffffc000450fffffffffffffffffffffffffffffffffffffc0110ffffffffffffffffffffffffffffffffffffffff00ffffffffffffffffffffffffffffffffffffffffff3ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff>
+88
+61
+2
+[1 0 0 -1 -10 61]
+ {}  image
+grestore
+0 0 1.46 0 setup
+460 0 40 650 line
+grestore
+0 0 1.46 0 setup
+gsave
+/Helvetica-Bold findfont 16 scalefont [1 0 0 -1 0 0] makefont
+26
+exch
+defineuserobject
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 1361] concat
+gsave
+42 670 456 21 rectclip
+/Helvetica-Bold findfont 18 scalefont [1 0 0 -1 0 0] makefont
+42
+exch
+defineuserobject
+42 execuserobject setfont
+0 setgray
+42 688 moveto (Multi-server: UNIX Emulation Library) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+50 480 80 140 rectstroke
+grestore
+0 0 2.03 0 setup
+170 480 80 140 rectstroke
+grestore
+0 0 2.03 0 setup
+290 590 30 30 rectstroke
+grestore
+0 0 2.03 0 setup
+290 540 30 30 rectstroke
+grestore
+0 0 2.03 0 setup
+290 490 30 30 rectstroke
+grestore
+0 0 2.03 0 setup
+50 380 200 70 rectstroke
+grestore
+0 0 2.03 0 setup
+290 440 30 30 rectstroke
+grestore
+0 0 2.03 0 setup
+290 390 30 30 rectstroke
+grestore
+0 0 2.03 0 setup
+100 290 130 30 rectstroke
+grestore
+0 0 2.03 0 setup
+220 210 101 60 rectstroke
+grestore
+0 0 2.03 0 setup
+290 160 30 30 rectstroke
+grestore
+0 0 2.03 0 setup
+290 110 30 30 rectstroke
+grestore
+0 0 2.03 0 setup
+290 60 30 30 rectstroke
+grestore
+0 0 2.03 0 setup
+60 70 130 80 rectstroke
+grestore
+0 0 2.03 0 setup
+100 210 70 60 rectstroke
+grestore
+0 0 2.03 0 setup
+gsave
+42 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 1173] concat
+gsave
+70 577 38 19 rectclip
+26 execuserobject setfont
+0 setgray
+70 593 moveto (desc) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 1061] concat
+gsave
+69 521 39 19 rectclip
+26 execuserobject setfont
+0 setgray
+69 537 moveto (table) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 1171] concat
+gsave
+201 576 25 19 rectclip
+26 execuserobject setfont
+0 setgray
+201 592 moveto (file) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 1059] concat
+gsave
+196 520 39 19 rectclip
+26 execuserobject setfont
+0 setgray
+196 536 moveto (table) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 837] concat
+gsave
+105 409 87 19 rectclip
+26 execuserobject setfont
+0 setgray
+105 425 moveto (prefix table) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 499] concat
+gsave
+231 240 97 19 rectclip
+26 execuserobject setfont
+0 setgray
+231 256 moveto (notification) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 453] concat
+gsave
+244 217 49 19 rectclip
+26 execuserobject setfont
+0 setgray
+244 233 moveto (object) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 513] concat
+gsave
+115 247 48 19 rectclip
+26 execuserobject setfont
+0 setgray
+115 263 moveto (signal) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 465] concat
+gsave
+114 223 54 19 rectclip
+26 execuserobject setfont
+0 setgray
+114 239 moveto (state) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 249] concat
+gsave
+67 115 121 19 rectclip
+26 execuserobject setfont
+0 setgray
+67 131 moveto (fork, exec, kill) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 187] concat
+gsave
+90 84 48 19 rectclip
+26 execuserobject setfont
+0 setgray
+90 100 moveto (logic) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 1265] concat
+gsave
+305 623 136 19 rectclip
+26 execuserobject setfont
+0 setgray
+305 639 moveto (open files, ttys, ...) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 939] concat
+gsave
+323 460 40 19 rectclip
+26 execuserobject setfont
+0 setgray
+323 476 moveto (CWD) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 839] concat
+gsave
+325 410 48 19 rectclip
+26 execuserobject setfont
+0 setgray
+325 426 moveto (ROOT) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 383] concat
+gsave
+325 182 141 19 rectclip
+26 execuserobject setfont
+0 setgray
+325 198 moveto (task master items) show
+grestore
+grestore
+grestore
+0 0 1.2 0 setup
+40 0 130 550 line
+0 170 550 arrow
+grestore
+0 0 1.2 0 setup
+40 0 250 600 line
+0 290 600 arrow
+grestore
+0 0 1.2 0 setup
+40 0 250 550 line
+0 290 550 arrow
+grestore
+0 0 1.2 0 setup
+40 0 250 500 line
+0 290 500 arrow
+grestore
+0 0 1.2 0 setup
+50 0 170 240 line
+180 170 240 arrow
+grestore
+0 0 4 0.498 setup
+100 0 320 600 line
+0 420 600 arrow
+grestore
+0 0 4 0.498 setup
+100 0 320 550 line
+0 420 550 arrow
+grestore
+0 0 4 0.498 setup
+100 0 320 500 line
+0 420 500 arrow
+grestore
+0 0 4 0.498 setup
+100 0 321 450 line
+0 421 450 arrow
+grestore
+0 0 4 0.498 setup
+100 0 320 400 line
+0 420 400 arrow
+grestore
+0 0 4 0.498 setup
+100 0 320 240 line
+180 320 240 arrow
+grestore
+0 0 4 0.498 setup
+100 0 320 170 line
+0 420 170 arrow
+grestore
+0 0 4 0.498 setup
+100 0 320 120 line
+0 420 120 arrow
+grestore
+0 0 4 0.498 setup
+100 0 320 70 line
+0 420 70 arrow
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 1201] concat
+gsave
+430 591 77 19 rectclip
+26 execuserobject setfont
+0 setgray
+430 607 moveto (file server) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 1101] concat
+gsave
+431 541 77 19 rectclip
+26 execuserobject setfont
+0 setgray
+431 557 moveto (file server) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 1001] concat
+gsave
+430 491 77 19 rectclip
+26 execuserobject setfont
+0 setgray
+430 507 moveto (file server) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 901] concat
+gsave
+428 441 77 19 rectclip
+26 execuserobject setfont
+0 setgray
+428 457 moveto (file server) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 803] concat
+gsave
+429 392 85 19 rectclip
+26 execuserobject setfont
+0 setgray
+429 408 moveto (root server) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 483] concat
+gsave
+429 232 90 19 rectclip
+26 execuserobject setfont
+0 setgray
+429 248 moveto (task master) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 343] concat
+gsave
+431 162 90 19 rectclip
+26 execuserobject setfont
+0 setgray
+431 178 moveto (task master) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 243] concat
+gsave
+431 112 90 19 rectclip
+26 execuserobject setfont
+0 setgray
+431 128 moveto (task master) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 143] concat
+gsave
+430 62 90 19 rectclip
+26 execuserobject setfont
+0 setgray
+430 78 moveto (task master) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+290 290 30 30 rectstroke
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 647] concat
+gsave
+322 316 52 15 rectclip
+26 execuserobject setfont
+0 setgray
+322 332 moveto (token) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 603] concat
+gsave
+429 292 88 19 rectclip
+26 execuserobject setfont
+0 setgray
+429 308 moveto (auth server) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 615] concat
+gsave
+108 298 118 19 rectclip
+26 execuserobject setfont
+0 setgray
+108 314 moveto (uid, gid, umask) show
+grestore
+grestore
+grestore
+0 0 4 0.498 setup
+100 0 321 302 line
+0 421 302 arrow
+grestore
+0 0 1.2 0 setup
+60 0 230 300 line
+0 290 300 arrow
+grestore
+0 0 1.2 0 setup
+40 0 130 500 line
+0 170 500 arrow
+grestore
+0 0 1.2 0 setup
+40 0 130 600 line
+0 170 600 arrow
+grestore
+0 0 1.2 0 setup
+100 50 190 120 line
+26.565834 290 170 arrow
+grestore
+0 0 1.2 0 setup
+100 20 190 100 line
+11.310266 290 120 arrow
+grestore
+0 0 1.2 0 setup
+100 -10 190 80 line
+-5.710762 290 70 arrow
+grestore
+0 0 2.03 0 setup
+290 340 30 30 rectstroke
+grestore
+0 0 1.2 0 setup
+40 10 250 440 line
+14.036657 290 450 arrow
+grestore
+0 0 1.2 0 setup
+40 -10 250 420 line
+-14.036657 290 410 arrow
+grestore
+0 0 1.2 0 setup
+40 -40 250 400 line
+-45.001328 290 360 arrow
+grestore
+0 0 4 0.498 setup
+100 0 320 350 line
+0 420 350 arrow
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 703] concat
+gsave
+429 342 74 19 rectclip
+26 execuserobject setfont
+0 setgray
+429 358 moveto (tty server) show
+grestore
+grestore
+grestore
+0 0 2.03 0 setup
+gsave
+26 execuserobject setfont
+0 setgray
+[1 0 0 -1 0 737] concat
+gsave
+324 359 58 19 rectclip
+26 execuserobject setfont
+0 setgray
+324 375 moveto (/dev/tty) show
+grestore
+grestore
+grestore
+gsave
+0 0 540 720 rectclip
+[1 0 0 -1 0 720] concat
+grestore
+grestore
+%%Trailer
+%%DocumentFonts: Helvetica-Bold
+endPSInsetprintcode
+%%EndDocument
+GR
+GR
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 10 10
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+234.09 97 M (Major Facilities and Interfaces)
+[22.64 11.99 7.99 11.99 10.65 6 14.06 11.99 10.65 6.67 6.67 6.67 7.99 6.67 10.65 9.33 6 11.99 13.34 13.34 6 9.33 13.34 7.99 10.65 10.65 7.99 11.99 10.65 10.65 0 ] xhow
+549.92 97 M (: )
+[7.99 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (object model: )
+[9 9 5 7.99 7.99 5 4.5 14 9 9 7.99 5 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (servers export )
+[7 7.99 5.99 8.73 7.99 5.99 7 4.5 7.72 9 9 9 5.99 5 0 ] xhow
+3 (Times-Italic) 18 mymakefont
+3 FF
+260.35 171 M (items )
+[5 5 7.99 12.99 7 0 ] xhow
+2 FF
+99 207 M (general-purpose: )
+[9 7.99 9 7.99 5.99 7.99 5 5.99 9 9 5.99 9 9 7 7.99 5 0 ] xhow
+1 FF
+135 237 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 237 M (item management and access control )
+[5 5 7.99 14 4.5 14 7.99 9 7.99 9 7.99 14 7.99 9 5 4.5 7.99 9 9 4.5 7.99 7.99 7.99 7.99 7 7 4.5 7.99 9 9 5 5.99 9 5 0 ] xhow
+1 FF
+135 267 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 267 M (naming )
+[9 7.99 14 5 9 9 0 ] xhow
+1 FF
+135 297 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 297 M (I/O )
+[5.99 5 12.99 0 ] xhow
+1 FF
+135 327 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 327 M (asynchronous notifications )
+[7.99 7 9 9 7.99 9 5.99 9 9 9 9 7 4.5 9 9 5 5 5 5 7.99 7.99 5 5 9 9 7 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (shared state management )
+[7 9 7.99 5.99 7.99 9 4.5 7 5 7.99 5 7.99 4.5 14 7.99 9 7.99 9 7.99 14 7.99 9 5 0 ] xhow
+99 393 M (specialized: )
+[7 9 7.99 7.99 5 7.99 5 5 7.99 7.99 9 5 0 ] xhow
+1 FF
+135 423 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 423 M (network control )
+[9 7.99 5 12.81 9 5.99 9 4.5 7.99 9 9 5 5.99 9 5 0 ] xhow
+1 FF
+135 453 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 453 M (process control )
+[9 5.99 9 7.99 7.99 7 7 4.5 7.99 9 9 5 5.99 9 5 0 ] xhow
+1 FF
+135 483 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 483 M (TTY control )
+[10.99 10.99 12.99 4.5 7.99 9 9 5 5.99 9 5 0 ] xhow
+1 FF
+135 513 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 513 M (system administration )
+[7 9 7 5 7.99 14 4.5 7.99 9 14 5 9 5 7 5 5.99 7.99 5 5 9 9 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 11 11
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+297.79 97 M (Low-level Facilities )
+[16 11.75 17.32 7.99 6.67 10.29 11.75 10.65 6.67 6 14.06 11.99 10.65 6.67 6.67 6.67 7.99 6.67 10.65 9.33 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (Common library of reusable objects \(MachObjects, C++\) )
+[12 9 14 14 9 9 4.5 5 5 9 5.99 7.99 5.99 9 4.5 9 5.99 4.5 5.99 7.99 9 7 7.99 9 5 7.99 4.5 9 9 5 7.99 7.99 5 7 4.5 5.99 15.99 7.99 7.99 9 12.99 9 5 7.99 7.99 5 7 4.5 4.5 12 10.15 10.15 5.99 0 ] xhow
+99 177 M (Support of high-level interfaces )
+[10 9 9 9 9 5.99 5 4.5 9 5.99 4.5 9 5 9 9 5.99 5 7.54 8.73 7.99 5 4.5 5 9 5 7.99 5.99 5.81 7.99 7.99 7.99 7 0 ] xhow
+1 FF
+135 207 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 207 M (mapped file access )
+[14 7.99 9 9 7.99 9 4.5 5 5 5 7.99 4.5 7.99 7.99 7.99 7.99 7 7 0 ] xhow
+1 FF
+135 237 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 237 M (data streams -- I/O buffers )
+[9 7.99 5 7.99 4.5 7 5 5.99 7.99 7.99 14 7 4.5 5.99 5.99 4.5 5.99 5 12.99 4.5 8.64 9 5.54 5.99 7.99 5.99 7 0 ] xhow
+1 FF
+135 267 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 267 M (hierarchical name spaces )
+[9 5 7.99 5.99 7.99 5.99 7.99 9 5 7.99 7.99 5 4.5 9 7.99 14 7.99 4.5 7 9 7.99 7.99 7.99 7 0 ] xhow
+1 FF
+135 297 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 297 M (inter-server name resolution )
+[5 9 5 7.99 5.63 5.99 7 7.99 5.99 8.73 7.99 5.99 4.5 9 7.99 14 7.99 4.5 5.99 7.99 7 9 5 9 5 5 9 9 0 ] xhow
+99 333 M (Internal functions )
+[5.99 9 5 7.99 5.99 9 7.99 5 4.5 5.99 9 9 7.99 5 5 9 9 7 0 ] xhow
+1 FF
+135 363 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 363 M (authentication, access mediation )
+[7.99 9 5 9 7.99 9 5 5 7.99 7.99 5 5 9 9 4.5 4.5 7.99 7.99 7.99 7.99 7 7 4.5 14 7.99 9 5 7.99 5 5 9 9 0 ] xhow
+1 FF
+135 393 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 393 M (asynchronous notifications )
+[7.99 7 9 9 7.99 9 5.99 9 9 9 9 7 4.5 9 9 5 5 5 5 7.99 7.99 5 5 9 9 7 0 ] xhow
+1 FF
+135 423 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 423 M (file system glue code )
+[5 5 5 7.99 4.5 7 9 7 5 7.99 14 4.5 9 5 9 7.99 4.5 7.99 9 9 7.99 0 ] xhow
+1 FF
+135 453 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 453 M (shared state -- blackboards )
+[7 9 7.99 5.99 7.99 9 4.5 7 5 7.99 5 7.99 4.5 5.99 5.99 4.5 9 5 7.99 7.99 9 9 9 7.99 5.99 9 7 0 ] xhow
+99 489 M (Support of emulation library )
+[10 9 9 9 9 5.99 5 4.5 9 5.99 4.5 7.99 14 9 5 7.99 5 5 9 9 4.5 5 5 9 5.99 7.99 5.99 9 0 ] xhow
+1 FF
+99 514 M ( )
+[0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 12 12
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+369.11 97 M (Tools )
+[13.79 11.99 11.99 6.67 9.33 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (MachObjects )
+[15.99 7.99 7.99 9 12.99 9 5 7.99 7.99 5 7 0 ] xhow
+99 177 M (C++ )
+[12 10.15 10.15 0 ] xhow
+99 213 M (RPC package )
+[12 10 12 4.5 9 7.99 7.99 9 7.99 9 7.99 0 ] xhow
+99 249 M (threads package w/ exception handling )
+[5 9 5.99 7.99 7.99 9 7 4.5 9 7.99 7.99 9 7.99 9 7.99 4.5 12.99 5 4.5 7.72 9 7.99 7.99 9 5 5 9 9 4.5 9 7.99 9 9 5 5 9 9 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 13 13
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+356.24 97 M (Sources )
+[13.34 11.99 13.34 10.22 10.65 10.65 9.33 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (/afs/cs.cmu.edu/project/mach3/src/us )
+[5 7.99 5.99 7 5 7.99 7 4.5 7.99 14 9 4.5 7.99 9 9 5 9 5.99 9 5 7.99 7.99 5 5 14 7.99 7.99 9 9 5 7 5.99 7.99 5 9 7 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (include, local_include, unix_include )
+[5 9 7.99 5 9 9 7.99 4.5 4.5 5 9 7.99 7.99 5 9 5 9 7.99 5 9 9 7.99 4.5 4.5 9 9 5 9 9 5 9 7.99 5 9 9 7.99 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (lib/threads )
+[5 5 9 5 5 9 5.99 7.99 7.99 9 7 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (lib/machobj, lib/machobj++ )
+[5 5 9 5 14 7.99 7.99 9 9 9 5 4.5 4.5 5 5 9 5 14 7.99 7.99 9 9 9 5 10.15 10.15 0 ] xhow
+1 FF
+135 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 261 M (lib/us, lib/us++ )
+[5 5 9 5 9 7 4.5 4.5 5 5 9 5 9 7 10.15 10.15 0 ] xhow
+1 FF
+135 291 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 291 M (lib/ux )
+[5 5 9 5 9 9 0 ] xhow
+1 FF
+135 321 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 321 M (lib/emul )
+[5 5 9 5 7.99 14 9 5 0 ] xhow
+1 FF
+135 351 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 351 M (server/{as,config,diag,name,pipenet,tm,tty,ufs} )
+[7 7.99 5.99 8.73 7.99 5.99 5 8.64 7.99 7 4.5 7.99 9 9 5 5 9 4.5 9 5 7.99 9 4.5 9 7.99 14 7.99 4.5 9 5 9 7.99 9 7.99 5 4.5 5 14 4.5 5 5 7.83 4.5 9 5.99 7 8.64 0 ] xhow
+1 FF
+135 381 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 381 M (pkg/xkernel  )
+[9 9 9 5 9 8.82 7.99 5.99 9 7.99 5 0 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 14 14
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+99 81 594 450 CR
+93 81 606 462 NF
+99 87 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+201.44 103 M (Example: simple UNIX file operations )
+[16 11.99 11.99 19.98 13.34 6.67 10.65 7.99 6 9.33 6.67 19.98 13.34 6.67 10.65 6 17.32 17.32 9.33 17.32 6 6.67 6.67 6.67 10.65 6 11.99 13.34 10.65 10.65 11.99 7.99 6.67 11.99 13.34 9.33 0 ] xhow
+1 G
+103 150 195 379 NF
+0 G
+2 (Times-Roman) 18 mymakefont
+2 FF
+103 162 M (int fd; )
+[5 9 5 4.5 5.99 9 5 0 ] xhow
+103 198 M (char buf[100]; )
+[7.99 9 7.99 5.99 4.5 8.64 9 5.99 5.99 9 9 9 5.99 5 0 ] xhow
+103 234 M ( )
+[0 ] xhow
+103 270 M (fd = open\(\322/tmp/foo\323,...\); )
+[5.99 9 4.5 10.15 4.5 9 9 7.99 9 5.99 7.99 5 5 14 9 5 5.99 9 9 7.99 4.5 4.5 4.5 4.5 5.99 5 0 ] xhow
+103 306 M (read\(fd,buf,100\); )
+[5.99 7.99 7.99 9 5.99 5.99 9 4.5 8.64 9 5.99 4.5 9 9 9 5.99 5 0 ] xhow
+103 342 M (close\(fd\); )
+[7.99 5 9 7 7.99 5.99 5.99 9 5.99 5 0 ] xhow
+302 124 391 409 CR
+1 G
+302 124 391 409 NF
+313 468 368 52 NF
+2 SL
+0 G
+313 468 368 52 N
+1 G
+18 320 177 162 253 RF
+0 G
+18 320 177 162 253 RS
+1 G
+18 545 196 117 126 RF
+0 G
+18 545 196 117 126 RS
+1 G
+329 343.029663 144 79.061737 NF
+1 SL
+0 G
+329 343.029663 144 79.061737 N
+1 G
+329 184.906174 144 150.2173 NF
+0 G
+329 184.906174 144 150.2173 N
+1 G
+410 248.155563 54 55.343216 NF
+0 G
+410 248.155563 54 55.343216 N
+404.57 454.53 
+401 465.99 
+397.95 454.38 
+401.26 454.46 
+4 PP
+F
+402 422 
+401.26 454.47 
+2 PP
+S
+629.31 454.46 
+626 466 
+622.69 454.46 
+626 454.46 
+4 PP
+F
+626 322 
+626 454.46 
+2 PP
+S
+586.69 333.54 
+590 322 
+593.31 333.54 
+590 333.54 
+4 PP
+F
+590 466 
+590 333.54 
+2 PP
+S
+440.31 454.46 
+437 466 
+433.69 454.46 
+437 454.46 
+4 PP
+F
+437 286 
+437 454.46 
+2 PP
+S
+0 360 18 15.812347 437 240.24939 AS
+533.28 229.39 
+544.99 232 
+533.68 236 
+533.48 232.7 
+4 PP
+F
+446 238 
+533.49 232.7 
+2 PP
+S
+3 (Helvetica) 14 mymakefont
+3 FF
+346 452 M (syscalls)
+[7 7 7 7 7.78 3.11 3.11 0 ] xhow
+439 452 M (VM faults)
+[9.33 11.66 3.89 3.89 7.78 7.78 3.11 3.89 0 ] xhow
+536 363 M (external)
+[7.78 7 3.89 7.78 4.66 7.78 7.78 0 ] xhow
+628 386 M (device I/O)
+[7.78 7.78 7 3.11 7 7.78 3.89 3.89 3.89 0 ] xhow
+496 227 M (RPC)
+[10.1 9.33 0 ] xhow
+412 267.21 M (mapped)
+[11.66 7.78 7.78 7.78 7.78 0 ] xhow
+333 354.88 M (user program)
+[7.78 7 7.78 4.66 3.89 7.78 4.66 7.78 7.78 4.66 7.78 0 ] xhow
+333 198.52 M (Emulation library)
+[9.33 11.66 7.78 3.11 7.78 3.89 3.11 7.78 7.78 3.89 3.11 3.11 7.78 4.66 7.78 4.66 0 ] xhow
+4 (Helvetica) 22 mymakefont
+4 FF
+553 184 M (File server)
+[13.43 4.88 4.88 12.23 6.11 10.99 12.23 7.32 10.99 12.23 0 ] xhow
+463 496 M (Kernel)
+[14.67 12.23 7.32 12.23 12.23 0 ] xhow
+3 FF
+536 377 M (pager)
+[7.78 7.78 7.78 7.78 0 ] xhow
+429 282.15 M (file)
+[3.89 3.11 3.11 0 ] xhow
+537 392 M (calls)
+[7 7.78 3.11 3.11 0 ] xhow
+427 230.14 M (fd)
+[3.89 0 ] xhow
+4 FF
+333 169 M (User process)
+[15.88 10.99 12.23 7.32 6.11 12.23 7.32 12.23 10.99 12.23 10.99 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 15 15
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+99 93 M ( )
+[0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+272.5 97 M (C++ Class Organization )
+[17.32 13.67 13.67 6 17.32 6.67 11.99 9.33 9.33 6 18.66 10.41 11.99 11.99 13.34 6.67 10.65 11.99 7.99 6.67 11.99 13.34 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (  )
+[0 0 ] xhow
+109.414642 146.999908 573.170715 375.000092 CR
+1 G
+109.414642 146.999908 573.170715 375.000092 NF
+0.5 SL
+2 SC
+0 G
+18 266.913055 191.999908 296.996979 148.5 RS
+1 G
+391.197449 199.499924 59.403854 16.199753 NF
+0 G
+3 (Helvetica) 14 mymakefont
+3 FF
+391.2 208.83 M (usItem )
+[7.78 7 3.89 3.89 7.78 11.66 0 ] xhow
+1 G
+593.610718 259.499908 67.499313 29.249008 NF
+0 G
+593.61 268.83 M (agency )
+[7.78 7.78 7.78 7.78 7 7 0 ] xhow
+1 G
+299.315918 285.597931 62.096161 16.199753 NF
+0 G
+299.32 294.93 M (usName )
+[7.78 7 10.1 7.78 11.66 7.78 0 ] xhow
+1 G
+461.311829 285.597931 75.598495 16.199753 NF
+0 G
+461.31 294.93 M (usByteIO )
+[7.78 7 9.33 7 3.89 7.78 3.89 10.89 0 ] xhow
+1 G
+205.952286 390.247375 81.85022 33.252411 NF
+0 G
+205.95 399.58 M (file_proxy )
+[3.89 3.11 3.11 7.78 7.78 7.78 4.66 7.78 7 7 0 ] xhow
+1 G
+111.024994 390.247559 74.888885 33.252045 NF
+0 G
+111.02 399.58 M (dir_proxy )
+[7.78 3.11 4.66 7.78 7.78 4.66 7.78 7 7 0 ] xhow
+1 G
+569.31073 392.247314 21.599045 29.252609 NF
+0 G
+569.31 401.58 M (dir )
+[7.78 3.11 4.66 0 ] xhow
+1 G
+644.90918 392.247314 26.998489 29.252609 NF
+0 G
+644.91 401.58 M (file )
+[3.89 3.11 3.11 7.78 0 ] xhow
+1 G
+144.065048 259.499908 110.697388 33.252045 NF
+0 G
+144.07 268.83 M (usItem_Proxy )
+[7.78 7 3.89 3.89 7.78 11.66 7.78 9.33 4.66 7.78 7 7 0 ] xhow
+403.45 217.9 
+415.4 219 
+404.68 224.4 
+404.06 221.15 
+4 PP
+0.5 G
+F
+199.41 259.5 
+404.08 221.15 
+2 PP
+1 SL
+S
+426.05 224.53 
+415.4 219 
+427.37 218.05 
+426.71 221.29 
+4 PP
+F
+617.91 259.5 
+426.72 221.29 
+2 PP
+S
+404.11 223.06 
+415.4 219 
+407.97 228.43 
+406.04 225.74 
+4 PP
+F
+320.91 286.5 
+406.05 225.75 
+2 PP
+S
+422.12 228.94 
+415.4 219 
+426.37 223.87 
+424.25 226.4 
+4 PP
+F
+496.41 286.5 
+424.25 226.41 
+2 PP
+S
+186.89 284.96 
+185.91 273 
+193.08 282.62 
+189.98 283.79 
+4 PP
+0 G
+F
+226.41 381 
+189.99 283.79 
+2 PP
+S
+505.21 308.14 
+496.4 300 
+508.19 302.24 
+506.7 305.19 
+4 PP
+0.5 G
+F
+658.41 381 
+506.71 305.19 
+2 PP
+S
+330.9 306.63 
+320.9 299.99 
+332.9 300.33 
+331.9 303.48 
+4 PP
+F
+577.41 381 
+331.91 303.49 
+2 PP
+S
+309.05 301.86 
+320.9 299.99 
+311.84 307.86 
+310.45 304.86 
+4 PP
+F
+145.41 381 
+310.45 304.87 
+2 PP
+S
+484.4 300.24 
+496.4 300 
+486.36 306.56 
+485.38 303.4 
+4 PP
+F
+226.41 381 
+485.39 303.41 
+2 PP
+S
+1 G
+152.16423 448.499908 80.999176 13.5 NF
+0 G
+152.16 457.83 M (Client-side )
+[10.1 3.11 3.11 7.78 7.78 3.89 4.66 7 3.11 7.78 7.78 0 ] xhow
+1 G
+131.914429 461.999908 121.498764 13.5 NF
+0 G
+131.91 471.33 M (Implementations )
+[3.89 11.66 7.78 3.11 7.78 11.66 7.78 7.78 3.89 7.78 3.89 3.11 7.78 7.78 7 0 ] xhow
+1 G
+584.159851 448.499908 87.7491 13.5 NF
+0 G
+584.16 457.83 M (Server-side )
+[9.33 7.78 4.66 7 7.78 4.66 4.66 7 3.11 7.78 7.78 0 ] xhow
+1 G
+563.910034 461.999908 121.504608 13.5 NF
+0 G
+563.91 471.33 M (Implementations )
+[3.89 11.66 7.78 3.11 7.78 11.66 7.78 7.78 3.89 7.78 3.89 3.11 7.78 7.78 7 0 ] xhow
+1 G
+381.661896 448.499908 74.249237 13.5 NF
+0 G
+381.66 457.83 M (Interfaces )
+[3.89 7.78 3.89 7.78 4.66 3.89 7.78 7 7.78 7 0 ] xhow
+178.75 282.62 
+185.91 273 
+184.93 284.96 
+181.84 283.79 
+4 PP
+F
+145.41 381 
+181.84 283.79 
+2 PP
+S
+618.87 284.96 
+617.89 273 
+625.06 282.62 
+621.96 283.79 
+4 PP
+F
+658.41 381 
+621.98 283.79 
+2 PP
+S
+610.73 282.62 
+617.89 273 
+616.92 284.96 
+613.82 283.79 
+4 PP
+F
+577.41 381 
+613.84 283.79 
+2 PP
+S
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 16 16
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 SC
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+367.36 97 M (Items )
+[9.33 7.99 10.65 19.98 9.33 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (Common information )
+[12 9 14 14 9 9 4.5 5 9 5.99 9 5.99 14 7.99 5 5 9 9 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (type )
+[5 9 9 7.99 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M ( )
+[0 ] xhow
+154.98 201 M (standard attributes )
+[7 5 7.99 9 9 7.99 5.99 9 4.5 7.99 5 5 5.99 5 8.64 9 5 7.99 7 0 ] xhow
+99 237 M (Classes )
+[12 5 7.99 7 7 7.99 7 0 ] xhow
+1 FF
+135 267 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 267 M (common base for all items: )
+[7.99 9 14 14 9 9 4.5 9 7.99 7 7.99 4.5 5.99 9 5.99 4.5 7.99 5 5 4.5 5 5 7.99 14 7 5 0 ] xhow
+3 (Times-Italic) 18 mymakefont
+3 FF
+355.35 267 M (agency )
+[8.82 8.82 7.99 9 7.99 7.99 0 ] xhow
+2 FF
+99 303 M (Main exported operations -- )
+[15.99 7.99 5 9 4.5 7.72 9 9 9 5.99 5 7.99 9 4.5 9 9 7.99 5.99 7.99 5 5 9 9 7 4.5 5.99 5.99 0 ] xhow
+3 FF
+304.57 303 M (usItem \(us_item_ifc.h\) )
+[9 7 5.99 5 7.99 12.99 4.5 5.99 9 7 9 5 5 7.99 12.99 9 5 5 7.99 4.5 9 5.99 0 ] xhow
+1 FF
+135 333 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 333 M (ns_get_attributes\(\) )
+[9 7 9 9 7.99 5 9 7.99 5 5 5.99 5 8.64 9 5 7.99 7 5.99 5.99 0 ] xhow
+1 FF
+135 363 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 363 M (specialized )
+[7 9 7.99 7.99 5 7.99 5 5 7.99 7.99 9 0 ] xhow
+3 FF
+239.41 363 M (set_attributes)
+[7 7.99 5 9 9 5 5 7 5 8.64 9 5 7.99 0 ] xhow
+2 FF
+337 363 M ( operations )
+[4.5 9 9 7.99 5.99 7.99 5 5 9 9 7 0 ] xhow
+1 FF
+99 388 M ( )
+[0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 17 17
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+72 81 648 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+331.72 97 M (RPC System  )
+[17.32 14.66 17.32 6 13.34 11.99 9.33 7.99 10.65 19.98 0 0 ] xhow
+72 104.999954 648 417 CR
+1 G
+67.6875 104.999954 656.625 417 NF
+3 SL
+0 G
+18 218.937378 347.999939 246.49585 162 RS
+2 SL
+291.436157 365.999939 101.498291 54 N
+0 360 43.499268 54 269.686523 464.999939 AS
+0 360 43.499268 54 342.185303 464.999939 AS
+0 360 43.499268 54 414.684082 464.999939 AS
+0 360 14.499756 18 305.935913 365.999939 AS
+0 360 14.499756 18 342.185303 365.999939 AS
+0 360 14.499756 18 378.434692 365.999939 AS
+3 SL
+18 211.6875 113.999954 123.247925 162 RS
+18 349.435181 113.999954 123.252319 162 RS
+2 SL
+0 360 43.499268 54 247.93689 221.999954 AS
+247.94 240 
+240.69 258 
+255.19 258 
+3 PP
+CS
+0 360 43.499268 54 298.686035 221.999954 AS
+298.69 240 
+291.44 258 
+305.94 258 
+3 PP
+CS
+0 360 43.499268 54 414.684082 221.999954 AS
+414.68 240 
+407.43 258 
+421.93 258 
+3 PP
+CS
+301.39 339.57 
+305.93 356.99 
+292.85 344.63 
+297.12 342.1 
+4 PP
+F
+247.94 258 
+297.12 342.11 
+2 PP
+S
+339.71 339.16 
+342.18 356.99 
+330.64 343.18 
+335.17 341.17 
+4 PP
+F
+298.69 258 
+335.18 341.18 
+2 PP
+S
+389.06 342.47 
+378.42 356.99 
+379.74 339.04 
+384.4 340.75 
+4 PP
+F
+414.68 258 
+384.41 340.76 
+2 PP
+S
+288.46 434.66 
+276.93 437.99 
+284.94 429.06 
+286.7 431.86 
+4 PP
+F
+305.94 420 
+286.71 431.87 
+2 PP
+1 SL
+S
+345.49 426.46 
+342.19 438 
+338.88 426.46 
+342.19 426.46 
+4 PP
+F
+342.19 420 
+342.19 426.46 
+2 PP
+S
+399.4 429.06 
+407.42 437.99 
+395.89 434.66 
+397.65 431.86 
+4 PP
+F
+378.43 420 
+397.66 431.87 
+2 PP
+S
+251.24 183.46 
+247.94 195 
+244.63 183.46 
+247.94 183.46 
+4 PP
+F
+247.94 150 
+247.94 183.46 
+2 PP
+S
+301.99 183.46 
+298.69 195 
+295.38 183.46 
+298.69 183.46 
+4 PP
+F
+298.69 150 
+298.69 183.46 
+2 PP
+S
+417.99 183.46 
+414.68 195 
+411.38 183.46 
+414.68 183.46 
+4 PP
+F
+414.68 150 
+414.68 183.46 
+2 PP
+S
+192.8 159.96 
+204.33 163.26 
+192.8 166.57 
+192.8 163.26 
+4 PP
+F
+105.33 163.26 
+192.8 163.26 
+2 PP
+S
+192.8 213.96 
+204.33 217.26 
+192.8 220.57 
+192.8 217.26 
+4 PP
+F
+105.33 217.26 
+192.8 217.26 
+2 PP
+S
+192.8 240.96 
+204.33 244.26 
+192.8 247.57 
+192.8 244.26 
+4 PP
+F
+105.33 244.26 
+192.8 244.26 
+2 PP
+S
+192.8 294.96 
+204.33 298.26 
+192.8 301.57 
+192.8 298.26 
+4 PP
+F
+105.33 298.26 
+192.8 298.26 
+2 PP
+S
+192.8 357.96 
+204.33 361.26 
+192.8 364.57 
+192.8 361.26 
+4 PP
+F
+105.33 361.26 
+192.8 361.26 
+2 PP
+S
+192.8 393.96 
+204.33 397.26 
+192.8 400.57 
+192.8 397.26 
+4 PP
+F
+105.33 397.26 
+192.8 397.26 
+2 PP
+S
+192.8 456.96 
+204.33 460.26 
+192.8 463.57 
+192.8 460.26 
+4 PP
+F
+105.33 460.26 
+192.8 460.26 
+2 PP
+S
+2 (Helvetica) 14 mymakefont
+2 FF
+94.69 151.2 M (Client invocations)
+[10.1 3.11 3.11 7.78 7.78 3.89 3.89 3.11 7.78 7 7.78 7 7.78 3.89 3.11 7.78 7.78 0 ] xhow
+97.56 241.2 M (Send rights)
+[9.33 7.78 7.78 7.78 3.89 4.66 3.11 7.78 7.78 3.89 0 ] xhow
+97.9 290.47 M (Mach IPC)
+[11.66 7.78 7 7.78 3.89 3.89 9.33 0 ] xhow
+96.33 353.47 M (Receive rights)
+[10.1 7.78 7 7.78 3.11 7 7.78 3.89 4.66 3.11 7.78 7.78 3.89 0 ] xhow
+96.33 394.2 M (RPC runtime)
+[10.1 9.33 10.1 3.89 4.66 7.78 7.78 3.89 3.11 11.66 0 ] xhow
+96.33 457.2 M (Server objects)
+[9.33 7.78 4.66 7 7.78 4.66 3.89 7.78 7.78 3.11 7.78 7 3.89 0 ] xhow
+96.33 214.2 M (Proxy objects)
+[9.33 4.66 7.78 7 7 3.89 7.78 7.78 3.11 7.78 7 3.89 0 ] xhow
+0 0 792 612 CR
+1 G
+477 108 243 405 NF
+0 G
+1 FF
+513 120 M (-  )
+[7.99 6 0 ] xhow
+3 (Times-Roman) 18 mymakefont
+3 FF
+532.98 120 M (transparent C++ method )
+[5 5.99 7.99 9 7 9 7.99 5.99 7.99 9 5 4.5 12 10.15 10.15 4.5 14 7.99 5 9 9 9 0 ] xhow
+534.6 141 M (invocations )
+[5 8.28 8.64 9 7.99 7.99 5 5 9 9 7 0 ] xhow
+1 FF
+513 171 M (-  )
+[7.99 6 0 ] xhow
+3 FF
+532.98 171 M (automatic object )
+[7.99 9 5 9 14 7.99 5 5 7.99 4.5 9 9 5 7.99 7.99 5 0 ] xhow
+534.6 192 M (dispatching )
+[9 5 7 9 7.99 5 7.99 9 5 9 9 0 ] xhow
+1 FF
+513 222 M (-  )
+[7.99 6 0 ] xhow
+3 FF
+532.98 222 M (object references passed )
+[9 9 5 7.99 7.99 5 4.5 5.99 7.99 5.99 7.99 5.99 7.99 9 7.99 7.99 7 4.5 9 7.99 7 7 7.99 9 0 ] xhow
+534.6 243 M (as arguments )
+[7.99 7 4.5 7.99 5.67 9 9 14 7.99 9 5 7 0 ] xhow
+1 FF
+513 273 M (-  )
+[7.99 6 0 ] xhow
+3 FF
+532.98 273 M (proxies can be arbitrarily )
+[9 5.99 9 9 5 7.99 7 4.5 7.99 7.99 9 4.5 9 7.99 4.5 7.99 5.99 9 5 5 5.99 7.99 5.99 5 5 9 0 ] xhow
+534.6 294 M (complex )
+[7.99 9 14 9 5 7.72 9 0 ] xhow
+1 FF
+513 324 M (-  )
+[7.99 6 0 ] xhow
+3 FF
+532.98 324 M (garbage-collection )
+[8.91 7.99 5.99 9 7.99 9 7.99 5.99 7.99 9 5 5 7.99 7.99 5 5 9 9 0 ] xhow
+534.6 345 M (through no-more-)
+[5 9 5.99 9 9 9 9 4.5 9 9 5.99 14 9 5.99 7.99 0 ] xhow
+534.6 366 M (senders notifications )
+[7 7.99 9 9 7.99 5.99 7 4.5 9 9 5 5 5 5 7.99 7.99 5 5 9 9 7 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 18 18
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+325.85 97 M (Name Service )
+[17.32 11.99 19.98 10.65 6 13.34 10.65 10.41 11.99 6.67 10.65 10.65 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (objectives: )
+[9 9 5 7.99 7.99 5 4.55 8.73 7.99 7 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (uniform access to all items )
+[9 9 5 5.99 9 5.99 14 4.5 7.99 7.99 7.99 7.99 7 7 4.5 5 9 4.5 7.99 5 5 4.5 5 5 7.99 14 7 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (easy integration of new, foreign components )
+[7.99 7.99 7 9 4.5 5 9 5 7.72 9 5.99 7.99 5 5 9 9 4.5 9 5.99 4.5 9 7.54 11.82 4.5 4.5 5.99 9 5.99 7.99 5 9 9 4.5 7.99 9 14 9 9 9 7.99 9 5 7 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (customize name space: per-user / per-system, per-OS )
+[7.99 9 7 5 9 14 5 7.99 7.99 4.5 9 7.99 14 7.99 4.5 7 9 7.99 7.99 7.99 5 4.5 9 7.99 5.63 5.99 9 7 7.99 5.99 4.5 5 4.5 9 7.99 5.63 5.99 7 9 7 5 7.99 14 4.5 4.5 9 7.99 5.63 5.99 12.99 10 0 ] xhow
+1 FF
+135 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 261 M (support distributed and centralized operation )
+[7 9 9 9 9 5.99 5 4.5 9 5 7 5 5.99 5 8.64 9 5 7.99 9 4.5 7.99 9 9 4.5 7.99 7.99 9 5 5.99 7.99 5 5 7.99 7.99 9 4.5 9 9 7.99 5.99 7.99 5 5 9 9 0 ] xhow
+1 FF
+135 291 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 291 M (issues of scale, network distribution )
+[5 7 7 9 7.99 7 4.5 9 5.99 4.5 7 7.99 7.99 5 7.99 4.5 4.5 9 7.99 5 12.81 9 5.99 9 4.5 9 5 7 5 5.99 5 8.64 9 5 5 9 9 0 ] xhow
+99 327 M (key ideas: )
+[8.82 7.72 9 4.5 5 9 7.99 7.99 7 5 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (item manipulation: type, attributes )
+[5 5 7.99 14 4.5 14 7.99 9 5 9 9 5 7.99 5 5 9 9 5 4.5 5 9 9 7.99 4.5 4.5 7.99 5 5 5.99 5 8.64 9 5 7.99 7 0 ] xhow
+1 FF
+135 387 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 387 M (access mediation: credentials, access rights, access control lists )
+[7.99 7.99 7.99 7.99 7 7 4.5 14 7.99 9 5 7.99 5 5 9 9 5 4.5 7.99 5.99 7.99 9 7.99 9 5 5 7.99 5 7 4.5 4.5 7.99 7.99 7.99 7.99 7 7 4.5 5.99 5 9 9 5 7 4.5 4.5 7.99 7.99 7.99 7.99 7 7 4.5 7.99 9 9 5 5.99 9 5 4.5 5 5 7 5 7 0 ] xhow
+1 FF
+135 417 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 417 M (uniform name space: resolving protocol + glue components \(root name )
+[9 9 5 5.99 9 5.99 14 4.5 9 7.99 14 7.99 4.5 7 9 7.99 7.99 7.99 5 4.5 5.99 7.99 7 9 5 9 5 9 9 4.5 9 5.99 9 5 9 7.99 9 5 4.5 10.15 4.5 9 5 9 7.99 4.5 7.99 9 14 9 9 9 7.99 9 5 7 4.5 5.99 5.99 9 9 5 4.5 9 7.99 14 7.99 0 ] xhow
+156.6 438 M (server, directories, symlinks, mount points\) )
+[7 7.99 5.99 8.73 7.99 5.27 4.5 4.5 9 5 5.99 7.99 7.99 5 9 5.99 5 7.99 7 4.5 4.5 7 9 14 5 5 9 9 7 4.5 4.5 14 9 9 9 5 4.5 9 9 5 9 5 7 5.99 0 ] xhow
+1 FF
+135 468 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 468 M (user controlled operations: prefix table, parsing of path names )
+[9 7 7.99 5.99 4.5 7.99 9 9 5 5.99 9 5 5 7.99 9 4.5 9 9 7.99 5.99 7.99 5 5 9 9 7 5 4.5 9 5.99 7.99 5 5 9 4.5 5 7.99 9 5 7.99 4.5 4.5 9 7.99 5.99 7 5 9 9 4.5 9 5.99 4.5 9 7.99 5 9 4.5 9 7.99 14 7.99 7 0 ] xhow
+1 FF
+135 498 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 498 M (item creation through the name space )
+[5 5 7.99 14 4.5 7.99 5.99 7.99 7.99 5 5 9 9 4.5 5 9 5.99 9 9 9 9 4.5 5 9 7.99 4.5 9 7.99 14 7.99 4.5 7 9 7.99 7.99 7.99 0 ] xhow
+1 FF
+99 523 M ( )
+[0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 19 19
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+99 93 M ( )
+[0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+333.05 97 M (Name Space )
+[17.32 11.99 19.98 10.65 6 13.34 13.34 11.99 10.65 10.65 0 ] xhow
+99 108 594 423 CR
+1 G
+99 108 594 423 NF
+153 198 72 72 NF
+2 SL
+0 G
+153 198 72 72 N
+153 216 
+225 216 
+2 PP
+1.5 SL
+S
+153 234 
+225 234 
+2 PP
+S
+153 252 
+225 252 
+2 PP
+S
+207 198 
+207 270 
+2 PP
+S
+0.5 G
+8 369 234 18 18 RF
+0 G
+8 369 234 18 18 RS
+0.5 G
+315 198 18 18 NF
+0 G
+315 198 18 18 N
+0.5 G
+531 216 18 18 NF
+0 G
+531 216 18 18 N
+0.5 G
+8 369 162 18 18 RF
+0 G
+8 369 162 18 18 RS
+594 270 
+585 288 
+603 288 
+3 PP
+0.5 G
+F
+594 270 
+585 288 
+603 288 
+3 PP
+0 G
+CS
+0.5 G
+585 162 18 18 NF
+0 G
+585 162 18 18 N
+648 126 
+639 144 
+657 144 
+3 PP
+0.5 G
+F
+648 126 
+639 144 
+657 144 
+3 PP
+0 G
+CS
+648 198 
+639 216 
+657 216 
+3 PP
+0.5 G
+F
+648 198 
+639 216 
+657 216 
+3 PP
+0 G
+CS
+353.6 185.94 
+368.99 180 
+359.09 193.19 
+356.34 189.57 
+4 PP
+F
+333 207 
+356.35 189.57 
+2 PP
+S
+359.09 220.8 
+368.99 234 
+353.6 228.06 
+356.34 224.43 
+4 PP
+F
+333 207 
+356.35 224.43 
+2 PP
+S
+571.5 189.5 
+584.99 180 
+578.59 195.2 
+575.05 192.35 
+4 PP
+F
+549 225 
+575.05 192.35 
+2 PP
+S
+623.6 149.94 
+638.99 144 
+629.08 157.19 
+626.34 153.57 
+4 PP
+F
+603 171 
+626.35 153.57 
+2 PP
+S
+636.77 185.89 
+647.98 198 
+632.05 193.67 
+634.41 189.78 
+4 PP
+F
+603 171 
+634.44 189.78 
+2 PP
+S
+585.9 255.6 
+593.97 269.99 
+579.5 262.06 
+582.7 258.83 
+4 PP
+F
+549 225 
+582.73 258.84 
+2 PP
+S
+4 SL
+0.5 G
+18 495 117 189 180 RS
+531 432 18 18 NF
+1.5 SL
+0 G
+531 432 18 18 N
+594 486 
+585 504 
+603 504 
+3 PP
+0.5 G
+F
+594 486 
+585 504 
+603 504 
+3 PP
+0 G
+CS
+0.5 G
+585 378 18 18 NF
+0 G
+585 378 18 18 N
+648 342 
+639 360 
+657 360 
+3 PP
+0.5 G
+F
+648 342 
+639 360 
+657 360 
+3 PP
+0 G
+CS
+648 414 
+639 432 
+657 432 
+3 PP
+0.5 G
+F
+648 414 
+639 432 
+657 432 
+3 PP
+0 G
+CS
+571.5 405.5 
+584.99 396 
+578.59 411.2 
+575.05 408.35 
+4 PP
+F
+549 441 
+575.05 408.35 
+2 PP
+S
+623.6 365.94 
+638.99 359.99 
+629.08 373.19 
+626.34 369.56 
+4 PP
+F
+603 387 
+626.35 369.57 
+2 PP
+S
+636.77 401.88 
+647.98 413.99 
+632.05 409.66 
+634.41 405.77 
+4 PP
+F
+603 387 
+634.44 405.78 
+2 PP
+S
+585.9 471.59 
+593.97 485.98 
+579.5 478.05 
+582.7 474.82 
+4 PP
+F
+549 441 
+582.73 474.84 
+2 PP
+S
+4 SL
+0.5 G
+18 495 333 189 180 RS
+261 432 18 18 NF
+1.5 SL
+0 G
+261 432 18 18 N
+324 486 
+315 504 
+333 504 
+3 PP
+0.5 G
+F
+324 486 
+315 504 
+333 504 
+3 PP
+0 G
+CS
+0.5 G
+315 378 18 18 NF
+0 G
+315 378 18 18 N
+378 342 
+369 360 
+387 360 
+3 PP
+0.5 G
+F
+378 342 
+369 360 
+387 360 
+3 PP
+0 G
+CS
+378 414 
+369 432 
+387 432 
+3 PP
+0.5 G
+F
+378 414 
+369 432 
+387 432 
+3 PP
+0 G
+CS
+301.51 405.5 
+315 396 
+308.59 411.2 
+305.05 408.35 
+4 PP
+F
+279 441 
+305.05 408.35 
+2 PP
+S
+353.6 365.94 
+368.99 359.99 
+359.09 373.19 
+356.34 369.56 
+4 PP
+F
+333 387 
+356.35 369.57 
+2 PP
+S
+366.78 401.88 
+377.99 413.99 
+362.07 409.66 
+364.42 405.77 
+4 PP
+F
+333 387 
+364.44 405.78 
+2 PP
+S
+315.92 471.59 
+323.99 485.98 
+309.52 478.05 
+312.72 474.82 
+4 PP
+F
+279 441 
+312.73 474.84 
+2 PP
+S
+4 SL
+0.5 G
+18 225 333 189 180 RS
+18 117 135 126 162 RS
+18 297 144 108 126 RS
+299.61 201.03 
+314.99 207 
+298.78 210.08 
+299.2 205.56 
+4 PP
+0.333 G
+F
+272.02 203.59 
+241.6 203.77 
+216 207 
+299.21 205.57 
+4 SP
+1.5 SL
+S
+513.41 207.31 
+525.99 218 
+509.66 215.6 
+511.54 211.46 
+4 PP
+F
+468.89 181.99 
+429.64 161.3 
+387 171 
+508.91 209.35 
+506.46 207.09 
+504 205.44 
+511.54 211.5 
+7 SP
+S
+533.4 414.45 
+538.97 429.98 
+526.01 419.76 
+529.71 417.11 
+4 PP
+F
+450.97 293.39 
+425.63 258.82 
+387 243 
+514.35 383.11 
+489.51 358.23 
+471.54 328 
+529.33 416.45 
+528.91 415.76 
+528.57 415 
+529.8 417.09 
+10 SP
+S
+266.5 408.5 
+266 424.99 
+257.68 410.74 
+262.09 409.62 
+4 PP
+F
+255.71 258.35 
+243.87 233.13 
+216 225 
+253.82 369.21 
+257.65 327.35 
+256.49 286 
+262.17 409.6 
+7 SP
+S
+0 G
+2 (Helvetica) 22 mymakefont
+2 FF
+513 135 M (Server 1)
+[14.67 12.23 7.32 10.99 12.23 7.32 6.11 0 ] xhow
+513 351 M (Server 2)
+[14.67 12.23 7.32 10.99 12.23 7.32 6.11 0 ] xhow
+270 351 M (Server 3)
+[14.67 12.23 7.32 10.99 12.23 7.32 6.11 0 ] xhow
+297 139.18 M (Root server)
+[15.88 12.23 12.23 6.11 6.11 10.99 12.23 7.32 10.99 12.23 0 ] xhow
+126 130.18 M (User)
+[15.88 10.99 12.23 0 ] xhow
+3 (Helvetica) 14 mymakefont
+3 FF
+176 211.94 M (/)
+[0 ] xhow
+162.78 228.94 M (/tmp)
+[3.89 3.89 11.66 0 ] xhow
+164 247 M (/usr1)
+[3.89 7.78 7 4.66 0 ] xhow
+337 176 M (usr0)
+[7.78 7 4.66 0 ] xhow
+336 245 M (usr1)
+[7.78 7 4.66 0 ] xhow
+545 400 M (dpj)
+[7.78 7.78 0 ] xhow
+645 399 M (foo)
+[3.89 7.78 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 20 20
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+333.05 97 M (Name Space )
+[17.32 11.99 19.98 10.65 6 13.34 13.34 11.99 10.65 10.65 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (Classes )
+[12 5 7.99 7 7 7.99 7 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (building blocks: )
+[8.64 9 5 5 9 5 9 9 4.5 9 5 9 7.99 9 7 5 0 ] xhow
+3 (Times-Italic) 18 mymakefont
+3 FF
+275.57 171 M (dir, symlink, tsymlink, mountpt )
+[9 5 5 4.5 4.5 7 7.99 12.99 5 5 9 7.99 4.5 4.5 5 7 7.99 12.99 5 5 9 7.99 4.5 4.5 12.99 9 9 9 5 9 5 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (common base for terminal entries: )
+[7.99 9 14 14 9 9 4.5 9 7.99 7 7.99 4.5 5.99 9 5.99 4.5 5 7.99 5.99 14 5 9 7.99 5 4.5 7.99 9 5 5.99 5 7.99 7 5 0 ] xhow
+3 FF
+406.3 201 M (vol_agency )
+[7.99 9 5 9 8.82 8.82 7.99 9 7.99 7.99 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (temporary entries: )
+[5 7.99 14 9 9 5.99 7.99 5.99 9 4.5 7.99 9 5 5.99 5 7.99 7 5 0 ] xhow
+3 FF
+290.88 231 M (tmp_agency )
+[5 12.99 9 9 8.82 8.82 7.99 9 7.99 7.99 0 ] xhow
+1 FF
+135 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 261 M (client-side navigation: )
+[7.99 5 5 7.99 9 5 5.99 7 5 9 7.99 4.5 9 7.63 9 5 8.91 7.99 5 5 9 9 5 0 ] xhow
+3 FF
+319.43 261 M (std_name )
+[7 5 9 9 9 9 12.99 7.99 0 ] xhow
+2 FF
+99 297 M (Main exported operations -- )
+[15.99 7.99 5 9 4.5 7.72 9 9 9 5.99 5 7.99 9 4.5 9 9 7.99 5.99 7.99 5 5 9 9 7 4.5 5.99 5.99 0 ] xhow
+3 FF
+304.57 297 M (usName \(us_name_ifc.h\) )
+[9 7 12 9 12.99 7.99 4.5 5.99 9 7 9 9 9 12.99 7.99 9 5 5 7.99 4.5 9 5.99 0 ] xhow
+1 FF
+135 327 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 327 M (ns_resolve\(\) )
+[9 7 9 5.99 7.99 7 9 5 8.73 7.99 5.99 5.99 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (ns_create\(\) )
+[9 7 9 7.99 5.99 7.99 7.99 5 7.99 5.99 5.99 0 ] xhow
+1 FF
+135 387 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 387 M (ns_insert_entry\(\) )
+[9 7 9 5 9 7 7.99 5.99 5 9 7.99 9 5 5.99 9 5.99 5.99 0 ] xhow
+1 FF
+135 417 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 417 M (ns_remove_entry\(\) )
+[9 7 9 5.99 7.99 14 8.73 8.73 7.99 9 7.99 9 5 5.99 9 5.99 5.99 0 ] xhow
+1 FF
+135 447 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 447 M (ns_list_entries\(\) )
+[9 7 9 5 5 7 5 9 7.99 9 5 5.99 5 7.99 7 5.99 5.99 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 21 21
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+99 93 M ( )
+[0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+306.4 97 M (Access Mediation )
+[17.32 10.65 10.65 10.65 9.33 9.33 6 22.64 10.65 13.34 6.67 11.99 7.99 6.67 11.99 13.34 0 ] xhow
+99 108 594 423 CR
+1 G
+99 108 594 423 NF
+0.5 G
+0 360 17.999664 18 341.997375 387 AF
+3 SL
+0 G
+0 360 17.999664 18 341.997375 387 AS
+216 306 
+207 324 
+225 324 
+3 PP
+0.5 G
+F
+216 306 
+207 324 
+225 324 
+3 PP
+0 G
+CS
+467.99 306 
+459 324 
+476.99 324 
+3 PP
+0.5 G
+F
+467.99 306 
+459 324 
+476.99 324 
+3 PP
+0 G
+CS
+1 G
+296.99823 432 89.998276 72 NF
+1.5 SL
+0 G
+296.99823 432 89.998276 72 N
+1 G
+512.99408 360 54.005905 18 NF
+0 G
+512.99408 360 54.005905 18 N
+2 (Helvetica) 14 mymakefont
+2 FF
+517 371.94 M (access)
+[7.78 7 7 7.78 7 0 ] xhow
+307 450 M (access)
+[7.78 7 7 7.78 7 0 ] xhow
+326 472 M (control)
+[7 7.78 7.78 3.89 4.66 7.78 0 ] xhow
+353 491 M (list)
+[3.11 3.11 7 0 ] xhow
+1 G
+440.000519 361 53.998962 54 NF
+0 G
+440.000519 361 53.998962 54 N
+457.79 402.94 M (cred)
+[7 4.66 7.78 0 ] xhow
+449.01 375.94 M (user)
+[7.78 7 7.78 0 ] xhow
+1 G
+189.000519 360 53.998962 54 NF
+0 G
+189.000519 360 53.998962 54 N
+197.01 374.94 M (user)
+[7.78 7 7.78 0 ] xhow
+208.79 401.94 M (cred)
+[7 4.66 7.78 0 ] xhow
+1 G
+116.994095 361 54.005905 18 NF
+0 G
+116.994095 361 54.005905 18 N
+121 372.94 M (access)
+[7.78 7 7 7.78 7 0 ] xhow
+220.55 344.14 
+216 360 
+211.45 344.14 
+216 344.14 
+4 PP
+F
+216 324 
+216 344.14 
+2 PP
+S
+160.01 356 
+144 359.99 
+155.46 348.12 
+157.74 352.06 
+4 PP
+F
+207 324 
+157.74 352.07 
+2 PP
+S
+472.55 344.14 
+468 360 
+463.45 344.14 
+468 344.14 
+4 PP
+F
+468 324 
+468 344.14 
+2 PP
+S
+528.52 348.12 
+539.98 359.99 
+523.97 356 
+526.25 352.06 
+4 PP
+F
+477 324 
+526.26 352.07 
+2 PP
+S
+320.88 366.79 
+332.99 377.99 
+316.78 374.91 
+318.83 370.85 
+4 PP
+F
+225 324 
+318.84 370.86 
+2 PP
+S
+367.2 374.91 
+350.99 377.99 
+363.11 366.79 
+365.15 370.85 
+4 PP
+F
+459 324 
+365.16 370.86 
+2 PP
+S
+346.55 416.14 
+342 432 
+337.45 416.14 
+342 416.14 
+4 PP
+F
+342 396 
+342 416.14 
+2 PP
+S
+4 SL
+0.5 G
+0 360 108 108 225 180 AS
+0 360 108 108 405 180 AS
+0 360 108 108 585 180 AS
+18 108 288 477 234 RS
+224.26 286.69 
+216 306 
+212.77 285.25 
+218.51 285.97 
+4 PP
+F
+225 234 
+218.52 285.97 
+2 PP
+3 SL
+S
+459.03 287 
+467.99 305.99 
+450.32 294.63 
+454.68 290.82 
+4 PP
+F
+405 234 
+454.69 290.82 
+2 PP
+S
+488.18 300.25 
+467.98 305.99 
+482.07 290.42 
+485.13 295.33 
+4 PP
+F
+585 234 
+485.14 295.34 
+2 PP
+S
+298.43 196.41 
+306 216 
+289.2 203.39 
+293.82 199.9 
+4 PP
+F
+279 180 
+293.82 199.9 
+2 PP
+S
+478.43 196.41 
+485.99 216 
+469.2 203.39 
+473.81 199.9 
+4 PP
+F
+459 180 
+473.82 199.9 
+2 PP
+S
+658.43 196.41 
+665.99 216 
+649.19 203.39 
+653.81 199.9 
+4 PP
+F
+639 180 
+653.82 199.9 
+2 PP
+S
+604.43 430.4 
+611.99 449.99 
+595.2 437.39 
+599.81 433.89 
+4 PP
+F
+585 414 
+599.82 433.9 
+2 PP
+S
+0 G
+3 (Helvetica) 22 mymakefont
+3 FF
+189 180 M (Client 1)
+[15.88 4.88 4.88 12.23 12.23 6.11 6.11 0 ] xhow
+369 175.18 M (Client 2)
+[15.88 4.88 4.88 12.23 12.23 6.11 6.11 0 ] xhow
+549 175.18 M (Client 3)
+[15.88 4.88 4.88 12.23 12.23 6.11 6.11 0 ] xhow
+294.67 229.18 M (AS)
+[14.67 0 ] xhow
+483.67 229.18 M (AS)
+[14.67 0 ] xhow
+657 229.18 M (AS)
+[14.67 0 ] xhow
+603 463.18 M (AS)
+[14.67 0 ] xhow
+2 FF
+360 396 M (item)
+[3.11 3.89 7.78 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 22 22
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+306.4 97 M (Access Mediation )
+[17.32 10.65 10.65 10.65 9.33 9.33 6 22.64 10.65 13.34 6.67 11.99 7.99 6.67 11.99 13.34 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (Classes: )
+[12 5 7.99 7 7 7.99 7 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (mediation proper: )
+[14 7.99 9 5 7.99 5 5 9 9 4.5 9 5.99 9 9 7.99 5.99 5 0 ] xhow
+3 (Times-Italic) 18 mymakefont
+3 FF
+287.89 171 M (agent, agency )
+[8.82 8.82 7.99 9 5 4.5 4.5 8.82 8.82 7.99 9 7.99 7.99 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (user credentials: )
+[9 7 7.99 5.99 4.5 7.99 5.99 7.99 9 7.99 9 5 5 7.99 5 7 5 0 ] xhow
+3 FF
+276.88 201 M (std_cred )
+[7 5 9 9 7.99 6.33 7.99 9 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (access control list: )
+[7.99 7.99 7.99 7.99 7 7 4.5 7.99 9 9 5 5.99 9 5 4.5 5 5 7 5 5 0 ] xhow
+3 FF
+292.39 231 M (std_prot )
+[7 5 9 9 9 6.19 9 5 0 ] xhow
+1 FF
+135 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 261 M (connection with authentication server: )
+[7.99 9 9 9 7.99 7.99 5 5 9 9 4.5 12.99 5 5 9 4.5 7.99 9 5 9 7.99 9 5 5 7.99 7.99 5 5 9 9 4.5 7 7.99 5.99 8.73 7.99 5.99 5 0 ] xhow
+3 FF
+434.51 261 M (std_auth )
+[7 5 9 9 9 9 5 9 0 ] xhow
+2 FF
+99 297 M (Main exported operations -- )
+[15.99 7.99 5 9 4.5 7.72 9 9 9 5.99 5 7.99 9 4.5 9 9 7.99 5.99 7.99 5 5 9 9 7 4.5 5.99 5.99 0 ] xhow
+3 FF
+304.57 297 M (usItem \(us_item_ifc.h\) )
+[9 7 5.99 5 7.99 12.99 4.5 5.99 9 7 9 5 5 7.99 12.99 9 5 5 7.99 4.5 9 5.99 0 ] xhow
+1 FF
+135 327 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 327 M (ns_authenticate\(\) )
+[9 7 9 7.99 9 5 9 7.99 9 5 5 7.99 7.99 5 7.99 5.99 5.99 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (ns_duplicate\(\) )
+[9 7 9 9 9 9 5 5 7.99 7.99 5 7.99 5.99 5.99 0 ] xhow
+1 FF
+135 387 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 387 M (ns_get_access\(\) )
+[9 7 9 9 7.99 5 9 7.99 7.99 7.99 7.99 7 7 5.99 5.99 0 ] xhow
+1 FF
+135 417 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 417 M (ns_get_protection\(\) )
+[9 7 9 9 7.99 5 9 9 5.99 9 5 7.99 7.99 5 5 9 9 5.99 5.99 0 ] xhow
+1 FF
+135 447 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 447 M (ns_set_protection\(\) )
+[9 7 9 7 7.99 5 9 9 5.99 9 5 7.99 7.99 5 5 9 9 5.99 5.99 0 ] xhow
+1 FF
+135 477 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 477 M (ns_get_privileged_id\(\) )
+[9 7 9 9 7.99 5 9 9 5.99 4.55 9 5 5 7.72 9 7.99 9 9 5 9 5.99 5.99 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 23 23
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+378.67 97 M (I/O )
+[9.33 6.67 18.66 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (objectives: )
+[9 9 5 7.99 7.99 5 4.55 8.73 7.99 7 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (allow \(but not require\) use of shared memory )
+[7.99 5 5 8.55 12.99 4.5 5.99 8.64 9 5 4.5 9 9 5 4.5 5.99 7.99 9 9 5 5.99 7.99 5.99 4.5 9 7 7.99 4.5 9 5.99 4.5 7 9 7.99 5.99 7.99 9 4.5 14 7.99 14 9 5.99 9 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (compatibility with existing servers )
+[7.99 9 14 9 7.99 5 5 9 5 5 5 5 9 4.5 12.99 5 5 9 4.5 7.72 9 5 7 5 5 9 9 4.5 7 7.99 5.99 8.73 7.99 5.99 7 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (minimize server overhead / complexity )
+[14 5 9 5 14 5 7.99 7.99 4.5 7 7.99 5.99 8.73 7.99 5.99 4.5 8.73 8.73 7.99 5.99 9 7.99 7.99 9 4.5 5 4.5 7.99 9 14 9 5 7.72 9 5 5 9 0 ] xhow
+1 FF
+135 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 261 M (support sophisticated users )
+[7 9 9 9 9 5.99 5 4.5 7 9 9 9 5 7 5 5 7.99 7.99 5 7.99 9 4.5 9 7 7.99 5.99 7 0 ] xhow
+1 FF
+135 291 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 291 M (extensions for complex I/O )
+[7.72 9 5 7.99 9 7 5 9 9 7 4.5 5.99 9 5.99 4.5 7.99 9 14 9 5 7.72 9 4.5 5.99 5 12.99 0 ] xhow
+1 FF
+135 321 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 321 M (independent access by multiple users )
+[5 9 9 7.99 9 7.99 9 9 7.99 9 5 4.5 7.99 7.99 7.99 7.99 7 7 4.5 9 9 4.5 14 9 5 5 5 9 5 7.99 4.5 9 7 7.99 5.99 7 0 ] xhow
+99 357 M (key ideas: )
+[8.82 7.72 9 4.5 5 9 7.99 7.99 7 5 0 ] xhow
+1 FF
+135 387 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 387 M (data representation: bytestreams and records \(64-bit keys\) )
+[9 7.99 5 7.99 4.5 5.99 7.99 9 5.99 7.99 7 7.99 9 5 7.99 5 5 9 9 5 4.5 9 9 5 7.99 7 5 5.99 7.99 7.99 14 7 4.5 7.99 9 9 4.5 5.99 7.99 7.99 9 5.99 9 7 4.5 5.99 9 9 5.99 9 5 5 4.5 8.82 7.72 9 7 5.99 0 ] xhow
+1 FF
+135 417 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 417 M (data manipulation: user buffers and system blocks )
+[9 7.99 5 7.99 4.5 14 7.99 9 5 9 9 5 7.99 5 5 9 9 5 4.5 9 7 7.99 5.99 4.5 8.64 9 5.54 5.99 7.99 5.99 7 4.5 7.99 9 9 4.5 7 9 7 5 7.99 14 4.5 9 5 9 7.99 9 7 0 ] xhow
+1 FF
+135 447 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 447 M (all operations under user control \(async operations, random access\) )
+[7.99 5 5 4.5 9 9 7.99 5.99 7.99 5 5 9 9 7 4.5 9 9 9 7.99 5.99 4.5 9 7 7.99 5.99 4.5 7.99 9 9 5 5.99 9 5 4.5 5.99 7.99 7 9 9 7.99 4.5 9 9 7.99 5.99 7.99 5 5 9 9 7 4.5 4.5 5.99 7.99 9 9 9 14 4.5 7.99 7.99 7.99 7.99 7 7 5.99 0 ] xhow
+1 FF
+135 477 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 477 M (service options: wait, truncate, probe )
+[7 7.99 5.99 9 5 7.99 7.99 4.5 9 9 5 5 9 9 7 5 4.5 12.81 7.99 5 5 4.5 4.5 5 5.99 9 9 7.99 7.99 5 7.99 4.5 4.5 9 5.99 9 9 7.99 0 ] xhow
+1 FF
+135 507 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 507 M (explicit and transparent shared memory )
+[7.72 9 9 5 5 7.99 5 5 4.5 7.99 9 9 4.5 5 5.99 7.99 9 7 9 7.99 5.99 7.99 9 5 4.5 7 9 7.99 5.99 7.99 9 4.5 14 7.99 14 9 5.99 9 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 24 24
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+378.67 97 M (I/O )
+[9.33 6.67 18.66 0 ] xhow
+99 108 594 432 CR
+1 G
+99 108 594 432 NF
+441 162 
+441 531 
+2 PP
+1 SL
+0 G
+S
+2 (Helvetica) 22 mymakefont
+2 FF
+245 156 M (Byte-level)
+[14.67 10.99 6.11 12.23 7.32 4.88 12.23 10.99 12.23 0 ] xhow
+518.38 158.08 M (Record-level)
+[15.88 12.23 10.99 12.23 7.32 12.23 7.32 4.88 12.23 10.99 12.23 0 ] xhow
+207 306 
+747 306 
+2 PP
+S
+108 217 M (User)
+[15.88 10.99 12.23 0 ] xhow
+110 241 M (buffers)
+[12.23 12.23 5.72 6.11 12.23 7.32 0 ] xhow
+108 405 M (System)
+[14.67 10.99 10.99 6.11 12.23 0 ] xhow
+112 431 M (buffers)
+[12.23 12.23 5.72 6.11 12.23 7.32 0 ] xhow
+2 SL
+207 216 198 36 N
+225 216 
+225 252 
+2 PP
+S
+243 216 
+243 252 
+2 PP
+S
+261 216 
+261 252 
+2 PP
+S
+279 216 
+279 252 
+2 PP
+S
+297 216 
+297 252 
+2 PP
+S
+315 216 
+315 252 
+2 PP
+S
+333 216 
+333 252 
+2 PP
+S
+351 216 
+351 252 
+2 PP
+S
+369 216 
+369 252 
+2 PP
+S
+387 216 
+387 252 
+2 PP
+S
+477 216 198 36 N
+207 342 72 36 N
+243 414 72 36 N
+279 486 72 36 N
+513 342 72 36 N
+603 342 72 36 N
+477 342 
+459 360 
+477 378 
+495 360 
+4 PP
+CS
+270.19 398.28 
+278.99 413.98 
+263.2 405.33 
+266.69 401.81 
+4 PP
+F
+243 378 
+266.71 401.83 
+2 PP
+S
+306.18 470.28 
+314.99 485.98 
+299.2 477.33 
+302.69 473.8 
+4 PP
+F
+279 450 
+302.71 473.83 
+2 PP
+S
+495.7 355.04 
+513 360 
+495.7 364.96 
+495.7 360 
+4 PP
+F
+495 360 
+495.7 360 
+2 PP
+S
+585.7 355.04 
+603 360 
+585.7 364.96 
+585.7 360 
+4 PP
+F
+585 360 
+585.7 360 
+2 PP
+S
+531 414 72 36 N
+621 414 72 36 N
+495 414 
+477 432 
+495 450 
+513 432 
+4 PP
+CS
+513.7 427.04 
+531 432 
+513.7 436.96 
+513.7 432 
+4 PP
+F
+513 432 
+513.7 432 
+2 PP
+S
+603.7 427.04 
+621 432 
+603.7 436.96 
+603.7 432 
+4 PP
+F
+603 432 
+603.7 432 
+2 PP
+S
+491.63 396.31 
+494.99 413.99 
+482.77 400.78 
+487.2 398.54 
+4 PP
+F
+477 378 
+487.21 398.55 
+2 PP
+S
+225 342 
+225 378 
+2 PP
+S
+243 342 
+243 378 
+2 PP
+S
+261 342 
+261 378 
+2 PP
+S
+261 414 
+261 450 
+2 PP
+S
+279 414 
+279 450 
+2 PP
+S
+297 414 
+297 450 
+2 PP
+S
+297 486 
+297 522 
+2 PP
+S
+315 486 
+315 522 
+2 PP
+S
+333 486 
+333 522 
+2 PP
+S
+210.31 204.46 
+207 216 
+203.69 204.46 
+207 204.46 
+4 PP
+F
+207 180 
+207 204.46 
+2 PP
+1 SL
+S
+480.31 204.46 
+477 216 
+473.69 204.46 
+477 204.46 
+4 PP
+F
+477 180 
+477 204.46 
+2 PP
+S
+3 (Helvetica) 14 mymakefont
+3 FF
+210 185 M (Offset)
+[10.89 3.64 3.89 7 7.78 0 ] xhow
+481 187 M (Record number)
+[10.1 7.78 7 7.78 4.66 7.78 3.89 7.78 7.78 11.66 7.78 7.78 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 25 25
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+378.67 97 M (I/O )
+[9.33 6.67 18.66 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (Classes: )
+[12 5 7.99 7 7 7.99 7 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (mapped-file management: )
+[14 7.99 9 9 7.99 9 5.99 5 5 5 7.99 4.5 14 7.99 9 7.99 9 7.99 14 7.99 9 5 5 0 ] xhow
+3 (Times-Italic) 18 mymakefont
+3 FF
+346.85 171 M (mf_user, mf_mgr, mf_mem, pager )
+[12.99 5 9 9 7 7.99 5 4.5 4.5 12.99 5 9 12.99 9 5 4.5 4.5 12.99 5 9 12.99 7.99 12.99 4.5 4.5 9 8.82 8.82 7.99 7 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (system buffers: )
+[7 9 7 5 7.99 14 4.5 8.64 9 5.54 5.99 7.99 5.99 7 5 0 ] xhow
+3 FF
+269.09 201 M (default_iobuf_mgr )
+[9 7.99 5 9 9 5 5 9 5 9 8.64 9 5 9 12.99 9 7 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (streams: )
+[7 5 5.99 7.99 7.99 14 7 5 0 ] xhow
+3 FF
+219.44 231 M (bytestream, recordstream, stream_base )
+[9 7.99 5 7.99 7 5 6.33 7.99 9 12.99 4.5 4.5 6.33 7.99 7.99 9 6.33 9 7 5 6.33 7.99 9 12.99 4.5 4.5 7 5 6.33 7.99 9 12.99 9 9 9 7 7.99 0 ] xhow
+2 FF
+99 267 M (Main exported operations -- )
+[15.99 7.99 5 9 4.5 7.72 9 9 9 5.99 5 7.99 9 4.5 9 9 7.99 5.99 7.99 5 5 9 9 7 4.5 5.99 5.99 0 ] xhow
+3 FF
+304.57 267 M (usByteIO \(us_byteio_ifc.h\), usRecIO \(us_recio_ifc.h\) )
+[9 7 10.99 7.99 5 7.99 5.99 12.99 4.5 5.99 9 7 9 9 7.99 5 7.99 5 9 9 5 5 7.99 4.5 9 5.99 4.5 4.5 9 7 10.99 7.99 7.99 5.99 12.99 4.5 5.99 9 7 9 6.33 7.99 7.99 5 9 9 5 5 7.99 4.5 9 5.99 0 ] xhow
+1 FF
+135 297 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 297 M (io_read\(\), io_write\(\) )
+[5 9 9 5.99 7.99 7.99 9 5.99 5.99 4.5 4.5 5 9 9 12.99 5.99 5 5 7.99 5.99 5.99 0 ] xhow
+1 FF
+135 327 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 327 M (io_read_seq\(\), io_write_seq\(\) )
+[5 9 9 5.99 7.99 7.99 9 9 7 7.99 9 5.99 5.99 4.5 4.5 5 9 9 12.99 5.99 5 5 7.99 9 7 7.99 9 5.99 5.99 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (io_map\(\) )
+[5 9 9 14 7.99 9 5.99 5.99 0 ] xhow
+1 FF
+135 387 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 387 M (io_read1rec\(\), io_write1rec\(\) )
+[5 9 9 5.99 7.99 7.99 9 9 5.99 7.99 7.99 5.99 5.99 4.5 4.5 5 9 9 12.99 5.99 5 5 7.99 9 5.99 7.99 7.99 5.99 5.99 0 ] xhow
+1 FF
+135 417 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 417 M (io_getbytes\(\), io_putbytes\(\) )
+[5 9 9 9 7.99 5 9 9 5 7.99 7 5.99 5.99 4.5 4.5 5 9 9 9 9 5 9 9 5 7.99 7 5.99 5.99 0 ] xhow
+1 FF
+135 447 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 447 M (io_getrec\(\), io_putrec\(\) )
+[5 9 9 9 7.99 5 5.99 7.99 7.99 5.99 5.99 4.5 4.5 5 9 9 9 9 5 5.99 7.99 7.99 5.99 5.99 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 26 26
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+318.38 97 M (Other Modules )
+[18.66 7.99 13.34 10.65 10.65 6 22.64 11.99 13.34 13.34 6.67 10.65 9.33 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (Shared state management )
+[10 9 7.99 5.99 7.99 9 4.5 7 5 7.99 5 7.99 4.5 14 7.99 9 7.99 9 7.99 14 7.99 9 5 0 ] xhow
+99 177 M (Asynchronous notifications )
+[12.99 7 9 9 7.99 9 5.99 9 9 9 9 7 4.5 9 9 5 5 5 5 7.99 7.99 5 5 9 9 7 0 ] xhow
+99 213 M (Process management )
+[10 5.99 9 7.99 7.99 7 7 4.5 14 7.99 9 7.99 9 7.99 14 7.99 9 5 0 ] xhow
+99 249 M (Network control )
+[12.99 7.99 5 12.81 9 5.99 9 4.5 7.99 9 9 5 5.99 9 5 0 ] xhow
+99 285 M (TTY control )
+[10.99 10.99 12.99 4.5 7.99 9 9 5 5.99 9 5 0 ] xhow
+99 321 M (VNODE glue code )
+[12.99 12.99 12.99 12.99 10.99 4.5 9 5 9 7.99 4.5 7.99 9 9 7.99 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 27 27
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+285.6 97 M (Shared State Support )
+[13.34 13.34 11.99 10.22 10.65 13.34 6 13.34 7.99 11.99 7.99 10.65 6 13.34 13.34 13.34 13.34 11.99 10.65 7.99 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (objectives: )
+[9 9 5 7.99 7.99 5 4.55 8.73 7.99 7 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (arbitrary sharing between multiple clients )
+[7.99 5.99 9 5 5 5.99 7.99 5.99 9 4.5 7 9 7.99 5.99 5 9 9 4.5 9 7.99 5 12.99 7.99 7.99 9 4.5 14 9 5 5 5 9 5 7.99 4.5 7.99 5 5 7.99 9 5 7 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (decoupled from individual servers )
+[9 7.99 7.99 9 9 9 5 7.99 9 4.5 5.99 5.99 9 14 4.5 5 9 9 4.55 9 5 9 9 7.99 5 4.5 7 7.99 5.99 8.73 7.99 5.99 7 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (management of client-side cached information )
+[14 7.99 9 7.99 9 7.99 14 7.99 9 5 4.5 9 5.99 4.5 7.99 5 5 7.99 9 5 5.99 7 5 9 7.99 4.5 7.99 7.99 7.99 9 7.99 9 4.5 5 9 5.99 9 5.99 14 7.99 5 5 9 9 0 ] xhow
+1 FF
+135 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 261 M (very low overhead possible )
+[8.73 7.99 5.99 9 4.5 5 8.55 12.99 4.5 8.73 8.73 7.99 5.99 9 7.99 7.99 9 4.5 9 9 7 7 5 9 5 7.99 0 ] xhow
+1 FF
+135 291 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 291 M (flexible tradeoffs between space, time, trust, complexity, ... )
+[5 5 7.72 9 5 9 5 7.99 4.5 5 5.99 7.99 9 7.99 9 5.54 5.99 7 4.5 9 7.99 5 12.99 7.99 7.99 9 4.5 7 9 7.99 7.99 7.99 4.5 4.5 5 5 14 7.99 4.5 4.5 5 5.99 9 7 5 4.5 4.5 7.99 9 14 9 5 7.72 9 5 5 7.83 4.5 4.5 4.5 4.5 4.5 0 ] xhow
+99 327 M (key ideas: )
+[8.82 7.72 9 4.5 5 9 7.99 7.99 7 5 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+3 (Times-Italic) 18 mymakefont
+3 FF
+154.98 357 M (item callbacks)
+[5 5 7.99 12.99 4.5 7.99 9 5 5 9 9 7.63 7.99 0 ] xhow
+2 FF
+258.05 357 M (: synchronous boolean notifications -- also used for access )
+[5 4.5 7 9 9 7.99 9 5.99 9 9 9 9 7 4.5 9 9 9 5 7.99 7.99 9 4.5 9 9 5 5 5 5 7.99 7.99 5 5 9 9 7 4.5 5.99 5.99 4.5 7.99 5 7 9 4.5 9 7 7.99 9 4.5 5.99 9 5.99 4.5 7.99 7.99 7.99 7.99 7 7 0 ] xhow
+156.6 378 M (revocation )
+[5.99 7.54 8.64 9 7.99 7.99 5 5 9 9 0 ] xhow
+1 FF
+135 408 M (-  )
+[7.99 6 0 ] xhow
+3 FF
+154.98 408 M (blackboards)
+[9 5 9 7.63 7.99 9 9 9 6.33 9 0 ] xhow
+2 FF
+242.9 408 M ( and )
+[4.5 7.99 9 9 0 ] xhow
+3 FF
+277.87 408 M (shared records)
+[7 9 9 6.33 7.99 9 4.5 6.33 7.99 7.99 9 6.33 9 0 ] xhow
+2 FF
+384.3 408 M (: arbitrary data, direct user access )
+[5 4.5 7.99 5.99 9 5 5 5.99 7.99 5.99 9 4.5 9 7.99 5 7.99 4.5 4.5 9 5 5.99 7.99 7.99 5 4.5 9 7 7.99 5.99 4.5 7.99 7.99 7.99 7.99 7 7 0 ] xhow
+1 FF
+135 438 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 438 M (shared memory or messages )
+[7 9 7.99 5.99 7.99 9 4.5 14 7.99 14 9 5.99 9 4.5 9 5.99 4.5 14 7.99 7 7 7.99 9 7.99 7 0 ] xhow
+1 FF
+135 468 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 468 M (central )
+[7.99 7.99 9 5 5.99 7.99 5 0 ] xhow
+3 FF
+208.43 468 M (blackboard server )
+[9 5 9 7.63 7.99 9 9 9 6.33 9 4.5 7 7.99 7 7.99 7.99 7 0 ] xhow
+1 FF
+99 493 M ( )
+[0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 28 28
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+99 93 M ( )
+[0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+295.84 97 M (Blackboard Service )
+[16 6.67 11.99 10.65 13.34 13.34 11.99 11.99 10.65 13.34 6 13.34 10.65 10.41 11.99 6.67 10.65 10.65 0 ] xhow
+99 108 594 423 CR
+1 G
+99 108 594 423 NF
+18 171 144 432 162 RF
+3 SL
+0 G
+18 171 144 432 162 RS
+1 G
+144 378 72 90 NF
+2 SL
+0 G
+144 378 72 90 N
+9 sp
+18 18 153 387 NR
+0.5 G
+153 387 18 18 N
+1 G
+504 198 72 90 NF
+0 G
+504 198 72 90 N
+1 G
+351 198 72 90 NF
+0 G
+351 198 72 90 N
+18 18 360 207 NR
+0.5 G
+360 207 18 18 N
+8 sp
+18 18 513 207 NR
+513 207 18 18 N
+18 18 360 234 NR
+360 234 18 18 N
+1 G
+198 198 72 90 NF
+0 G
+198 198 72 90 N
+9 sp
+18 18 207 207 NR
+0.5 G
+207 207 18 18 N
+1 G
+351 378 72 90 NF
+0 G
+351 378 72 90 N
+18 18 360 387 NR
+0.5 G
+360 387 18 18 N
+8 sp
+18 18 360 414 NR
+360 414 18 18 N
+1 G
+558 378 72 90 NF
+0 G
+558 378 72 90 N
+18 18 567 387 NR
+0.5 G
+567 387 18 18 N
+3 SL
+0 G
+18 126 360 108 144 RS
+18 333 360 108 144 RS
+18 540 360 108 144 RS
+198 288 
+144 378 
+2 PP
+1 SL
+9 sp
+A Z
+270 288 
+216 378 
+2 PP
+A Z
+351 288 
+351 378 
+2 PP
+A Z
+423 288 
+423 378 
+2 PP
+A Z
+504 288 
+558 378 
+2 PP
+A Z
+576 288 
+630 378 
+2 PP
+A Z
+188.3 400.96 
+171 396 
+188.3 391.04 
+188.3 396 
+4 PP
+0.5 G
+F
+342.7 391.04 
+360 396 
+342.7 400.96 
+342.7 396 
+4 PP
+F
+188.3 396 
+342.7 396 
+2 PP
+2 SL
+S
+395.83 425.44 
+377.99 422.99 
+394.41 415.62 
+395.12 420.53 
+4 PP
+F
+549.16 393.55 
+566.99 395.99 
+550.57 403.37 
+549.87 398.46 
+4 PP
+F
+395.13 420.54 
+549.87 398.46 
+2 PP
+S
+242.3 220.96 
+225 216 
+242.3 211.04 
+242.3 216 
+4 PP
+F
+342.7 211.04 
+360 216 
+342.7 220.96 
+342.7 216 
+4 PP
+F
+242.3 216 
+342.7 216 
+2 PP
+S
+395.94 244.42 
+377.99 243 
+393.96 234.7 
+394.95 239.56 
+4 PP
+F
+495.05 214.57 
+512.99 216 
+497.02 224.3 
+496.03 219.43 
+4 PP
+F
+394.96 239.56 
+496.04 219.44 
+2 PP
+S
+0 G
+2 (Helvetica) 14 mymakefont
+2 FF
+157.25 136.2 M (Blackboard server)
+[9.33 3.11 7.78 7 7 7.78 7.78 7.78 4.66 7.78 3.89 7 7.78 4.66 7 7.78 0 ] xhow
+126 347.94 M (Client 1)
+[10.1 3.11 3.11 7.78 7.78 3.89 3.89 0 ] xhow
+321.57 347.94 M (Client 2)
+[10.1 3.11 3.11 7.78 7.78 3.89 3.89 0 ] xhow
+531 347.94 M (Client 3)
+[10.1 3.11 3.11 7.78 7.78 3.89 3.89 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 29 29
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+255.28 97 M (Asynchronous Notifications )
+[17.32 9.33 11.99 13.34 10.65 13.34 10.22 11.99 13.34 11.99 13.34 9.33 6 17.32 11.99 7.99 6.67 6.67 6.67 10.65 11.99 7.99 6.67 11.99 13.34 9.33 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (objectives: )
+[9 9 5 7.99 7.99 5 4.55 8.73 7.99 7 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (UNIX signals, VMS events, cheap external asynchronous service )
+[12.99 12.99 5.99 12.99 4.5 7 5 9 9 7.99 5 7 4.5 4.5 12.99 15.99 10 4.5 7.54 8.73 7.99 9 5 7 4.5 4.5 7.99 9 7.99 7.99 9 4.5 7.72 9 5 7.99 5.99 9 7.99 5 4.5 7.99 7 9 9 7.99 9 5.99 9 9 9 9 7 4.5 7 7.99 5.99 9 5 7.99 7.99 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (integrated in the uniform name space )
+[5 9 5 7.72 9 5.99 7.99 5 7.99 9 4.5 5 9 4.5 5 9 7.99 4.5 9 9 5 5.99 9 5.99 14 4.5 9 7.99 14 7.99 4.5 7 9 7.99 7.99 7.99 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (minimize overhead when not in use )
+[14 5 9 5 14 5 7.99 7.99 4.5 8.73 8.73 7.99 5.99 9 7.99 7.99 9 4.5 12.99 9 7.99 9 4.5 9 9 5 4.5 5 9 4.5 9 7 7.99 0 ] xhow
+99 267 M (key ideas: )
+[8.82 7.72 9 4.5 5 9 7.99 7.99 7 5 0 ] xhow
+1 FF
+135 297 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 297 M (generic: event number, code, subcode )
+[9 7.99 9 7.99 5.99 5 7.99 5 4.5 7.54 8.73 7.99 9 5 4.5 9 9 14 9 7.99 5.27 4.5 4.5 7.99 9 9 7.99 4.5 4.5 7 9 9 7.99 9 9 7.99 0 ] xhow
+1 FF
+135 327 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 327 M (special item in the emulation library )
+[7 9 7.99 7.99 5 7.99 5 4.5 5 5 7.99 14 4.5 5 9 4.5 5 9 7.99 4.5 7.99 14 9 5 7.99 5 5 9 9 4.5 5 5 9 5.99 7.99 5.99 9 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (remote invocation through the task_master )
+[5.99 7.99 14 9 5 7.99 4.5 5 8.28 8.64 9 7.99 7.99 5 5 9 9 4.5 5 9 5.99 9 9 9 9 4.5 5 9 7.99 4.5 5 7.99 7 9 9 14 7.99 7 5 7.99 5.99 0 ] xhow
+1 FF
+135 387 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 387 M (alert and exception handling mechanism in the emulation library )
+[7.99 5 7.99 5.99 5 4.5 7.99 9 9 4.5 7.72 9 7.99 7.99 9 5 5 9 9 4.5 9 7.99 9 9 5 5 9 9 4.5 14 7.99 7.99 9 7.99 9 5 7 14 4.5 5 9 4.5 5 9 7.99 4.5 7.99 14 9 5 7.99 5 5 9 9 4.5 5 5 9 5.99 7.99 5.99 9 0 ] xhow
+1 FF
+99 412 M ( )
+[0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 30 30
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+99 93 M ( )
+[0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+317.95 97 M (Signal Delivery )
+[13.34 6.67 11.99 13.34 11.99 6.67 6 17.32 10.65 6.67 6.43 11.75 10.65 10.65 11.99 0 ] xhow
+99 117 594 414 CR
+1 G
+99 117 594 414 NF
+378 153 279 180 NF
+2 SL
+0 G
+378 153 279 180 N
+1 G
+495 405 189 117 NF
+0 G
+495 405 189 117 N
+1 G
+135 405 189 117 NF
+0 G
+135 405 189 117 N
+8 sp
+0 360 18 18 216 432 AQ
+0.5 SL
+0 360 18 18 216 432 AS
+0 360 18 18 396 306 AQ
+0 360 18 18 396 306 AS
+0 360 18 18 594 432 AQ
+0 360 18 18 594 432 AS
+378 207 
+657 207 
+2 PP
+1 SL
+S
+4 SL
+0.5 G
+18 153 468 135 45 RS
+237.93 461.38 
+261 468 
+237.93 474.62 
+237.93 468 
+4 PP
+F
+225 468 
+237.93 468 
+2 PP
+S
+18 432 261 81 63 RS
+18 531 180 117 144 RS
+590.07 186.62 
+567 180 
+590.07 173.38 
+590.07 180 
+4 PP
+F
+593.4 180 
+590.07 180 
+2 PP
+S
+18 513 459 63 54 RS
+543.93 452.38 
+567 459 
+543.93 465.62 
+543.93 459 
+4 PP
+F
+531 459 
+543.93 459 
+2 PP
+S
+18 603 459 63 54 RS
+633.93 452.38 
+657 459 
+633.93 465.62 
+633.93 459 
+4 PP
+F
+621 459 
+633.93 459 
+2 PP
+S
+482.07 267.62 
+459 261 
+482.07 254.38 
+482.07 261 
+4 PP
+F
+482.07 261 
+495 261 
+2 PP
+S
+220 461.07 
+216 468 
+212 461.07 
+216 461.07 
+4 PP
+0 G
+F
+216 441 
+216 461.07 
+2 PP
+1 SL
+S
+574.71 456.95 
+566.97 458.98 
+569.08 451.26 
+571.89 454.1 
+4 PP
+F
+585 441 
+571.92 454.13 
+2 PP
+S
+612.44 451 
+611.99 458.99 
+605.29 454.61 
+608.87 452.8 
+4 PP
+F
+603 441 
+608.88 452.81 
+2 PP
+S
+598 416.07 
+594 423 
+590 416.07 
+594 416.07 
+4 PP
+F
+594 324 
+594 416.07 
+2 PP
+S
+379.71 318.31 
+386.98 314.99 
+386.22 322.95 
+382.96 320.63 
+4 PP
+F
+279 468 
+382.98 320.64 
+2 PP
+S
+425.07 302 
+432 306 
+425.07 310 
+425.07 306 
+4 PP
+F
+405 306 
+425.07 306 
+2 PP
+S
+582.59 415.37 
+585 423 
+577.18 421.27 
+579.89 418.32 
+4 PP
+10 sp
+Z
+477 324 
+579.89 418.32 
+2 PP
+A Z
+2 SL
+108 153 171 180 N
+4 SL
+0.5 G
+18 135 171 117 153 RS
+194.07 177.62 
+171 171 
+194.07 164.38 
+194.07 171 
+4 PP
+F
+197.4 171 
+194.07 171 
+2 PP
+S
+220 416.07 
+216 423 
+212 416.07 
+216 416.07 
+4 PP
+0 G
+F
+216 324 
+216 416.07 
+2 PP
+1 SL
+S
+2 (Helvetica) 14 mymakefont
+2 FF
+117 144 M (User proc A)
+[10.1 7 7.78 4.66 3.89 7.78 4.66 7.78 7 3.89 0 ] xhow
+387 140.94 M (User proc B)
+[10.1 7 7.78 4.66 3.89 7.78 4.66 7.78 7 3.89 0 ] xhow
+387 171 M (User space)
+[10.1 7 7.78 4.66 3.89 7 7.78 7.78 7 0 ] xhow
+387 225 M (Emul space)
+[9.33 11.66 7.78 3.11 3.89 7 7.78 7.78 7 0 ] xhow
+108 392.94 M (Task master)
+[7 7.78 7 7 3.89 11.66 7.78 7 3.89 7.78 0 ] xhow
+603 369 M (RPC)
+[10.1 9.33 0 ] xhow
+522 365.94 M (Abort)
+[9.33 7.78 7.78 4.66 0 ] xhow
+432 252 M (Notif thread)
+[10.1 7.78 3.89 3.11 3.89 3.89 3.89 7.78 4.66 7.78 7.78 0 ] xhow
+538.9 167.94 M (User thread)
+[10.1 7 7.78 4.66 3.89 3.89 7.78 4.66 7.78 7.78 0 ] xhow
+225 423 M (Task item)
+[7 7.78 7 7 3.89 3.11 3.89 7.78 0 ] xhow
+603 423 M (I/O item)
+[3.89 3.89 10.89 3.89 3.11 3.89 7.78 0 ] xhow
+345.91 293.94 M (Notif item)
+[10.1 7.78 3.89 3.11 3.89 3.89 3.11 3.89 7.78 0 ] xhow
+108 207 
+279 207 
+2 PP
+S
+441 396 M (I/O server)
+[3.89 3.89 10.89 3.89 7 7.78 4.66 7 7.78 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 31 31
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+356.69 97 M (Startup )
+[13.34 7.99 11.99 10.65 7.99 13.34 13.34 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (boot on POE or other single-server )
+[9 9 9 5 4.5 9 9 4.5 10 12.99 10.99 4.5 9 5.99 4.5 9 5 9 7.99 5.99 4.5 7 5 9 9 5 7.99 5.99 7 7.99 5.99 8.73 7.99 5.99 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (share TTY\325s, network )
+[7 9 7.99 5.99 7.99 4.5 10.99 10.99 12.99 5 7 4.5 4.5 9 7.99 5 12.81 9 5.99 9 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (separate disk partition )
+[7 7.99 9 7.99 5.99 7.99 5 7.99 4.5 9 5 7 9 4.5 9 7.99 5.99 5 5 5 5 9 9 0 ] xhow
+99 237 M (config_server )
+[7.99 9 9 5 5 9 9 7 7.99 5.99 8.73 7.99 5.99 0 ] xhow
+1 FF
+135 267 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 267 M (netname service )
+[9 7.99 5 9 7.99 14 7.99 4.5 7 7.99 5.99 9 5 7.99 7.99 0 ] xhow
+99 303 M (startup script \(shell\) )
+[7 5 7.99 5.99 5 9 9 4.5 7 7.99 5.99 5 9 5 4.5 5.99 7 9 7.99 5 5 5.99 0 ] xhow
+1 FF
+135 333 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 333 M (start all the servers )
+[7 5 7.99 5.99 5 4.5 7.99 5 5 4.5 5 9 7.99 4.5 7 7.99 5.99 8.73 7.99 5.99 7 0 ] xhow
+99 369 M (setup the name space \(fsadmin script\) )
+[7 7.99 5 9 9 4.5 5 9 7.99 4.5 9 7.99 14 7.99 4.5 7 9 7.99 7.99 7.99 4.5 5.99 5.99 7 7.99 9 14 5 9 4.5 7 7.99 5.99 5 9 5 5.99 0 ] xhow
+99 405 M (emul_init )
+[7.99 14 9 5 9 5 9 5 5 0 ] xhow
+1 FF
+135 435 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 435 M ( first emulated process )
+[4.5 5 5 5.99 7 5 4.5 7.99 14 9 5 7.99 5 7.99 9 4.5 9 5.99 9 7.99 7.99 7 7 0 ] xhow
+99 471 M (debugging: GDB )
+[9 7.99 8.64 9 9 9 5 9 9 5 4.5 12.99 12.99 12 0 ] xhow
+99 507 M ( )
+[0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 32 32
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+364.01 97 M (Status )
+[13.34 7.99 11.99 7.99 13.34 9.33 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (BSD prototype is now self-hosting: )
+[12 10 12.99 4.5 9 5.99 9 5 9 5 9 9 7.99 4.5 5 7 4.5 9 8.55 12.99 4.5 7 7.99 5 5.99 5.99 9 9 7 5 5 9 9 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (stays up indefinitely )
+[7 5 7.99 9 7 4.5 9 9 4.5 5 9 9 7.99 5 5 9 5 5 7.99 5 9 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (supports all common UNIX \322shell-level\323 activities except networking )
+[7 9 9 9 9 5.99 5 7 4.5 7.99 5 5 4.5 7.99 9 14 14 9 9 4.5 12.99 12.99 5.99 12.99 4.5 7.99 7 9 7.99 5 5 5.99 5 7.54 8.73 7.99 5 7.99 4.5 7.99 7.99 5 4.55 9 5 5 5 7.99 7 4.5 7.72 9 7.99 7.99 9 5 4.5 9 7.99 5 12.81 9 5.99 9 5 9 9 0 ] xhow
+156.6 222 M (\(TFTP only\) )
+[5.99 10.99 10 10.99 10 4.5 9 9 5 9 5.99 0 ] xhow
+1 FF
+135 252 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 252 M (performance acceptable for everyday use of prototype )
+[9 7.99 5.99 5.99 9 5.99 14 7.99 9 7.99 7.99 4.5 7.99 7.99 7.99 7.99 9 5 7.99 9 5 7.99 4.5 5.99 9 5.99 4.5 7.54 8.73 7.99 5.99 9 9 7.99 9 4.5 9 7 7.99 4.5 9 5.99 4.5 9 5.99 9 5 9 5 9 9 7.99 0 ] xhow
+1 FF
+135 282 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 282 M (short-term task: finish the C++ conversion )
+[7 9 9 5.99 5 5.99 5 7.99 5.99 14 4.5 5 7.99 7 9 5 4.5 5 5 9 5 7 9 4.5 5 9 7.99 4.5 12 10.15 10.15 4.5 7.99 9 8.28 8.73 7.99 5.99 7 5 9 9 0 ] xhow
+99 318 M (Analysis of design and documentation underway )
+[12.99 9 7.99 5 9 7 5 7 4.5 9 5.99 4.5 9 7.99 7 5 9 9 4.5 7.99 9 9 4.5 9 9 7.99 9 14 7.99 9 5 7.99 5 5 9 9 4.5 9 9 9 7.99 5.99 12.81 7.99 9 0 ] xhow
+99 354 M (More work: )
+[15.99 9 5.99 7.99 4.5 12.81 9 5.99 9 5 0 ] xhow
+1 FF
+135 384 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 384 M (functionality )
+[5.99 9 9 7.99 5 5 9 9 7.99 5 5 5 9 0 ] xhow
+1 FF
+135 414 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 414 M (performance )
+[9 7.99 5.99 5.99 9 5.99 14 7.99 9 7.99 7.99 0 ] xhow
+1 FF
+135 444 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 444 M (evaluation / experimentation )
+[7.54 8.55 7.99 5 9 7.99 5 5 9 9 4.5 5 4.5 7.72 9 9 7.99 5.99 5 14 7.99 9 5 7.99 5 5 9 9 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 33 33
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 72 594 477 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+329.94 88 M (Performance )
+[14.18 10.65 10.65 7.39 11.99 10.65 19.98 11.99 13.34 10.65 10.65 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 132 M (Already decent and getting better )
+[12.99 5 5.99 7.99 7.99 9 9 4.5 9 7.99 7.99 7.99 9 5 4.5 7.99 9 9 4.5 9 7.99 5 5 5 9 9 4.5 9 7.99 5 5 7.99 5.99 0 ] xhow
+99 168 M (Suspected/possible bottlenecks: )
+[10 9 7 9 7.99 7.99 5 7.99 9 5 9 9 7 7 5 9 5 7.99 4.5 9 9 5 5 5 7.99 9 7.99 7.99 9 7 5 0 ] xhow
+1 FF
+135 198 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 198 M (MachObjects invocations: not really )
+[15.99 7.99 7.99 9 12.99 9 5 7.99 7.99 5 7 4.5 5 8.28 8.64 9 7.99 7.99 5 5 9 9 7 5 4.5 9 9 5 4.5 5.99 7.99 7.99 5 5 9 0 ] xhow
+1 FF
+135 228 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 228 M (object instantiation and returning objects to clients: yes )
+[9 9 5 7.99 7.99 5 4.5 5 9 7 5 7.99 9 5 5 7.99 5 5 9 9 4.5 7.99 9 9 4.5 5.99 7.99 5 9 5.99 9 5 9 9 4.5 9 9 5 7.99 7.99 5 7 4.5 5 9 4.5 7.99 5 5 7.99 9 5 7 5 4.5 9 7.99 7 0 ] xhow
+1 FF
+135 258 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 258 M (RPC: maybe )
+[12 10 12 5 4.5 14 7.99 9 9 7.99 0 ] xhow
+1 FF
+135 288 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 288 M (inheritance of state during fork\(\) )
+[5 9 9 7.99 5.99 5 5 7.99 9 7.99 7.99 4.5 9 5.99 4.5 7 5 7.99 5 7.99 4.5 9 9 5.99 5 9 9 4.5 5.99 9 5.99 9 5.99 5.99 0 ] xhow
+1 FF
+135 318 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 318 M (complex generic operations: fork\(\), item lookups )
+[7.99 9 14 9 5 7.72 9 4.5 9 7.99 9 7.99 5.99 5 7.99 4.5 9 9 7.99 5.99 7.99 5 5 9 9 7 5 4.5 5.99 9 5.99 9 5.99 5.99 4.5 4.5 5 5 7.99 14 4.5 5 9 9 9 9 9 7 0 ] xhow
+1 FF
+135 348 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 348 M (paging )
+[9 7.99 9 5 9 9 0 ] xhow
+99 384 M (Avenues of action: )
+[11.66 8.73 7.99 9 9 7.99 7 4.5 9 5.99 4.5 7.99 7.99 5 5 9 9 5 0 ] xhow
+1 FF
+135 414 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 414 M (optimize the RPC package )
+[9 9 5 5 14 5 7.99 7.99 4.5 5 9 7.99 4.5 12 10 12 4.5 9 7.99 7.99 9 7.99 9 7.99 0 ] xhow
+1 FF
+135 444 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 444 M (optimize selected high-level functions \(fork\(\), stat\(\), file open\) )
+[9 9 5 5 14 5 7.99 7.99 4.5 7 7.99 5 7.99 7.99 5 7.99 9 4.5 9 5 9 9 5.99 5 7.54 8.73 7.99 5 4.5 5.99 9 9 7.99 5 5 9 9 7 4.5 5.99 5.99 9 5.99 9 5.99 5.99 4.5 4.5 7 5 7.99 5 5.99 5.99 4.5 4.5 5 5 5 7.99 4.5 9 9 7.99 9 5.99 0 ] xhow
+1 FF
+135 474 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 474 M (new mechanisms: blackboard server )
+[9 7.54 12.99 4.5 14 7.99 7.99 9 7.99 9 5 7 14 7 5 4.5 9 5 7.99 7.99 9 9 9 7.99 5.99 9 4.5 7 7.99 5.99 8.73 7.99 5.99 0 ] xhow
+1 FF
+135 504 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 504 M (experiment with inheritance of state \(memory + ports\) )
+[7.72 9 9 7.99 5.99 5 14 7.99 9 5 4.5 12.99 5 5 9 4.5 5 9 9 7.99 5.99 5 5 7.99 9 7.99 7.99 4.5 9 5.99 4.5 7 5 7.99 5 7.99 4.5 5.99 14 7.99 14 9 5.99 9 4.5 10.15 4.5 9 9 5.99 5 7 5.99 0 ] xhow
+1 FF
+135 534 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 534 M (streamline common code paths and object creation \(C++, new threads\) )
+[7 5 5.99 7.99 7.99 14 5 5 9 7.99 4.5 7.99 9 14 14 9 9 4.5 7.99 9 9 7.99 4.5 9 7.99 5 9 7 4.5 7.99 9 9 4.5 9 9 5 7.99 7.99 5 4.5 7.99 5.99 7.99 7.99 5 5 9 9 4.5 5.99 12 10.15 10.15 4.5 4.5 9 7.54 12.99 4.5 5 9 5.99 7.99 7.99 9 7 5.99 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 34 34
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+283.38 97 M (Functionality / Design )
+[14.66 13.34 13.34 10.65 7.99 6.67 11.99 13.34 11.99 6.67 6.67 7.99 11.99 6 6.67 6 17.32 10.65 9.33 6.67 11.99 13.34 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (Relatively straightforward: )
+[12 7.99 5 7.99 5 4.55 8.73 7.99 5 9 4.5 7 5 5.99 7.99 5 9 9 5 5.99 9 5.99 12.81 7.99 5.99 9 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (networking + network file systems )
+[9 7.99 5 12.81 9 5.99 9 5 9 9 4.5 10.15 4.5 9 7.99 5 12.81 9 5.99 9 4.5 5 5 5 7.99 4.5 7 9 7 5 7.99 14 7 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (devices )
+[9 7.54 9 5 7.99 7.99 7 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (implement more system calls and/or options )
+[5 14 9 5 7.99 14 7.99 9 5 4.5 14 9 5.99 7.99 4.5 7 9 7 5 7.99 14 4.5 7.99 7.99 5 5 7 4.5 7.99 9 9 5 9 5.99 4.5 9 9 5 5 9 9 7 0 ] xhow
+1 FF
+135 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 261 M (X )
+[12.99 0 ] xhow
+1 FF
+135 291 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 291 M (system startup, core dumps, etc... )
+[7 9 7 5 7.99 14 4.5 7 5 7.99 5.99 5 9 9 4.5 4.5 7.99 9 5.99 7.99 4.5 9 9 14 9 7 4.5 4.5 7.99 5 7.99 4.5 4.5 4.5 0 ] xhow
+99 327 M (More interesting: )
+[15.99 9 5.99 7.99 4.5 5 9 5 7.99 5.99 7.99 7 5 5 9 9 5 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (asynchronous I/O, select\(\) )
+[7.99 7 9 9 7.99 9 5.99 9 9 9 9 7 4.5 5.99 5 12.99 4.5 4.5 7 7.99 5 7.99 7.99 5 5.99 5.99 0 ] xhow
+1 FF
+135 387 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 387 M (item callbacks -- mount\(\)/umount\(\) )
+[5 5 7.99 14 4.5 7.99 7.99 5 5 9 7.99 7.99 9 7 4.5 5.99 5.99 4.5 14 9 9 9 5 5.99 5.99 5 9 14 9 9 9 5 5.99 5.99 0 ] xhow
+1 FF
+135 417 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 417 M (shared state management )
+[7 9 7.99 5.99 7.99 9 4.5 7 5 7.99 5 7.99 4.5 14 7.99 9 7.99 9 7.99 14 7.99 9 5 0 ] xhow
+1 FF
+135 447 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 447 M (set-uid exec\(\) )
+[7 7.99 5 5.99 9 5 9 4.5 7.72 8.73 7.99 7.99 5.99 5.99 0 ] xhow
+1 FF
+135 477 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 477 M (resource control )
+[5.99 7.99 7 9 9 5.99 7.99 7.99 4.5 7.99 9 9 5 5.99 9 5 0 ] xhow
+1 FF
+135 507 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 507 M (experiment with other OS / features )
+[7.72 9 9 7.99 5.99 5 14 7.99 9 5 4.5 12.99 5 5 9 4.5 9 5 9 7.99 5.99 4.5 12.99 10 4.5 5 4.5 5.99 7.99 7.99 5 9 5.99 7.99 7 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 35 35
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+290.72 97 M (Size and Complexity )
+[13.34 6.67 10.65 10.65 6 11.99 13.34 13.34 6 17.32 11.99 19.98 13.34 6.67 10.65 11.99 6.67 7.99 11.99 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (Source code: )
+[10 9 9 5.99 7.99 7.99 4.5 7.99 9 9 7.99 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (9 servers + 1 BSD emulation library + utilities )
+[9 4.5 7 7.99 5.99 8.73 7.99 5.99 7 4.5 10.15 4.5 9 4.5 12 10 12.99 4.5 7.99 14 9 5 7.99 5 5 9 9 4.5 5 5 9 5.99 7.99 5.99 9 4.5 10.15 4.5 9 5 5 5 5 5 5 7.99 7 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (1244 files: 139\(C++\) + 382\(C\) + 511\(headers\) + 31\(assembler\) + 212 )
+[9 9 9 9 4.5 5 5 5 7.99 7 5 4.5 9 9 9 5.99 12 10.15 10.15 5.99 4.5 10.15 4.5 9 9 9 5.99 12 5.99 4.5 10.15 4.5 9 9 9 5.99 9 7.99 7.99 9 7.99 5.99 7 5.99 4.5 10.15 4.5 9 9 5.99 7.99 7 7 7.99 14 9 5 7.99 5.99 5.99 4.5 10.15 4.5 9 9 9 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (6.8Megs, 250000 raw lines, 128000 effective lines, 60000 semicolons )
+[9 4.5 9 15.99 7.72 9 7 4.5 4.5 9 9 9 9 9 9 4.5 5.99 7.72 12.99 4.5 5 5 9 7.99 7 4.5 4.5 9 9 9 9 9 9 4.5 7.99 5.54 5.99 7.99 7.99 5 4.55 8.73 7.99 4.5 5 5 9 7.99 7 4.5 4.5 9 9 9 9 9 4.5 7 7.99 14 5 7.99 9 5 9 9 7 0 ] xhow
+1 FF
+135 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 261 M (1173 effective lines of machine-dependent code in 19 files \(+ support libs\) )
+[9 9 9 9 4.5 7.99 5.54 5.99 7.99 7.99 5 4.55 8.73 7.99 4.5 5 5 9 7.99 7 4.5 9 5.99 4.5 14 7.99 7.99 9 5 9 7.99 5.99 9 7.99 9 7.99 9 9 7.99 9 5 4.5 7.99 9 9 7.99 4.5 5 9 4.5 9 9 4.5 5 5 5 7.99 7 4.5 5.99 10.15 4.5 7 9 9 9 9 5.99 5 4.5 5 5 9 7 5.99 0 ] xhow
+99 297 M (Complexity: )
+[12 9 14 9 5 7.72 9 5 5 9 5 0 ] xhow
+1 FF
+135 327 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 327 M (78 classes in common library )
+[9 9 4.5 7.99 5 7.99 7 7 7.99 7 4.5 5 9 4.5 7.99 9 14 14 9 9 4.5 5 5 9 5.99 7.99 5.99 9 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (84 exported methods in 7 logical interfaces \(18 interface classes\) )
+[9 9 4.5 7.72 9 9 9 5.99 5 7.99 9 4.5 14 7.99 5 9 9 9 7 4.5 5 9 4.5 9 4.5 5 9 9 5 7.99 7.99 5 4.5 5 9 5 7.99 5.99 5.81 7.99 7.99 7.99 7 4.5 5.99 9 9 4.5 5 9 5 7.99 5.99 5.81 7.99 7.99 7.99 4.5 7.99 5 7.99 7 7 7.99 7 5.99 0 ] xhow
+99 393 M (Concerns: )
+[12 9 9 7.99 7.99 5.99 9 7 5 0 ] xhow
+1 FF
+135 423 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 423 M (bigger stress on the kernel )
+[9 5 9 9 7.99 5.99 4.5 7 5 5.99 7.99 7 7 4.5 9 9 4.5 5 9 7.99 4.5 8.82 7.99 5.99 9 7.99 5 0 ] xhow
+1 FF
+135 453 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 453 M (need shared libraries to avoid code replication )
+[9 7.99 7.99 9 4.5 7 9 7.99 5.99 7.99 9 4.5 5 5 9 5.99 7.99 5.99 5 7.99 7 4.5 5 9 4.5 7.63 8.64 9 5 9 4.5 7.99 9 9 7.99 4.5 5.99 7.99 9 5 5 7.99 7.99 5 5 9 9 0 ] xhow
+1 FF
+135 483 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 483 M (need more maturity in the common library + standards )
+[9 7.99 7.99 9 4.5 14 9 5.99 7.99 4.5 14 7.99 5 9 5.99 5 5 9 4.5 5 9 4.5 5 9 7.99 4.5 7.99 9 14 14 9 9 4.5 5 5 9 5.99 7.99 5.99 9 4.5 10.15 4.5 7 5 7.99 9 9 7.99 5.99 9 7 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 36 36
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+323.06 97 M (Other Aspects )
+[18.66 7.99 13.34 10.65 10.65 6 17.32 9.33 13.34 10.65 10.65 7.99 9.33 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (complex emulation libraries: )
+[7.99 9 14 9 5 7.72 9 4.5 7.99 14 9 5 7.99 5 5 9 9 4.5 5 5 9 5.99 7.99 5.99 5 7.99 7 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M ( )
+[0 ] xhow
+154.98 171 M (simpler servers, optimizations, specialization )
+[7 5 14 9 5 7.99 5.99 4.5 7 7.99 5.99 8.73 7.99 5.99 7 4.5 4.5 9 9 5 5 14 5 7.99 7.99 5 5 9 9 7 4.5 4.5 7 9 7.99 7.99 5 7.99 5 5 7.99 7.99 5 5 9 9 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (very hard to write )
+[8.73 7.99 5.99 9 4.5 9 7.99 5.99 9 4.5 5 9 4.5 12.99 5.99 5 5 7.99 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (possible fork\(\) overhead )
+[9 9 7 7 5 9 5 7.99 4.5 5.99 9 5.99 9 5.99 5.99 4.5 8.73 8.73 7.99 5.99 9 7.99 7.99 9 0 ] xhow
+1 FF
+135 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 261 M (shared state is still a challenge )
+[7 9 7.99 5.99 7.99 9 4.5 7 5 7.99 5 7.99 4.5 5 7 4.5 7 5 5 5 5 4.5 7.99 4.5 7.99 9 7.99 5 5 7.99 9 9 7.99 0 ] xhow
+99 297 M (languages support: )
+[5 7.99 9 9 9 7.99 9 7.99 7 4.5 7 9 9 9 9 5.99 5 5 0 ] xhow
+1 FF
+135 327 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 327 M (compiler is not mature )
+[7.99 9 14 9 5 5 7.99 5.99 4.5 5 7 4.5 9 9 5 4.5 14 7.99 5 9 5.99 7.99 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (good RPC support is hard )
+[9 9 9 9 4.5 12 10 12 4.5 7 9 9 9 9 5.99 5 4.5 5 7 4.5 9 7.99 5.99 9 0 ] xhow
+1 FF
+135 387 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 387 M (multiple inheritance )
+[14 9 5 5 5 9 5 7.99 4.5 5 9 9 7.99 5.99 5 5 7.99 9 7.99 7.99 0 ] xhow
+1 FF
+135 417 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 417 M (runtime checking )
+[5.99 9 9 5 5 14 7.99 4.5 7.99 9 7.99 7.99 9 5 9 9 0 ] xhow
+1 FF
+135 447 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 447 M (why hasn\325t all this been solved already? )
+[12.99 8.91 9 4.5 9 7.99 7 9 5.67 5 4.5 7.99 5 5 4.5 5 9 5 7 4.5 9 7.99 7.99 9 4.5 7 9 5 8.73 7.99 9 4.5 7.99 5 5.99 7.99 7.99 9 9 7.99 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 37 37
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+267.42 97 M (Summary of Experiences )
+[13.34 13.34 19.98 19.98 11.99 10.65 11.99 6 11.99 7.99 6 16 11.99 13.34 10.65 10.65 6.67 10.65 13.34 10.65 10.65 9.33 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (positive: )
+[9 9 7 5 5 4.55 8.73 7.99 5 0 ] xhow
+1 FF
+135 171 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 171 M (the overal architecture \(servers + GP facilities\) works )
+[5 9 7.99 4.5 8.73 8.73 7.99 5.99 7.99 5 4.5 7.99 5.99 7.99 9 5 5 7.99 7.99 5 9 5.99 7.99 4.5 5.99 7 7.99 5.99 8.73 7.99 5.99 7 4.5 10.15 4.5 12.99 10 4.5 5.81 7.99 7.99 5 5 5 5 5 7.99 7 5.99 4.5 12.81 9 5.99 9 7 0 ] xhow
+1 FF
+135 201 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 201 M (modularity is a big advantage )
+[14 9 9 9 5 7.99 5.99 5 5 9 4.5 5 7 4.5 7.99 4.5 9 5 9 4.5 7.99 9 8.55 7.99 9 5 7.99 9 7.99 0 ] xhow
+1 FF
+135 231 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 231 M (object-oriented technology + complex tools do help )
+[9 9 5 7.99 7.99 5 5.99 9 5.99 5 7.99 9 5 7.99 9 4.5 5 7.99 7.99 9 9 9 5 9 9 9 4.5 10.15 4.5 7.99 9 14 9 5 7.72 9 4.5 5 9 9 5 7 4.5 9 9 4.5 9 7.99 5 9 0 ] xhow
+1 FF
+135 261 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 261 M (common service library is a success so far )
+[7.99 9 14 14 9 9 4.5 7 7.99 5.99 9 5 7.99 7.99 4.5 5 5 9 5.99 7.99 5.99 9 4.5 5 7 4.5 7.99 4.5 7 9 7.99 7.99 7.99 7 7 4.5 7 9 4.5 5.81 7.99 5.99 0 ] xhow
+99 297 M (issues: )
+[5 7 7 9 7.99 7 5 0 ] xhow
+1 FF
+135 327 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 327 M (some OS features are too obscure to standardize )
+[7 9 14 7.99 4.5 12.99 10 4.5 5.99 7.99 7.99 5 9 5.99 7.99 7 4.5 7.99 5.99 7.99 4.5 5 9 9 4.5 9 9 7 7.99 9 5.99 7.99 4.5 5 9 4.5 7 5 7.99 9 9 7.99 5.99 9 5 7.99 7.99 0 ] xhow
+1 FF
+135 357 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 357 M (beware of code size and replication )
+[9 7.54 12.81 7.99 5.99 7.99 4.5 9 5.99 4.5 7.99 9 9 7.99 4.5 7 5 7.99 7.99 4.5 7.99 9 9 4.5 5.99 7.99 9 5 5 7.99 7.99 5 5 9 9 0 ] xhow
+1 FF
+135 387 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 387 M (standard interfaces increase complexity )
+[7 5 7.99 9 9 7.99 5.99 9 4.5 5 9 5 7.99 5.99 5.81 7.99 7.99 7.99 7 4.5 5 9 7.99 5.99 7.99 7.99 7 7.99 4.5 7.99 9 14 9 5 7.72 9 5 5 9 0 ] xhow
+1 FF
+135 417 M (-  )
+[7.99 6 0 ] xhow
+2 FF
+154.98 417 M <d26a757279207374696c6c206f7574d3206f6e20636f6d706c657820656d756c6174696f6e206c696272617269657320>
+[7.99 5 9 5.99 9 4.5 7 5 5 5 5 4.5 9 9 5 7.99 4.5 9 9 4.5 7.99 9 14 9 5 7.72 9 4.5 7.99 14 9 5 7.99 5 5 9 9 4.5 5 5 9 5.99 7.99 5.99 5 7.99 7 0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+
+%%Page: 38 38
+%%PageBoundingBox: 0 0 792 612
+%%PageFonts: (atend)
+%%BeginPageSetup
+%%PaperSize: Letter
+/__NXsheetsavetoken save def
+-90 rotate
+-792 0 translate
+0 0 translate
+gsave
+ /__NXbasematrix matrix currentmatrix def
+grestore
+gsave
+0 0 792 612 rectclip
+[1 0 0 -1 0 612] concat
+0 0 translate
+%%EndPageSetup
+gsave
+0 0 792 612 rectclip
+/landscape true def
+0 0 792 612 CR
+0.25 SL
+3.86 setmiterlimit
+0 G
+63 63 666 486 N
+0 (Helvetica) 12 mymakefont
+0 FF
+63 576 M (Daniel P. Julin / Carnegie Mellon University / Mach Project)
+[8.66 6.67 6.67 2.66 6.67 2.66 3.33 6.45 3.33 3.33 6 6.67 2.66 2.66 6.67 3.33 3.33 3.33 8.66 6.67 3.99 6.67 6.67 6.67 2.66 6.67 3.33 9.99 6.67 2.66 2.66 6.67 6.67 3.33 8.66 6.67 2.66 6 6.67 3.99 6 2.66 3.33 6 3.33 3.33 3.33 9.99 6.67 6 6.67 3.33 8 3.99 6.67 2.66 6.67 6 0 ] xhow
+1 G
+99 81 594 450 NF
+0 G
+1 (Times-Bold) 24 mymakefont
+1 FF
+328.82 97 M (Future Work )
+[14.66 13.34 7.99 13.34 10.22 10.65 6 22.19 11.99 10.65 13.34 0 ] xhow
+2 (Times-Roman) 18 mymakefont
+2 FF
+99 141 M (Refine the framework, experiment with new ideas... )
+[12 7.99 5 5 9 7.99 4.5 5 9 7.99 4.5 5.99 5.99 7.99 14 7.54 12.81 9 5.99 9 4.5 4.5 7.72 9 9 7.99 5.99 5 14 7.99 9 5 4.5 12.99 5 5 9 4.5 9 7.54 12.99 4.5 5 9 7.99 7.99 7 4.5 4.5 4.5 0 ] xhow
+99 177 M (Develop better language support \(better languages?\) )
+[12.99 7.54 8.73 7.99 5 9 9 4.5 9 7.99 5 5 7.99 5.99 4.5 5 7.99 9 9 9 7.99 9 7.99 4.5 7 9 9 9 9 5.99 5 4.5 5.99 9 7.99 5 5 7.99 5.99 4.5 5 7.99 9 9 9 7.99 9 7.99 7 7.99 5.99 0 ] xhow
+99 213 M (Build production systems -- get rich! )
+[12 9 5 5 9 4.5 9 5.99 9 9 9 7.99 5 5 9 9 4.5 7 9 7 5 7.99 14 7 4.5 5.99 5.99 4.5 9 7.99 5 4.5 5.99 5 7.99 9 5.99 0 ] xhow
+99 249 M (Distributed systems -- scaling )
+[12.99 5 7 5 5.99 5 8.64 9 5 7.99 9 4.5 7 9 7 5 7.99 14 7 4.5 5.99 5.99 4.5 7 7.99 7.99 5 5 9 9 0 ] xhow
+99 285 M (New high-level features \(transactions, multi-media, ...\) )
+[12.99 7.54 12.99 4.5 9 5 9 9 5.99 5 7.54 8.73 7.99 5 4.5 5.99 7.99 7.99 5 9 5.99 7.99 7 4.5 5.99 5 5.99 7.99 9 7 7.99 7.99 5 5 9 9 7 4.5 4.5 14 9 5 5 5 5.99 14 7.99 9 5 7.99 4.5 4.5 4.5 4.5 4.5 5.99 0 ] xhow
+99 321 M (Second pass through other emulation system projects )
+[10 7.99 7.99 9 9 9 4.5 9 7.99 7 7 4.5 5 9 5.99 9 9 9 9 4.5 9 5 9 7.99 5.99 4.5 7.99 14 9 5 7.99 5 5 9 9 4.5 7 9 7 5 7.99 14 4.5 9 5.99 9 5 7.99 7.99 5 7 0 ] xhow
+1 FF
+99 346 M ( )
+[0 ] xhow
+grestore
+grestore
+showpage
+__NXsheetsavetoken restore
+%%PageTrailer
+%%Trailer
+%%Pages: 38 1
+%%BoundingBox:0 0 792 792
+

@@ -1,0 +1,158 @@
+
+==========================================================================
+   ***** MK Version MK76  (rvb) *****
+    
+    
+New features:
+--- --------
+
+I am basically syncing up i386 changes that I have had in my MK74 branch
+for a while and felt a need to bring them to the mainline.
+
+The system sucessfully compiled on a vax, sun, pmax, and i386.  It was only
+tested on the latter two because those saw real changes.
+
+[GENERAL]
+	Bug fix for mapping character devices at nonzero offsets.
+
+[PMAX]
+	I installed the marginal support for the FORE ATM.
+
+[I386]
+   16Meg
+	I have hacked "./kernel/i386at/model_dep.c" to not "see" more
+	than 16Meg of memory because machines now are pretty likely to
+	have more than 16Meg of memory and our dma devices will screw up.
+	The two devices we supply that do dma are the floppy and the
+	adaptec 1542b.  Until the dma gets rewritten, this is a cautious
+	choice.  If you are sure you will never hit these devices, you can
+	undo the change.
+	
+   IO PORTS
+	Remove io_port from list before freeing it.   [jvh]
+
+   SCSI DISK
+	AHA 1542B fix bad interaction between scsi dma and floppy dma.
+	Fix kernel printout and GETPARMS to return what the controller
+	would report the disk geometry as.
+	Fix to allow more than one scsi disk to probe succesfully.
+
+    ESDI DISK
+	handle multiple ESDI DISKS and ESDI + SCSI.
+
+    ETHER
+	3c503 - print ether type
+	pc586 - we don't see wd8003Elite's memory and thing that
+		there is a pc586.
+
+    X11R5
+	microsoft mouse - don't emulate 3rd button in kernel.
+
+    LPR
+	better probe.
+
+
+    
+    
+==========================================================================
+   ***** MK Version MK77  (cmaeda) *****
+    
+    
+New features:
+--- --------
+
+Restartable Atomic Sequence support from Brian.
+
+[PMAX]	  fast_tas: Use RAS technology to get a really fast test-n-set.
+
+Special notes:
+------- -----
+
+Built and tested as follows:
+
+[PMAX]
+	STD+WS		built
+			booted with ux37 on mc8 (ds5000/120)
+			booted with ux37 on exxon-valdez (ds2100)
+	STD+WS+fast_tas	built, booted with ux37 on mc8 and exxon-valdez
+	STD+WS+TEST	built
+
+[I386]
+	STD+WS		built, booted with ux37 on bialetti
+	STD+WS+TEST	built
+	STD+SQT		built
+	STD+WS+NORMA+norma_ether
+			built, failed to boot on bialetti
+
+[SUN3]
+	STD+SWS		built, booted with ux37 on rocky
+
+[VAX]
+	STD+VAX6bb	built, booted with ux37 on dbg
+	STD+16+fixpri+VAX6bb+BI+de
+			built
+
+    
+==========================================================================
+   ***** MK Version MK78  (jfriedl) *****
+    
+    
+New features:
+--- --------
+
+Added man page for task_set_ras_pc system call. [bershad]
+
+bootstrap now prints the emulator and startup filenames [cmaeda]
+
+Support (in machine "independent" files) for ns532 port. Machine dependent
+files can be ftp'd from Helsinki Univ. of Tech.
+
+[PMAX] fast_tas now part of default configuration [cmaeda]
+
+[SEQUENT] Add "zd_devinfo" routine [jms]
+
+[LUNA88K] lots of stuff (port in progress) [jfriedl]
+
+Bug fixes:
+--- -----
+
+Removed silly prototypes
+
+[i386] fixed i386/fpu.c to make critical variables volatile. 
+
+[i386] Fixed bug in wd80xxget_board_id, that made the machine hang on
+       reboot when using wd8013EP boards.  [kivinen]
+
+[LUNA88K] lots of stuff (port in progress) [jfriedl]
+
+Organizational changes:
+-------------- -------
+
+LUNA88K / M88K reorganization in progress.
+
+Special notes:
+------- -----
+
+Built:
+	i386_mach/special/mach.boot.MK78.STD+SQT*
+	i386_mach/special/mach.boot.MK78.STD+WS*
+	i386_mach/special/mach.boot.MK78.STD+WS+NORMA+norma_ether*
+	i386_mach/special/mach.boot.MK78.STD+WS+TEST*
+
+	m88k_mach/special/mach.boot.MK78.STD+LUNA+lineno+savearg*
+
+	pmax_mach/special/mach.boot.MK78.STD+ANY*
+	pmax_mach/special/mach.boot.MK78.STD+ANY+TEST*
+
+	sun3_mach/special/mach.boot.MK78.STD+SWS*
+
+	vax_mach/special/mach.boot.MK78.STD+16+fixpri+VAX6bb+BI+de*
+	vax_mach/special/mach.boot.MK78.STD+VAX6bb*
+
+Booted (successfully, even!)
+	i386_mach/special/mach.boot.MK78.STD+WS*
+	pmax_mach/special/mach.boot.MK78.STD+ANY*
+	sun3_mach/special/mach.boot.MK78.STD+SWS*
+
+
+

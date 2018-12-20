@@ -1,0 +1,70 @@
+FTP.inst:	Instructions for ftp'ing the Mach 3 files
+Mach.info	A more general description of the status of Mach 3
+
+alpha.pelican.README	An FTP pointer to the changes needed to suppor
+			the pelican model of the DecAlpha.
+
+mkernel directory  - Mach microkernel items
+    CHANGES.log.Z	The complete changelog history from the previous 
+			FTP version
+
+			to the current one.
+    CHANGES.brief	A shorter version of the CHANGE.log
+    VERSION		The version number of the kernel sources ( check this
+			to see if you need to get a fresh copy
+
+    MK83a.tar.gz	Latest kernel release - contains code for i386, mips and alpha
+  
+    default.MK83.tar.Z	Compressed tar file of the machine independent 
+			  kernel sources
+    mips.MK83,tar.Z	Compressed tar file for mips R2000/3000 specific 
+			  kernel sources
+    i386.MK83.tar.Z	Compressed tar file for i386 specific kernel sources
+    luna88k.MK83.tar.Z	Compressed tar file for luna88k specific kernel sources
+    kern-dir.list:	A description of the kernel directories
+    VERSION		version number of the latest sources
+    src			The directory from which the kernel sources were 
+			  tar'red.
+
+buildtools directory - Programs needed to build the micro-kernel
+    buildtools.tar.Z	Compressed tar file of sources for the ODE buildtools
+    gcc.tar.Z		Compressed tar file of sources for gcc.2.3.3
+    buildtools.tc	Table of contents of buildtools.tar.Z
+    gcc.tc		Table of contents of gcc.tar.Z
+    VERSION		version number of the sources
+
+gdb directory  -
+    gdb-3.5.tar.Z	Compressed tar file of sources for a 3.5 based version
+			 of gdb	that works with Mach 2.5. These are old files 
+			 that have not been built for some years. 
+			 Don't expect too much.
+    gdb-4.8.tar.Z	Compressed sources for the current gdb that works 
+			 with Mach 3.0
+    binaries		executables of gdb  4.8 and friend
+
+release directory	- binaries for Mach buildtools, programs and kernels
+    i386.tar.Z		Compressed tar of binaries for i386
+    i386.tar.tc		Table of contents of i386.tar.Z
+    pmax.tar.Z		Compressed tar of binaries for pmax
+    pmax.tar.tc		Table of contents of pmax.tar.Z
+    mach.boot.MK83a.STD+WS - i386 binary MK83a kernel
+
+mach_us directory	- Mach multi-server sources
+    mach_us.tar.Z	Compressed tar file of the licensefree sources
+    mach_us.tc		Table of contents of mach_us.tar.Z
+    VERSION		version number of the sources
+
+Miscellaneous:
+
+i386.mdos.src.tar.Z	Compressed tar file of the Mach DOS software's sources
+i386.mdos.bin.tar.Z	Compressed tar file of the Mach DOS software's binaries
+libsockets-apps.940603.tar.gz
+			Client programs that work with the user-level TCP/IP
+			library distributed with UX. (cmaeda)
+net-latency-tools.tar.Z	Programs to measure network round trip times. (cmaeda)
+netmsgserver.2.5 	Sources for the Mach 2.5 netmsgserver
+netmsgserver.3.0	Binaries for Mach 3.0 netmsgserver
+poe.src.tar.Z		Compressed tar file of Poe sources
+poe.src.tc		Table of contents of poe.src.tar.Z
+udp_server.tar.Z	A toy UDP server, for amusement purposes only. (cmaeda)
+private_tools,sup	Used to set up this directory, not needed by outsiders

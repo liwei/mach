@@ -1,0 +1,47 @@
+The code is this directory compiles and runs on a Mach 3.0 system.
+The code in the Mach2.5 directory works on a Mach 2.5 system.
+
+The program built from master.c can be named master, slave or stats.
+The master and slave programs can be on the same or different hosts.
+The program finds the netmemory_sever by the name "netmemoryserver"
+unless the environment variable NETMEMORYSERVER_NAME is defined, 
+in which case it uses the value of that variable.
+
+The master program is called as follows:
+	master [spin | check | read | write | null] size(KB)
+
+Master creates an memory object that is
+backed by the netmemory server and registers this object so that
+the slave program can find it. It maps the object into its memory
+and then performs the operation that was requested. Only one operation
+can be requested at a time. size (input in KB) is the number of words
+that are touched.
+
+The slave program is called as follows:
+	slave [spin | check | read | write | null] host size(KB)
+
+Slave looks up the shared memory object on the host specified by the
+hostname argument. This should be the host  that the master program
+is running on. It maps the object into its address
+space and then proceeds to perform whatever operation was requested.
+
+
+spin - causes the program to allow a context switch for each page
+	that would be touched in size number of words.
+
+check - master sets each word in shared object to i % 113
+	slave checks that each word in the shared object is = i % 113
+
+read - reads words from the shared object
+
+write - writes words to the shared object
+
+null - touchs size number of words not on the mapped object.
+
+The total ammont of time used for these operations is printed out
+in all cases.
+
+Stats is called
+	stats host
+
+it will call the  netmemory_statisitics primitive on the host given.

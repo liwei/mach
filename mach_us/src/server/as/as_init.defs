@@ -1,0 +1,27 @@
+/*
+ * as_init.defs
+ *	MIG definitions for the authentication server secure initialisation.
+ *
+/*
+ * HISTORY:
+ * $Log:	as_init.defs,v $
+ * Revision 1.2  92/03/05  15:11:01  jms
+ * 	Upgrade to use no MACH_IPC_COMPAT features.  New IPC only!
+ * 	[92/02/27  12:50:15  jms]
+ * 
+ *  8-Oct-87  Robert Sansom (rds) at Carnegie Mellon University
+ *	Added waittime specification.
+ *
+ *  8-Jul-87  Robert Sansom (rds) at Carnegie Mellon University
+ *	Started.
+ *
+ */
+
+subsystem as_init 3600;
+waittime 2000;
+
+routine as_init_cas_ports(	server_port	: mach_port_t;
+				cas_ports	: mach_port_array_t);
+
+routine as_init_get_as_port(	server_port	: mach_port_t;
+			out	as_port		: mach_port_make_send_t);

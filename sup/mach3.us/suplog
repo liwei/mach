@@ -1,0 +1,53 @@
+SUP 7.26 (4.3 BSD) for file supfile at Oct 28 16:40:46
+SUP Upgrade of mach3.us at Fri Oct 28 16:40:47 1994
+SUP Fileserver 7.13 (4.3 BSD) 420 on X29.MACH.CS.CMU.EDU at 16:40:47
+SUP Requesting changes since Jul 29 13:57:28 1994
+SUP Deleted file doc/status-0794.tex
+SUP Deleted file doc/status-0794.ps
+SUP Receiving file MERGE_HISTORY
+SUP Receiving file Makefile-version
+SUP Receiving file bin/Makefile
+SUP Receiving file bin/STARTUP.fsadmin.template.csh
+SUP Receiving file bin/fsadmin.cc
+SUP Receiving file bin/us_ps.cc
+SUP Receiving file conf/version.edit
+SUP Receiving file doc/README
+SUP Receiving file doc/machnix-91.ps
+SUP Receiving file doc/machnix-91.ps.funny
+SUP Receiving file doc/status.ps
+SUP Receiving file doc/status.tex
+SUP Receiving file doc/us-install.doc
+SUP Receiving file doc/us-install.mss
+SUP Receiving file doc/us-install.ps
+SUP Receiving file doc/us_analyze.ps
+SUP Receiving file doc/us_analyze.tex
+SUP Receiving file doc/us_client_server.ps
+SUP Receiving file doc/us_clues.ps
+SUP Receiving file doc/us_clues.tex
+SUP Receiving file include/tm_types.h
+SUP Receiving file include/us_tm_task_ifc.h
+SUP Receiving file lib/emul/emul_all.cc
+SUP Receiving file lib/emul/emul_exec.cc
+SUP Receiving file lib/emul/emul_file.cc
+SUP Receiving file lib/emul/emul_proc.cc
+SUP Receiving file lib/emul/emul_proc.h
+SUP Receiving file lib/us++/access_table.cc
+SUP Receiving file lib/us++/bytestream.cc
+SUP Receiving file lib/us++/dir.cc
+SUP Receiving file lib/us++/us_tm_task.cc
+SUP Receiving file server/config/rc.us.template
+SUP Receiving file server/tm/tm_root.cc
+SUP Receiving file server/tm/tm_root_ifc.h
+SUP Receiving file server/tm/tm_task.cc
+SUP Receiving file server/tm/tm_task_group.cc
+SUP Receiving file server/tm/tm_task_ifc.h
+SUP Updated directory server/tm
+SUP Updated directory server/config
+SUP Updated directory lib/us++
+SUP Updated directory lib/emul
+SUP Updated directory include
+SUP Updated directory doc
+SUP Updated directory conf
+SUP Updated directory bin
+SUP Updated directory .
+SUP Upgrade of mach3.us completed at Oct 28 16:42:00 1994

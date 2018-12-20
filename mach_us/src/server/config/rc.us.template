@@ -1,0 +1,121 @@
+# 
+# Mach Operating System
+# Copyright (c) 1994 Carnegie Mellon University
+# All Rights Reserved.
+# 
+# Permission to use, copy, modify and distribute this software and its
+# documentation is hereby granted, provided that both the copyright
+# notice and this permission notice appear in all copies of the
+# software, derivative works or modified versions, and any portions
+# thereof, and that both notices appear in supporting documentation.
+# 
+# CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
+# CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
+# ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
+# 
+# Carnegie Mellon requests users of this software to return to
+# 
+#  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
+#  School of Computer Science
+#  Carnegie Mellon University
+#  Pittsburgh PA 15213-3890
+# 
+# any improvements or extensions that they make and grant Carnegie Mellon 
+# the rights to redistribute these changes.
+#  
+#
+# HISTORY
+# $Log:	rc.us.template,v $
+# Revision 2.4  94/10/27  15:39:19  jms
+# 	Change fsck "-p" to "-y" to ensure that things get fixed.
+# 
+# Revision 2.3  94/07/07  16:37:59  mrt
+# 	Added a call to start the machid server.
+# 	[94/07/07            mrt]
+# 
+# Revision 2.2  94/06/16  17:40:45  mrt
+# 	Changed root_server to pathname_server.
+# 	Renamed to rc.us.template
+# 	[94/06/03            mrt]
+# 
+# Revision 2.9  94/06/01  18:19:59  mrt
+# 	Added some comments, removed old history
+# 	[94/04/21            mrt]
+# 
+# Revision 2.8  94/01/11  18:07:00  jms
+# 	Start net_server.
+# 	Put second ufs server back in
+# 
+# Revision 2.2  91/10/07  00:12:45  jjc
+# 	Created.
+# 	[91/10/02  18:05:20  jjc]
+# 
+#
+#  This file is executed as a shell script by the configuration 
+#  server. In general the final argument to a server is the name
+#  by which it will be known in the port-name-space maintainted by
+#  the configuration server
+
+/bin/echo "*** Fscking UFS partition ***"
+/etc/fsck -y /dev/rhd1a
+
+#  If you have more than one multi-server partition
+#/bin/echo "*** Fscking UFS2 partition ***"
+#/etc/fsck -y /dev/rhd1d
+
+/bin/echo "*** Starting multiserver ***"
+
+/mach_servers/us/bin/diag_serv&
+/bin/echo " diag_serv"
+/usr/bin/sleep 1
+
+/mach_servers/us/bin/cas -f /mach_servers/us/lib/asdatabase&
+/bin/echo " cas"
+/usr/bin/sleep 5
+
+/mach_servers/us/bin/task_master&
+/bin/echo " task_master"
+/usr/bin/sleep 5
+
+/mach_servers/us/bin/pathnameserver pathname_server&
+/bin/echo " pathname server"
+
+#  Start the ufs servers,
+#	arg1 mounting mode
+#	arg2 device name
+#	arg3 name of this instantiation of the ufs server
+#		to be checked in to a standard mach3 port-name-space
+#		maintained by the configuration server. Must correspond
+#		to the serve-name in the prefix.config table
+
+/mach_servers/us/bin/ufs -rw /dev/hd0f ufs_server&
+/bin/echo " ufs_server"
+
+# Wait a bit to make sure we pick-up a different mgr_id
+sleep 4
+/mach_servers/us/bin/ufs -ro /dev/hd0a ufs_slash &
+/bin/echo " ufs_slash"
+
+sleep 4
+/mach_servers/us/bin/ufs -ro /dev/hd0d ufs_usr &
+/bin/echo " ufs_usr"
+
+sleep 4
+/mach_servers/us/bin/ufs -ro /dev/hd0e ufs_usr1 &
+/bin/echo " ufs_usr1"
+
+/mach_servers/us/bin/pipenet pipenet_server&
+/bin/echo " pipeserver"
+
+/mach_servers/us/etc/start_net &
+/bin/echo " net_server"
+
+/mach_servers/us/bin/tty_server &
+/bin/echo " tty_server"
+/usr/bin/sleep 30
+
+/mach_servers/us/bin/machid &
+
+echo "*** Setting up name space ***"
+/mach_servers/us/bin/fsadmin < /mach_servers/us/etc/STARTUP.fsadmin
+ 

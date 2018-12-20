@@ -1,0 +1,70 @@
+Subject: How to FTP Mach sources
+Author:	Mary Thompson
+Date: Jul 7, 1993
+-------------------------------------------
+
+Mach 3.0 sources can be anonymously ftp'ed from
+CMU as follows:
+
+ftp mach.cs.cmu.edu  or 128.2.209.192
+Name: anonymous
+Password: <name>@<site>
+cd src
+
+At this point standard ftp commands will work. There are
+several information files there and several subdirectories
+
+The Mach.info file gives a description of the current status
+of Mach3 development work.
+
+The INDEX file gives a brief description of the source
+file organization.
+
+FTP.inst is this file.
+
+The Mach 3.0 micro-kernel sources are in the mkernel directory
+
+    The VERSION file contains the version number of the
+    kernel sources in the tar files. Check it to see when 
+    you need to get a new copy of the sources.
+
+    default.tar.Z (2871K)	     The machine independent code
+    i386.tar.Z (1134K)	     i386 specific code
+    mips.tar.Z (376K)	     DecStation 3100/5000 specific code
+    luna88k.tar.Z (445K)	     Omron Luna88k specific code
+
+    The subdirectory src contains all the individual files which
+    can be ftp'ed separately if desired. They are indentical to
+    the contents of the tar files. The end of the file 
+    src/MERGE_HISTORY describes the latest changes. 
+
+The tools needed to build the kernel sources are in the buildtools directory
+
+    buildtools.tar.Z (593K)	    The ODE version of make and friends
+    gcc.tar.Z (6543K)	    gcc 2.3.3
+
+    The subdirectory src contains all the individual files which
+    can be ftp'ed separately if desired. They are indentical to
+    the contents of the tar files. The end of the file 
+    src/MERGE_HISTORY describes the latest changes. 
+
+
+There are a number of other source files and a few executables which
+have been put there by request. See the INDEX file for a current listing
+of what is available.
+
+The files use relative pathnames and are designed to be 
+extracted in the same directory. Use a standard tar extraction
+command such as:
+  /usr/ucb/uncompress -c default.tar.Z | tar -xvf -
+
+
+If you have any questions about this distribution, they
+should be directed to mach@cs.cmu.edu, but please read all
+the information documents first. If you are having trouble
+with ftp be sure that you are connecting to the right machine
+(mach.cs.cmu.edu 128.2.209.192) and that you are doing a 
+"cd /usr/mach/public" or "cd /usr/mach/public/src"
+command before you try to retrieve any files. The /usr/mach/public
+directory contains some other subdirectories that might be of interest.
+See /usr/mach/public/FAQ/ftp.general for more information.

@@ -1,0 +1,218 @@
+.\"
+.\" Mach Operating System
+.\" Copyright (c) 1992 Carnegie Mellon University
+.\" All Rights Reserved.
+.\"
+.\" Permission to use, copy, modify and distribute this software and its
+.\" documentation is hereby granted, provided that both the copyright
+.\" notice and this permission notice appear in all copies of the
+.\" software, derivative works or modified versions, and any portions
+.\" thereof, and that both notices appear in supporting documentation.
+.\" 
+.\" CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
+.\" CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
+.\" ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
+.\"
+.\" Carnegie Mellon requests users of this software to return to
+.\"
+.\"  Software Distribution Coordinator  or  Software_Distribution@CS.CMU.EDU
+.\"  School of Computer Science
+.\"  Carnegie Mellon University
+.\"  Pittsburgh PA 15213-3890
+.\"
+.\" any improvements or extensions that they make and grant Carnegie Mellon
+.\" the rights to redistribute these changes.
+.\"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+.\" HISTORY
+.\" $Log:	setvar.man,v $
+.\" Revision 2.4  93/03/20  00:49:52  mrt
+.\" 	Changed meaning of -systembase
+.\" 	[93/03/20            mrt]
+.\" 
+.\" Revision 2.3  93/02/08  13:47:22  mrt
+.\" 	Removed -coll option
+.\" 
+.\" Revision 2.2  93/02/06  19:10:12  mrt
+.\" 	Created.
+.\" 	[93/01/31            mrt]
+.\" 
+.\"
+.TH SETVAR 1 1/29/93
+.CM 4
+.SH "NAME"
+setvar \- set environment variables needed for odemake
+.SH "SYNOPSIS"
+.nf
+setvar	[-basedir <dir>] [-masterbase <dir> ] 
+	[-systembase <dir>]  [-makesyspath <dir>] 
+	[-target <machine>] [-savepath] [-help] <context> 
+.br
+.fi
+.SH "DESCRIPTION"
+This script sets all the environment variables used by 
+\fBodemake\fR and leaves you in a csh sub-shell.
+This script is a substitute for using the OSF/1 workon
+program and rc-files, followed by build. This script
+initializes the environment to 
+build for the mach3 project.
+
+Options to \fB setvar \fR are:
+.TP
+-basedir <dir>:
+specifies the base of the tree which contains the src, obj
+and export directories. Defaults to the current directory if
+its name is "src" or to a parent of the current directory whose
+name is "src".
+.TP
+-masterbase <dir>: 
+when doing a build from a shadow set of sources, this switch
+specifies the backing tree.
+.TP
+-systembase <dir>: 
+is the base of the tree that contains a
+current system release. When shadowing a fully built
+release area this variable does not need to be set, since
+anything that in not in the local area should be found in either
+master/release area or on the default PATH. If
+not shadowing and this variable is not set, then 
+a bootstrap script must be run to get the
+the system tools and include files generated and released
+into the local export directory.
+.TP
+-makesyspath <dir>: 
+is a list of directories (separated by ':'s)
+that is searched by odemake to find the .mk rules files.
+Defaults to <basedir>/export/<host_context>/lib/mk, followed
+by mastersrc/release if shadowing and systembase if it was given.
+.TP
+-target <machine>:
+should only be used when cross-building 
+and the target_machine is different from the host_machine.
+Otherwise target_machine is set from the host_context
+.TP
+-savepath:
+if set, the current PATH will be added to the end
+of the PATH that is set here. By default PATH will only
+contain the minimum necessary to build.
+.TP
+-help:
+prints a brief help message.
+.TP
+<host_context>;
+is host_machine_os specification that selects
+a sub setvar.csh that sets machine specific variables
+such as HOST_MACHINE, target_machine, target_cpu and
+default search paths. The currently supported context's
+are: \fIi386_mach, pmax_mach, sun3_mach, sun4_mach, vax_mach, luna88k_mach, alpha_mach\fR,
+and \fIpmax_mach_X_alpha\fR. Creating a new context is done by writing a
+sub setvar.csh shell that sets the appropriate environment variable and
+installing it in a \fIsetup/<context>\fR subdirectory.
+.i0
+.DT
+.PP
+.SH "ENVIRONMENT"
+This script sets the following environment variables:
+.TP
+PATH
+Set to only look in the export, release and DEFPATH directories
+unless the -savepath option is given. 
+.TP
+CPATH
+A minimal default set of directories to search for .h files. Files
+found on CPATH will not have dependencies generated on them. Currently
+set to the systembase include dir, if systembase was set followed by
+/usr/cs/include:/usr/include. Non-CMU/Mach sites should change
+DEFCPATH in the <context>/setvar.csh to change this.
+.TP
+LPATH
+Path to search for libaries. Currently used by some Makefiles and
+gcc to find crt0.o and migcom. Set to include export and release directories
+and the DEFLPATH.
+.TP
+INCDIRS
+The replacement for CPATH. These directories are handed to the C preprosseor
+as -Idirs. Header files found in these directories will have relative
+dependencies generated on them. Contains the export include directory
+and the master src include directory when shadowing.
+.TP
+LIBDIRS
+The replacement for LPATH. These directories are passed to the loader as
+-Ldirs and used to search for libraries.
+.TP
+SOURCEBASE
+Base of local sources. Used by genpath.
+.TP
+SOURCEDIR
+Base of backing sources when shadowing. Used by genpath and
+Makeconf to set MAKESRCDIRPATH which is used by odemake.
+.TP
+OBJECTDIR
+Base of directory into which objects will be built. Used by
+genpath and Makeconf to set MAKEOBJDIR which is used by odemake.
+.TP
+EXPORTBASE
+Base of directory into which includes, libraries and executables
+are put by the odemake export passes, and from which they are used
+in the subsequent passes.
+.TP
+MAKESYSPATH
+Used by odemake when searching for make rules files.
+.TP
+RULES_MK
+Name of the standard rules file included by our Makefiles.
+.TP
+project_name
+Set to mach3. Used by osf rules files to find project specific
+rules. osf.rules.mk includes osf.${project_name}.mk.
+.PP
+Environment variables set by context specific setvar
+.sp
+TARGET_MACHINE, target_machine, HOST_MACHINE, host_machine,
+TARGET_CPU, target_cpu, KERN_MACHINE_DIR, 
+OBJECT_FORMAT, ARCHIVE_FORMAT and porting flags for OSF/1 tools.
+.PP
+.SH "EXAMPLES"
+.nf
+setvar -basedir /usr/mrt 
+	-systembase /afs/cs/project/mach3/latest/release/i386_mach i386_mach
+.sp
+.fi
+Sets up an environment to build from sources in /usr/mrt/src for an i386.
+Any executables, include files or libraries  that can not be found in 
+/usr/mrt/export/i386_mach will be searched for in 
+/afs/cs/project/mach3/latest/release/i386_mach/{bin,include,lib}.
+
+.nf
+setvar -basedir /usr/mrt 
+	-systembase /usr/mach3 i386_mach
+.sp
+.fi
+Sets up an environment to build from sources in /usr/mrt/src for an i386.
+Any executables, include files or libraries  that can not be found in 
+/usr/mrt/export/i386_mach will be searched for in 
+/usr/mach3/{bin,include,lib}.
+
+.nf
+cd /usr/mrt/src
+setvar 	-masterbase /afs/cs/project/mach3/latest i386_mach
+.sp
+.fi
+The same as the previous example with the addition that any sources that 
+are missing from /usr/mrt/src will be seached for in 
+/afs/cs/project/mach3/latest/src. Note that the basedir defaults to the
+current directory.
+
+.nf
+setvar 	-basedir /afs/cs/user/mrt/mach3 
+	-masterbase /afs/cs/project/mach3
+	-target alpha  pmax_mach
+.sp
+.fi
+sets up an environment to cross build for an alpha from a pmax from sources 
+in the shadow directory, /afs/cs/user/mrt/mach3/src, using the sources in
+/afs/cs/project/mach3/latest/src/mk  and released files in 
+/afs/cs/project/mach3/latest/release/pmax_mach_X_alpha} as a backing directory.
+
+.SH "SEE ALSO"
+odemake(1)
+makefiles(5)

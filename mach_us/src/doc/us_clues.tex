@@ -1,0 +1,1283 @@
+\documentstyle[11pt]{cmu-art}
+
+\newcommand{\comment}[1]{}
+%\newcommand{\MORE}{(More-Text-Here)}
+\newcommand{\MORE}{}
+\newcommand{\CHECK}{(Check-This-Info)}
+\newcommand{\SECREF}{section}
+
+\topmargin 0in
+\textheight 9in
+\pagestyle{empty}
+\makeatletter
+\def\@oddfoot{\hfil\em DRAFT-\arabic{page}\hfil}
+\let\@evenfoot=\@oddfoot
+\makeatother
+
+%\input draft
+%\special{' @draft}
+\special{! /@scaleunit 100 def }
+
+\title{Mach US: Clues For Developers,\\
+A Brain Dump}
+\author{J. Mark Stevenson \\
+\\
+School of Computer Science \\
+Carnegie Mellon University \\
+Pittsburgh, PA 15213 \\
+jms@cs.cmu.edu \\
+\\
+Included text by: \\
+Daniel P. Julin, dpj@isis.status.com \\
+Mary R. Thompson, mrt@cs.cmu.edu}
+\date{{\large {\bf DRAFT}} of \today}
+
+\begin{document}
+
+\maketitle
+{\large This is an informal incomplete working document.
+The information presented herein is subject to change without notice.}
+
+\section{Intro}
+The purpose of this document is to give new researchers with Mach-US
+and idea as to how to procede when making modifications to the system.  This
+document assumes that the researcher is familiar with object oriented
+programming, the Mach-3.0 kernel,
+and has read some of the introductory docs to Mach-US.  
+This document
+is not meant to be a reference guide to the system or a complete internals
+document.  Instead it is in the form of a brain dump on the part of an
+individual who is intimately familiar with the system, and some info
+about what he/I thought someone using the system might want/need to
+know.  This is not a polished formal document, and was written under
+serious time constraints.  On the other hand, for those researchers
+who wish to get deep into the system, this will be a very valuable
+source of information.
+
+\section{Overview/Religion: What is Mach-US}
+The Mach-US operating system has been created
+as part of the Carnegie-Mellon University MACH project.
+It is an OS which uses the CMU Mach3.0 kernel
+and runs today on i386/i486 based hardware supported by Mach3.0 including
+most IBM clones, and the Sequent Symmetry multi-processor.
+
+It currently supplies a Mach3.0/4.3BSD API and runs
+most non-administrative UNIX applications.
+There is no re-compilation or re-linking required.
+
+\paragraph{Quick System Architecture Overview}
+Mach-US is referred to
+as a symmetric multi-server OS emulation system.
+It has a set of separate servers
+supplying generalized system services (file systems, network server,
+process-mgr, tty server,...) and an emulation library loaded
+into each user process.  This library uses the services
+to generate the semantics
+of an industry standard OS being emulated.  Some of the system servers are,
+in part
+or whole, specific to the OS being emulated while most are meant to
+be fully generic.  Thought was given when writing the OS specific ones to
+make parts of them reusable for other OS's.  There is no "central" server,
+either for emulating a specific OS or for general traffic control.
+All multi-service actions are controlled by the emulation library.
+
+\paragraph{Mach-US: Flexibility Through Design}
+The biggest single feature of Mach-US is its flexibility.  It offers a whole
+new, highly modifiable OS architecture without significant
+structural impediments to speed.
+
+\paragraph{Object-Oriented Generic OS Interfaces}
+There are a series C++ based object-oriented
+interfaces (virtual classes/methods for multiple inheritance)
+that define semantics supplied by the
+system servers.  These interfaces are: access mediation, naming, I/O, 
+net\_control(OSI-XTI based), and async notification.  The various servers then
+support a
+combination of these interfaces to do their work and an emulation library uses
+them to emulate the target OS in question.
+
+This uniformity of access makes it easy for new servers to
+supply additional functionality by sliding into the name-space under the
+known interfaces.  Then
+that functionality is generally available to the system users through their
+pre-existing software.
+
+\paragraph{Modular Services}
+Different functionality is separated into various servers: 
+configuration, authentication, path-name, diagnostic,
+pipenet, ufs, process-mgr, tty,
+and network (with a University of Arizona xKernel protocol engine).
+This separation makes makes it simple to develop and debug OS services.
+One can also add and subtract
+services as needed for a given invocation of the system.  Furthermore,
+a bug in one service doesn't crash or corrupt the entire system.
+
+\paragraph{Object Library/Code Reuse}
+There is an extensive object library both for support/implementation of
+the various generic interfaces as well as general server building blocks.
+This enables faster prototyping of a new server and eases creation of
+servers from foreign code.  Some high-lights of this are support for:
+name-space manipulation, protection,
+mapped-files/shared-mem/pager-objects, IO/bulk-data,
+and extensive event/interrupt/signal support.
+
+\paragraph{More Mach-US Information}
+Many documents containing more information about various aspects of
+this system are described in the .../doc/README file in the source directory
+of this system.
+
+\section{Terms}
+There are many terms that are thrown around in this document.  To keep
+the reader from being thrown by them, here are some definitions.
+Many definitions that are mostly common to OS research are not supplied.
+\begin{itemize}
+\item{OSItem}: An formal item that OSs normally support:
+task, files, pipes, ttys, ...
+\item{Binding}: A binding is a logical relationship set up
+between a client and an OSItem when the client receives access to the item.
+(eg. When a client ``opens'' a file, a new binding is created that represents
+the conditions of the open.)
+\item{Proxy}: An object in a client's address space which represents an object
+in another address space.  A client side representation of a binding.
+A proxy may also directly supply some of the semantics associated with its
+OSItem.
+\item{Agent}: A protection object in a server's address space.
+A server side representation of a binding.
+\item{Agency}: Server part of an
+externally accessable OSItem that is represented by
+agent(s).
+For more information on bindings,
+proxies, agents, and agencies, see the document entitled
+"Client Server Interactions in Multi-Server Operating Systems:: The Mach-US approach" in the file ``us\_client\_server.ps''.
+
+\item{Interface Class}:  An abstract C++ class with method signatures but
+no method implementations.  Used to formally declare an interface to
+be inherited by several other classes.
+\item{Implementation Class}: A C++ class which has method implementations
+associated with it.  An implementation class may be used to associate
+implementations with the methods described in an abstract class, or it may
+supply unique methods.
+\item{Base Class}: A class used to supply a partial implementation to be
+inherited by several similar implementation classes.
+{\MORE}
+\end{itemize}
+
+\section{Include Files and Interfaces}
+\label{sec:tour-includes}
+\subsection{Service Interfaces}
+The src directory .../include contains all of the service interfaces
+that define the ``externally'' visible interfaces to the system servers
+that make up Mach-US.  Each server supports several of these generic
+API general interfaces in order to offer the functionality desired.
+The emulation library then uses these interfaces to do its work.
+These interfaces are represented by abstract classes found in the
+files named ``us\_*\_ifc.h'' (mach-US\_*\_InterFaCe.H).
+These interfaces are inherited by both
+proxy and implementation classes.
+
+\paragraph{Architecture Classes/Interfaces}
+\begin{itemize}
+\item{top\_ifc.h / usClass, usTop, usRemote}:
+This file with these three classes
+and the associated {\em Class-Helper} macros are the basis for the object
+architecture in Mach-US.  These helper macros are used in the class declaration
+process and are described in detail in the document in the file
+``libus-ref-1192.ps'' titled ``Libus++ Reference Manual'' by Paulo Guedes.
+
+The usTop class is inherited (directly or indirectly) by all classes in the
+system, and supports the reference counting and uses the usClass class to
+support class info queries.  usRemote is used to support remote reference
+and invocation of objects.  A description of this remote invocation
+system can be found in the document entitled
+"Client Server Interactions in Multi-Server Operating Systems:: The Mach-US approach" in the file ``us\_client\_server.ps''.
+
+Top\_ifc.h is also the repository for central build information and system wide
+compile time constants.  The most notable of these are the ``GXX'' constants
+used to describe workarounds for compiler problems/bugs.
+
+\item{us\_item\_ifc.h /  usItem}:
+This class inherits from usRemote and adds access control logic.  This
+is the greatest common ancestor of all proxy, agent, and agency classes
+and is thus generally used as the C++ type of object arguments in the
+following interfaces.
+
+\item{method\_info\_ifc.h,class\_info\_ifc.h}: Interfaces used by top\_ifc.h as
+part of the remote object runtime system.
+\end{itemize}
+
+\paragraph{Naming Interface}
+One aspect of Mach-US is that all of the OSItems in the system are
+accessible via standard path resolution in the name space.  Each server
+that supplies OSItems
+maintains a sub-directory ``path\_name'' server found in ``/server''.
+Further subdirectories are maintained at the desire of the server, and
+there are mechanisms to cause ``volatile'' OSItems to disappear
+automatically.  A discussion of these temporary/volatile object
+can be found in the {\SECREF} \ref{sec:object-semantics}
+``Class/Object Semantics/Control''.
+\begin{itemize}
+\item{us\_name\_ifc.h / usName}: Represents a directory, and is used
+for adding/deleting/renaming entries, listing, creating links, and
+resolving paths.
+\item{ns\_types.h}: Non-class types/structures/enumerated-types
+needed by the naming interface.  This includes the naming services
+{\em ns\_type\_t} type and the associated {\em NST\_*} enumerated type used
+to describes the flavor of the OSItems returned by the interface.
+\end{itemize}
+See {\SECREF} \ref{sec:naming} on ``Naming and Name Spaces'' for more info.
+
+\paragraph{IO Interface}
+This general IO interface is supported by all servers that do IO.  
+These include ufs, tty, net, and pipenet.  Interfaces
+are supplied for byte and record IO.
+\begin{itemize}
+
+%\item{us\_io\_ifc.h / usIO}: Not really  used
+\item{us\_byteio\_ifc.h / usByteIO}: Standard IO for read, write, append, size,
+as well as mapping and sequential access.
+\item{us\_recio\_ifc.h / usRecIO}: Simple/Minimal record manipulation
+\item{io\_types.h} General types/constants needed for these interfaces.
+\item{io\_types2.h} More complex record manipulation types.  Useful for
+handling more complex record manipulation.  An implementation class interface
+for this complex manipulation can be found in 
+.../lib/us++/iobuf\_mgr\_ifc.h.  This interface has not been exported
+as an abstract class because the simplicity of the UNIX io model has not
+required it.  For more complex IO models, this interface should be exported.
+\end{itemize}
+
+\paragraph{Network Style Interfaces}
+These interfaces are used to support network style, endpoint based
+communications.  They are used by the net server to supply communication
+with remote systems, and by the pipenet server for to support emulation
+of intra-machine communications (pipes,unix sockets).
+This network interface is based upon the ISO OSI/XTI standard.
+This is embodied in the following abstract classes
+
+\begin{itemize}
+\item{us\_net\_base\_ifc.h / usNetBase}: Base end-point type
+\item{us\_net\_name\_ifc.h / usNetName}: Named endpoints
+\item{us\_net\_connector\_ifc.h / usNetConnector}: Unconnected endpoints.
+
+\item{us\_net\_clts\_ifc.h / usNetCLTS}: ConnectionLess Transport Service 
+endpoints.  (May be meta-connected with a default remote target)
+\item{us\_net\_clts\_recs\_ifc.h / usNetCLTS\_recs}: CLTS endpoints with
+full record manipulation (eg. UDP).
+
+\item{us\_net\_cots\_ifc.h / usNetCOTS}: Connection Oriented Transport Service
+endpoints, or one could simply call them connections.
+\item{us\_net\_cots\_bytes\_ifc.h / usNetCOTS\_bytes}: Connections with byte IO
+(eg. pipes).
+\item{us\_net\_cots\_recs\_ifc.h / usNetCOTS\_recs}: Connections with record IO
+(eg. TCP).
+\item{net\_types.h}: Further types for supporting the above.
+\end{itemize}
+
+\paragraph{Task Master Interfaces}
+While the taskmaster itself is specific to UNIX because of certain
+semantic constraints, these interfaces are not believed to be.  They are
+used to track the process\_id name-space and to support posting
+of system events to user processes (eg. signalling).
+\begin{itemize}
+\item{us\_tm\_root\_ifc.h / usTMRoot}: Base connection for general queries and
+creations of the other objects.  Only one usTMRoot object exists per emulated
+API.
+\item{us\_tm\_task\_ifc.h / usTMTask}: Represents an individual task.  Supports
+manipulation of its: id, task group, status, timers, and posting of events.
+\item{us\_tm\_tgrp\_ifc.h /usTMTgrp}: Task group class supports task group id
+queries and posting of events to a group.
+\item{timer.h}: Types for setting task timers.
+\item{tm\_types.h}: General types needed for the above interfaces.
+\item{us\_event\_ifc.h / usEvent}: Event object exported by emulated
+user process, not the task\_master.  This interface is used by the task
+master to post events (send signals) to the emulated process, so that
+it may interpret the event based upon its own state (sigmask,...).
+\end{itemize}
+
+\paragraph{Specialized Abstract Classes}
+\begin{itemize}
+\item{us\_tty\_ifc.h, usTTY}: Byte IO with ioctl added.
+\item{clone\_ifc.h, usClone}: Interface used in object forking.  
+All objects used in the emulation lib must support this class. See
+{\SECREF} \ref{sec:forking} on ``Forking'' below for more info.
+\end{itemize}
+
+\paragraph{Error Definitions}
+These files contain error values of type {\em mach\_error\_t}
+for well known system errors.  All external interface
+methods and most internal ones
+in the system have a return type of mach\_error\_t to handle normal
+communication of error conditions.
+\begin{itemize}
+\item{us\_error.h}: General Mach-US errors.
+\item{mach\_object\_error.h}: Object system errors.
+\item{exception\_error.h}: Mach kernel exceptions as errors.
+\item{ns\_error.h}: Name Space errors.
+\item{io\_error.h}: IO errors.
+\item{net\_error.h}: Network errors.
+\item{sig\_error.h}: Unix signals as mach\_error\_t values.
+\end{itemize}
+
+\paragraph{Other Mixed Interfaces}
+The following are non-class interfaces:
+\begin{itemize}
+\item{interrupt.h}: Definitions and interface for Mach-US interrupt support.
+All system servers and emulation lib code must be aware of the need
+to handle interrupts.  For more info, see the note ``interrupts-0791.note''.
+\item{base.h}: General system wide macros (NULL, TRUE,...)
+\item{auth\_defs.h}: Authentication system constants and error values.
+\item{diag\_defs.h}: Diagnostic server msg type.
+\item{syscall\_val.h}: Syscall return value structure.
+\end{itemize}
+
+
+\subsection{Other Include Directories}
+These other include directories are also found at the top level in the source
+tree.
+\begin{itemize}
+\item{local\_includes}: include files common to multiple servers/libs but
+not needed by users or emul\_libs.  
+Separation of this directory from .../include
+and .../lib/us++/*.h was never very clear.
+\item{mach\_include\_sa}: a frozen copy of the Mach kernel include files.
+Periodically regenerated from the real kernel sources.
+\item{sa\_include}: a few files that override the files in
+./mach\_include\_sa, to correct problems and defects.
+\item{unix\_include}: a frozen copy of UNIX include files, for the
+UNIX system that we are emulating.
+\end{itemize}
+
+\section{General Libraries}
+\subsection{Short Summary Of System Libs}
+\begin{itemize}
+\item{C++}: This library replaces parts of the g++ runtime system to
+fix some problems with object allocation/deallocation and initialization.
+\item{Mach3}:
+a collection of libraries for basic functions needed by
+most Mach programs. Roughly equivalent to a combination of
+libmach.a and libc.a from the common release areas.
+\item{Threads}:
+Modified version of the cthreads library, for use
+inside the US emulation library.  Unlike the default threads package, there
+is a one-to-one mapping between cthreads and kernel threads with this package.
+\item{Proxies}:  Library which contains all of the automatically constructed
+default proxies, and any specialized proxies.  These proxies are later
+linked into the emulation lib.  This libproxies is very dependent upon libus++
+and was at one point part of that lib.
+\item{Us++}:
+Main repository for classes and common functions in the
+whole Mach-US system. Should be largely generic, and not dependent
+on UNIX semantics.  More detail in following paragraph.
+\item{Ux}:
+Support classes and functions for the implementation of
+UNIX-like emulation libraries.  More detail in following paragraph.
+\end{itemize}
+
+\subsection{The Us++ library}
+This library is where all of the implementation classes and general
+software used by multiple servers and/or the emulation lib live.
+Amongst other things, these classes are used to support the various
+abstract classes found in the ``.../include/us\_*\_ifc.h'' files.
+These files or the associated ``.cc'' files may have more extensive
+descriptions of parts of the abstract interfaces.  Sometimes the oldest
+``.cc'' file for any given interface is the best source of info.
+Below are some of the facilities available.
+
+\begin{itemize}
+\item{Implementation Classes for the Object Architecture}:
+\begin{itemize}
+\item{agent\_ifc.h}: representative of a client for a given object within a
+server.
+\item{agency\_ifc.h}:  coordinator of agents for a given externally visible
+server object.
+\item{vol\_agency\_ifc.h}: volatile agency, base class for non-fs OSItems.
+\item{tmp\_agency\_ifc.h}: vol\_agency that automatically disappears from
+directories when no longer referenced.
+\item{tmp\_dir\_ifc.h}: A directory that disappears when it goes empty.
+\item{tmp\_prop\_ifc.h}: Mechanism for giving the temporary property to any
+agency.
+\end{itemize}
+
+\item{IO buffering objects}:
+OSs do IO.  These implementation classes supply support for streams/buffering.
+\begin{itemize}
+\item{iobuf\_user\_ifc.h,default\_iobuf\_mgr\_ifc.h}:   Buffer manager veneer, and
+default buffer manager interface.
+\item{stream\_base\_ifc.h}: Base classes for following stream classes.
+\item{bytestream\_ifc.h}: Buffered byte streams.
+\item{recordstream\_ifc.h}: Buffered record streams
+\end{itemize}
+
+\item{Name Space Objects}:
+\begin{itemize}
+\item{std\_name\_ifc.h}: Client side object supplying the interface to
+the naming, path resolution and prefix table access.
+\item{dir\_ifc.h}: Directory.
+\item{mountpt\_ifc.h}: Connection for a server into a directory.
+\item{symlink\_ifc.h}: A symbolic link.
+\item{tsymlink\_ifc.h}:  A transparent symbolic link.  Like a symlink but
+is always followed instead of showing up as a symlink.  Used for making
+a Mach-US normal directory structure correspond to the directory structure
+of a specific API.
+\end{itemize}
+
+\item{Protection Objects}:
+\begin{itemize}
+\item{std\_prot\_ifc.h}: Protection for a given OSItems, like the 
+protection on a file.
+\item{std\_ident\_ifc.h}: A user identity, like an unforgeable uid.
+\item{std\_cred\_ifc.h}: A list of credentials to describe what an individual
+is permitted.  Like a uid and a set of group ids.
+\item{std\_auth\_ifc.h}: Interface to the Authentication Server.  Used to acquire
+std\_creds and std\_idents.
+\item{access\_table\_ifc.h}:  List of permissions required for each externally
+available method in the system.
+\end{itemize}
+
+\item{File System Protection}:
+File systems need a slightly different/more specific protection implementation
+that do general OSItems.  These files contain the associated implementation
+class definitions.
+\begin{itemize}
+\item{fs\_access\_ifc.h}
+\item{fs\_auth\_ifc.h}
+\item{fs\_cred\_ifc.h}
+\end{itemize}
+
+\item{Mapped Files and Pagers}:
+An alternate data communication paradigm in Mach is the external pager.
+Mapped files and shared memory are handled via this paradigm.
+These objects implement the non-kernel portion of said interfaces.
+\begin{itemize}
+\item{pager\_base\_ifc.h}:  The base class for other external pager objects.
+\item{null\_pager\_ifc.h}: Pager backed up by mem, used for shared memory.
+\item{mf\_mem\_ifc.h}: Common implementation for next two classes
+\item{mf\_mgr\_ifc.h}: Server side support for a mapped file
+\item{mf\_user\_ifc.h}: Client side for a mapped file
+\item{usint\_mf\_ifc.h,usint\_mfio\_ifc.h}: IO abstract interface veneer for mapped
+files.
+\end{itemize}
+
+\item{VNode Interface}:
+The following classes supply a vnode implementation to be used with
+pre-existing vnode file servers, supplying external interfaces that
+support the Mach-US abstract interfaces.  This work was done by Paul Roy
+at the OpenSoftwareFoundation.
+\begin{itemize}
+\item{vn\_agency\_ifc.h}:
+\item{vn\_dir\_ifc.h}:
+\item{vn\_file\_ifc.h}:
+\item{vn\_mgr\_ifc.h}:
+\item{vn\_pager\_ifc.h}:
+\item{vn\_symlink\_ifc.h}:
+\item{vn\_tsymlink\_ifc.h}:
+\end{itemize}
+
+\item{Nets and Endpoint}
+\begin{itemize}
+\item{net\_dir\_base\_ifc.h}: Base class for a directory of endpoints
+\item{net\_endpt\_base\_ifc.h}: Base class for an endpoint.
+\end{itemize}
+
+\item{Misc}
+\begin{itemize}
+\item{diag\_ifc.h}: Interface object for accessing the diagnostic
+server (console).
+\item{rpcmgr\_ifc.h}: Remote method invocation runtime system
+\item{clone\_master\_ifc.h}: Central emulation lib only object for
+registration of object for cloning at fork time.
+\end{itemize}
+
+
+\end{itemize}
+
+\subsection{The UX library}
+The following objects supply unix specific support for use in the unix
+emulation lib.  The objects are only used by the emulation lib, and support
+unix OSItems that exist in the emul\_lib and not elsewhere.
+\begin{itemize}
+\item{uxident\_ifc.h}: unix user identity.
+\item{uxio\_ifc.h}: Base class for unix io object to be found in
+file discriptor table.
+\item{uxio\_pipe\_ifc.h}:  Pipe object
+\item{uxio\_socket\_ifc.h}: socket object
+\item{uxio\_tty\_ifc.h}: tty object
+\item{uxselect\_ifc.h}: object that supports pending select actions on an uxio
+object.  Selects are done with a multi-thread implementation that does
+read/write of type ``IO\_PROBE'', tracks what these probes find and
+returns the info.  Be careful when you tread here.
+\item{uxsignal\_ifc.h}: object for posting and servicing unix signals based on
+inter-task or intra-task event postings.
+\item{uxstat\_ifc.h}: supplies unix ``stat'' functionality.
+\item{devnull\_ifc.h}: specialized dev null object.
+\item{ftab\_ifc.h}: unix descriptor file table.
+\end{itemize}
+
+\section{Server Descriptions}
+\label{sec:servers}
+\subsection{Authentication Server}
+The authentication server is used to ensure system ID security.
+It is the official owner of user credentials like group and user ids.
+The server work itself was done as thesis work by Robert Sansom, and there
+is extensive documentation for it with the sources.
+
+Mach-US has a distinctly separate protection model than that of UNIX.  It
+uses a credentials list technology, with the first entry being the primary
+identity and the rest being other groups that are permitted.  There are
+well known ids found in the ``as\_database'' and the ``root'' user has the
+ability to create additional ids dynamically to more easily accommodate
+the ``/etc/passwd,/bin/login'' API.
+This server supplies no OSItems to the Mach-US name space, but instead is
+used to support the remote object invocation system.
+
+\subsection{Configuration Server}
+This server is used to start the various system servers.  It executes
+the rc.us script.  It also supports a separate mach port names space
+(aka snames) for the Mach-US system (see {\SECREF} \ref{sec:naming} on
+``Naming and Name Spaces'' below)
+Mechanisms for more dynamic configuration was meant to go here but time
+has not allowed.  This server exports no OSItems and is used purely for
+startup support.
+
+\subsection{Diagnostic Server}
+This server serves a similar rol to the console of a standard unix system.
+It forwards its output to the ``console'' where the multi-server was started.
+The various ``ERROR()'' and ``DEBUG[0-3]'' statements sprinkled through out
+the system send messages to this server.
+
+\subsection{Path Name Server}  This simply supplies a Mach-US name service
+interface.  It is used as the base server that all of the other system servers
+mount their OSItem directories in.  It is found in the ``/server'' area
+of the UNIX API Mach-US name space.
+
+\subsection{Network Server}  This server supplies TCP/UDP/IP/ICMP/ARP/... for
+communication with the outer world.  The protocol engines themselves were
+supplied by the xKernel project under Larry Peterson from the University
+of Arizona.  As part of this project it was ported to the i[34]86 architecture
+and set of ``xKernel protocols'' to support the OSI/XTI style
+interface was generated.  The various endpoints and connections are found
+in the ``/server/net'' directory in the IP/UDP subdirectories.  Further
+xKernel supported protocols should be relatively easy to add.
+
+All of the Unix emulation stuff was built into the emulation lib to
+support unix semantics on top of the OSI/XTI ``us\_net\_I\_ifc.h''
+generalized interface.
+There are README files in its source area which give more info
+about the further layout of the sources within.
+
+This server is not bug free.  On the other hand, it supports inetd, telnetd
+ftpd, telnet and ftp. (To use the daemons, don't forget to start inetd by hand).
+Ftp transfers are often faster than those of the Mach-UX single server system.
+
+Note:  The xKernel folk have created a NetIPC protocol for extending the
+Mach\_IPC semantics between hosts.  This protocol could be used so that
+servers of a Mach-US system can reside on different hosts and proxy could
+to their standard remote method invocations to get to non-local servers.
+
+The gory details of flow of control for a TCP conversation can be found in
+the note: ``fs\_fork\_tcp\_tour.doc''
+
+\subsection{PipeNet/Local Connection Server}
+This service also supports the us\_net\_*\_*ifc.h OSI/XTI based interface
+and is used to support local endpoints for use with local sockets and pipes.
+The the endpoints/pipes are found in the appropriate subdirectories of
+the ``/server/pipenet'' area.  No the name is not very good.
+
+In many ways, this is a fairly simple/canonical server.  It makes a
+good example/template for how to make other servers.
+
+\subsection{Task Master}
+This server is specific to UNIX (4.3bsd) although it was designed to be easily
+modifiable to support other APIs.  It maintains the id spaces for
+processes and process groups, it also is used for posting events (signals)
+to user processes and groups (other than self signaling).  It is not
+directly involved in the forking process (which is done primarily within
+the emulation lib).  It is notified of the existence of newly forked
+processes and given a us\_event object to post events to the new process
+with.  Task OSItems can be seen in ``/server/tm/TASKS'' and in
+``/server/tm/GROUPS'' there are temporary directories which correspond
+to the different system task groups, and these directories also contain
+the task items.  I do not recommend running ``cat'' on these guys.
+
+The program '.../release/bin/us\_ps' will list the process ids and the
+corresponding exec\_strings, much as ``ps'' would.
+
+\subsection{TTY Server}
+This server is sliced in part from the 4.3BSD tty code and some of it
+is copyrighted to UC (sorry).  It was made multi-threaded, and the
+appropriate us\_byteio\_ifc.h and naming interfaces were glued
+on top.  It should be a fairly simple task to replace the licensed
+code with the code from one of the ``free'' bsdoid
+unixs, but time has not permitted this action.  The ttys and pttys
+supplied are found in the ``/server/ttys'' directory.  The are made
+visible in the ``/dev'' directory through a set of transparent symbolic
+links.  Because of a bug in that tslink code, the unix ``ttys'' application
+does not correctly determine your current tty (inode numbers are
+not coalescing properly).
+
+\subsection{Unix FileSystem Server}
+The ufs file server reads and writes BSD format disk
+partitions.  Any given server handles exactly one such partition
+(for no technically good reason.  Simply expandable to handle
+more).  This is another server that is partially derived from 4.3BSD and the
+bulk of the work was done by Paul Roy at the OSF.  The client service part of
+the system is multi-threaded, the low level disk facilities are accessed via
+the libus++ vnode interface that supplies a Mach-US byteio external interface.
+
+The file server acts as an external pager for its file proxies that
+map in windows to the files in order to support the byteio semantics.
+More gory details
+of this can be found in the note: ``fs\_fork\_tcp\_tour.doc''.
+
+\comment{
+Shared-seek keys are not fully implemented.  There exists a partly completed
+blackboard service that has not been installed into the system in general.
+Instead, the system contains the setup for the shared memory used to maintain
+said seek keys to insure appropriate timings.  The primary use of
+shared-seek keys to generate log files.  parents and children share keys and
+write to the key location which they believe to be the end of the file.  This
+semantics is emulated by simply ``appending'' to the end of a file instead
+of just ``writing'' to a location when that location is at what is
+believed by the task to be the end of the file.
+}
+
+\section{Emulation Lib}
+The sources for the emulation library are found in .../src/lib/emul.  The
+binary executable is in ../release/lib/bsd\_all.lib.
+It is not a library in the
+standard sense, instead it is loaded into the address space of the
+initial emulated process at runtime and inherited by its children.
+It is currently not callable directly by user processes but instead
+receives user syscalls redirected by the kernel.
+It then simulates the OS API in question
+upon the generalized system services supplied.  The only emulation lib
+supported at this time is used to support 4.3BSD UNIX semantics.
+
+The program "emul\_init" is built with the emul lib and is used to load
+the emul\_lib and redirect its syscalls, and exec the initial program.
+Redirecting the syscalls causes the Mach Kernel to forward each of the
+user's syscalls to a location in the emul\_lib for that task.  It is then
+sent to the appropriate "emul\_{\em syscall}" routine to execute the code
+for that syscall.  Note that these syscall emulations have the advantage that
+they actually reside in the address space with the caller, and can access
+argument memory directly (after validity checking).  The user's thread
+that made the syscall is used to execute the needed code in the emulation
+lib in a lib specific stack.
+
+\subsection{Forking}
+\label{sec:forking}
+In general, forking is an action by the emulation library in the process
+that called the fork syscall.  The task-master is advised of the intent to
+fork, and the occurrence of the fork, but is basically an observer.
+
+The basic idea of forking is that the emulation lib creates a new task
+that shares the state of the current process, and then sends it on its way.
+The problems come with the cloning of that state.  In multi-thread
+system, various parts of the emulation lib may not be appropriate
+to just be just copied at any time.  These problems are solved through
+the "cloning" mechanism.  There is a clone master object.  When ever a
+new object is created in the emulation lib, it is registered with the
+clone master, and each such object supplies methods:
+\begin{itemize}
+\item{clone\_init}:  Get an object in a consistent state to clone/fork.
+\item{clone\_abort}: Undo the clone\_init, something has gone wrong.
+\item{clone\_complete}: Called in the child to complete the cloning (reset the
+object)
+\end{itemize}
+These methods are invoked for every registered object at the obvious
+points in the forking process.  For "proxies", they are used to insert
+the send\_rights for the remote agents into the child process. (see
+the document entitled
+"Client Server Interactions in Multi-Server Operating Systems:: The Mach-US approach" in the file ``us\_client\_server.ps''.
+
+Further complications happen with multiple threads running at fork time.
+This is handled in a harsh fashion.  After forking, only one user thread
+is created.  That being the forking thread.  It is used in the child to
+complete the forking code, and then runs the user's child code upon
+fork completion.  It is the user's problem to
+handle whatever problems this causes in his software.  Of the emulation lib
+threads, the event/signal handling thread is recreated from scratch in the
+new process as it starts up.  Hence, a freshly forked task will only have
+those two threads in it (other emul\_lib threads occur when a select is done).
+Even more gory details can be found in the note: ``fs\_fork\_tcp\_tour.doc''.
+
+\section{Naming and Name Spaces}
+\label{sec:naming}
+\subsection{Directories, Links, Named OSItems, and Servers}
+An involved explanation of the name system can be found
+in the file ``naming-0891.ps'' titled
+``Naming Facilities for Operation System Emulation in Mach3.0''
+by Daniel Julin.
+
+A tour through the process of name resolution
+can be found in the note: ``fs\_fork\_tcp\_tour.doc''.
+{\MORE}
+
+\subsection{Name Spaces}
+There are several disjoint name spaces maintained in the multi-server
+environment.  The first one is the {\bf port name space} maintained by
+the configuration server. This consists of a mapping of ports 
+to server names. These names are known by convention to other servers or programs.
+The interface to this service is defined by the calls {\em netname\_check\_in}
+and {\em netname\_look\_up} as specified in {\em netname.h}.
+These calls are made on
+the predefined port {\em name\_server\_port}.
+
+The second name space is the {\bf pathname space}. This
+space is maintained by the pathname server with the ns\_resolve interface that
+maps a pathname to a proxy for the object. 
+
+There is a third name space defined by a {\bf prefix table} maintained by the
+emulation library. This table is initialized by the configuration server with some 
+"system" entries defined in the \verb|prefix.config| file. The prefix table maps the beginning
+of path names to the server that handles names starting with that prefix.
+Unix-style references to pathnames are handled by the emulation
+library which strips off the longest prefix it knows about and hands
+the rest of the name to the appropriate server for an ns\_resolve.
+
+Most servers maintain a name space for the objects they manage. There is
+a UFS server for every mounted partition, the tty server has a name entry
+for each potential tty or pty, the task\_master has a name space for all
+active tasks, and the pipenet server has a name space for any active pipes.
+These name spaces can be accessed through the {\bf /servers} directory.
+
+In the current configuration setup, all the servers that the configuration server
+starts are entered in the port name space, (see \verb|rc.us|) for the servers and their
+names). The pathname server and the UFS servers
+are given initial entries in the prefix table (see \verb|prefix.config|).
+The UFS
+servers, tty\_server, task\_master, pipenet\_server and net\_server are all
+given entries in the pathname space in the directory \verb|/servers|. 
+(see \verb|STARTUP.fsadmin|).
+The UFS servers and pathname server are given \verb|transparent symlinks|
+in the
+{\bf /} directory in order to make this directory look more like a traditional
+Unix root directory. 
+
+\section{Protection Model} 
+
+In accordance with the principle of using generic interfaces, the
+access control interface is based on a single protection model, of
+which the models of the various target environments should be either
+subsets or reasonable variations. This model is organized around three
+basic concepts:
+\begin{itemize}
+\item each operation exported by an agency is associated with a set of
+{\em access rights}. Those rights are normally established and stored
+in the agent when this agent is created. The appropriate rights must
+be present in the agent if the corresponding operation is to be
+allowed to the client.
+
+\item each client is associated with a list of {\em credentials}
+representing its identity, associated with the corresponding agent.
+These credentials are a simple ordered list of 32-bit {\em
+authentication identifiers}, which may be obtained from the
+authentication server upon presentation of an unforgeable {\em
+authentication token}. The token itself is created by the
+authentication server, from a user's password.
+
+\item each agency logically contains an {\em access control list} or
+{\em ACL}. This list is an ordered list of entries, each containing an
+authentication identifier and a set of access rights. The agency
+exports an operation to match a list of credentials against the ACL,
+and determine the set of access rights thus authorized for that
+client. In addition, each agency specifies a {\em privileged
+identifier}. Presence of this identifier in a list of credentials
+causes all access checks to be bypassed, and all access rights to be
+authorized.
+\end{itemize}
+
+\comment{
+The system prototype contains standard {\em access control list} and
+{\em credentials} objects that, in conjunction with the agent and
+agency objects described above, provide a simple implementation of
+this protection model usable in many servers.
+} % comment
+
+\comment{
+Although this model appears to be adequate for common situations, a
+number of issues are still pending, which should be re-evaluated when
+applying the model to practical emulations:
+\begin{itemize}
+\item on simple systems (probably including the UNIX emulations), it
+appears to be sufficient to define a global set of 32 access rights,
+that apply to all operations on all types of items. On more complicated
+systems, this simpler model may not be possible; in this case, a
+special {\em access table} provides for different encodings of access
+rights for different item types.
+
+\item the exact association between access rights and item operations
+may need to be refined from a simple conjunction of rights, to allow
+more complex boolean expressions, even possibly including negative
+access rights.
+
+\item there are situations where the set of rights associated with an
+agent cannot be statically determined at creation time. Those
+situations could be treated as special cases with special agents, but
+the problem merits further analysis
+
+\item it is desirable to allow multiple implementations of the
+authentication server, with different token formats. In addition,
+there exists a proposal to build a system where client authentication
+is based not on port capabilities, but on special extensions to the
+IPC mechanism in the kernel.
+
+\item the whole issue of mapping the generic protection model into the
+models of various target environments is insufficiently resolved. In
+particular, it is far from clear how the notion of privileged
+identifier should be handled in all cases.
+\end{itemize}
+} % comment
+
+\subsection{Access Control Interface}
+
+Given this model, clients acquire access to an item by obtaining
+access to an agent via a proxy object. The agent contains the
+credentials of the client, and a set of enabled access rights. Those
+access rights are specified by the client (under the restrictions
+imposed by the access control list), which indicates in this way what
+operations it intends to perform on the item (e.g. read-only file,
+read-write, etc.). The main primitive in the access control interface,
+to be invoked against one proxy object, returns a new proxy object
+representing the same item, but with different credentials and/or
+access rights, subject to mediation through the ACL and authentication
+mechanisms. The system has special bootstrap mechanisms to create an
+agent/proxy object with "anonymous" credentials, and simple rules for
+inheritance of credentials when an operation on one item must return
+access to another item.
+
+The other primitives in the access control interface can be used to
+query the status of agent (credentials and enabled access rights),
+find out the privileged identifier for a given item, or manipulate
+access control lists.
+
+\section{Expanding Servers}
+
+\subsection{Expanding and Adding Interfaces}
+One obvious question to ask is:  "How do I add a service method to this
+stuff that is accessible to an emulation lib." or just "how do I expand
+a server's interface".
+
+It is a bit involved, but is done in the following way:
+\begin{itemize}
+\item Read the paper entitled
+``Object-Oriented Interfaces in the Mach 3.0 Multi-Server''
+by Paulo Guedes in the file
+``i-wooos-91.ps''.
+It supplies a general
+discussion of the class hierarchy and abstract class/proxy use.
+Also have at hand the document describing the magic macros used in
+lib/us++ class definitions to make this all work.  That document also
+by Paulo, is titled ``Libus++ Reference Manual'' and is found in the
+file ``libus-ref-1192.ps''.
+
+\item Add your method(s) to an existing a service interface, or create
+another service interface.
+\begin{itemize}
+\item choose which interface you wish to expand.  Find the appropriate existing
+.../include/us\_*\_ifc.h interface that is responsible for the functionality
+you want to expand, or create a new one to do the work you desire.
+These interface file all represent abstract C++ classes.  In order to
+create a new interface, just copy another us\_*\_ifc.h interface and change the
+names/methods as needed for your purposes.
+
+\item Add your method signature.  If a method is to be accessible to/through
+a proxy, the "REMOTE" meta-keyword most occur on the line with the
+method name.  All such methods must return the type "mach\_error\_t" 
+
+
+\item Describe the message format for remote method invocation.  In the 
+.../lib/us++ directory, there are files whose names correspond with those
+of the us\_*\_ifc.h files of the form us\_*.cc.  These files contain descriptions
+of how to pack/unpack the  method arguements for shipping
+to other processes.  The details of this format are found in the
+`Libus++ Reference Manual'' in the
+file ``libus-ref-1192.ps'', check the section on
+"Remote Method Arguments Strings".
+
+\item Supply the protection for the method.  There is a file 
+.../lib/us++/access\_table.cc
+that describes the protections needed for each remotely 
+accessible method.  Make your addition in the same form as the others there.
+Note:  Not all methods from a us\_*\_ifc.h interface need to be remotely
+accessible.  Some of them may be for use internal to the servers that
+use them.  Others may be supplied by proxies directly and have no need
+for corresponding remote calls.
+
+This access table is used by agent objects to determine of a client has
+the appropriate permission to invoke the method in question against the agency
+(OSItem) it represents.
+
+\item Build the default proxies.  In .../lib/proxies, the "make " process
+uses a script called "proxy\_default" for building the simple proxies that
+merely forward methods to the server.  This lib must be rebuilt whenever
+the .../include/us\_*\_ifc.h files are changed.  The script uses those files
+to build the ".cc" and ".h" files for supporting those proxies, and they
+are then compiled into libproxies.a.
+\end{itemize}
+
+At this point the interface is set and ready to go, but there are no actual
+implementations yet in place.
+
+\item Adding implementations:
+\begin{itemize}
+\item Modify other users of the interface.  At this point,  all of the
+various implementation classes (.cc and .h files) that inherit from the
+changed interface must
+be updated to support the new method. Either a real implementation can
+be done if that is what is desired, or a dummy form of the method must
+be put in,  Generally something that just returns, 
+US\_NOT\_IMPLEMENTED, MACH\_OBJECT\_NO\_SUCH\_OPERATION, or ERR\_SUCCESS.
+C++ will complain if all of the methods are not filled out
+for implementation classes that are instantiated.
+
+Finding these classes may be a bit of a challenge, since they can be most
+anywhere in the system either in servers, libs or the emulation lib.
+A class browser, or find/grep should do the job
+for you.  Remember where it is that you found classes which implement
+these interfaces, because they can make a useful template when creating
+your own implemention.
+
+\item Now it is finally time to create the implementation for the
+method that you actually wanted.  This is fairly simple.  All incoming
+object args have been coalesced, protection has been handled.  
+When adding the
+new method to the implementation you want to change,  just do it.  The
+only fancy parts come in if you are creating a new OSItem, are returning
+an object as an OUT parameter, or need to determine what "agency" is associated
+with a given "agent" IN parameter.  These questions are handled below in
+{\SECREF} \ref{sec:obj-args} on
+"Objects as Method Arguments".  Again, using similar
+implementations can be a helpful guide.
+
+Note: vol\_agency is a necessary ancestor class for all OSItem implementation
+classes that are not file\_system classes.  Vol\_agencies support the
+directory semantics, as well as supporting the standard protection associated
+with an object itself (like file protection).  Many OSItem's in the system
+derive directly from this class and support their specific semantics through
+multiple inheritance of the abstract class which represents the OSItems
+specific interface.
+\end{itemize}
+
+\item Finally we must deal with the proxies.
+For most instances the default proxy is
+sufficient for handling the additional method, but "special" proxies are
+required in cases where there is
+a desire to do some form of caching of data or alternate method for
+communicating data (shared mem objects,...).
+
+First,  find any other "special" proxies for the interface that you are 
+changing, and expand them to handle the
+new method as needed.  All such proxy implementations should be found in
+.../lib/proxies.  There may be none, also, there may not be one which
+is returned by the implementation class(es) that you are most interested
+in modifying.
+
+A simple example of a special proxy is the "tm\_task\_proxy''.  This
+proxy does some simple caching of task ids.  Hence id
+queries need not always go back to the task\_master.  In order to
+create a special proxy,  examine the task
+proxy and then take the following
+steps:
+\begin{itemize}
+\item Create a new proxy class.  This is done by inheriting from the
+default proxy for the interface in question and then overriding the
+methods that need proxy local implementations.  This overriding may
+involve calling the default method in order to get initial values, or
+it may be necessary to create other methods not available to the
+user through the proxy.  In extremely complex cases, an administrative
+abstract interface can be created,
+that is also supported by the server implementation class
+for the object represented, and is called in order to support proxy unique
+calculations.  This is done for file proxies to help support file windows.
+
+\item Returning the correct proxy.  Normally, an object returned as an out
+parameter will be instantiated in the client address space as a default
+proxy of the type in question.  In order to get a different proxy
+instantiated, the following magic must be done.
+\begin{itemize}
+\item Edit the files .../lib/emul/\{emul\_user\_init.cc,emul\_all.cc\}.
+\item Find the lines ``INSERT\_CLASS\_IN\_MAP(tm\_task\_proxy, "tm\_task\_proxy");''
+\item Make a similar entry in each file for your special proxy to insert it
+into the class map.
+\item Find the file that supplies the object implementation for which the
+proxy is being created (eg. .../server/tm/tm\_task.cc).
+\item Override the {\em remote\_class\_name} method in that class to return
+the quoted string that you used in the class map above.
+\end{itemize}
+Further discussion
+on how to manipulate objects as in/out arguments to methods can be found 
+in the following {\SECREF} \ref{sec:obj-args} titled
+"Objects as Method Arguments".
+
+\end{itemize}
+\end{itemize}
+
+\subsection{Objects as Method Arguments}
+\label{sec:obj-args}
+Usually, the way a client gets a new object is as an out argument of a method
+to a different object. The question arises, how to specify those arguments
+and how to implement them.
+
+In general there is a desire to have an "agency" (server maintained, externally
+available) object represented by
+an "agent" in the server, and it must be represented by a "proxy" on the
+client side.  Since the default agent has always been used (although specialized
+ones can be created), the class of objects specified in the abstract
+interfaces is the most complex antecedent class shared by the agent class and
+the and the proxy classes.  This causes the class types of object sent or
+received via remote methods to be specified in the interfaces as being
+"usItem" as defined in .../include/us\_item\_ifc.h.  This restriction is
+not necessary for objects not represented by agents, but since it is agents
+that handle the access control/restriction for remote objects,  such objects
+are described in the abstract interfaces as "usItem"s.
+
+Given that the interface type of an remote object is  usItem,
+(even though it was instantiated by the remote method runtime as the
+correct proxy type) it is necessary to reshape it into the correct
+type before more specialized methods can be called.  This is done
+by using the "castdown" mechanism to change its type to be that of
+the abstract class which has the correct semantic for the proxy
+in question.  Examples of the cast down appear regularly in the
+emulation lib source.  The {\em ns\_type\_t} returned with OUT objects
+from the naming interface can be helpful in determining how to castdown
+an object.
+
+Furthermore, on the server side, you want to return to the client
+an agent to access an object being returned.  To create such an agent, one
+must take the following steps.
+\begin{itemize}
+\item Check an example.  A good one is in ``tm\_task::tm\_get\_tgrp''
+in the file .../server/tm/tm\_task.cc.
+
+\item Get the identity to associate with the new agent.  Assuming that the
+the agent is meant to represent the current caller, then the std\_cred
+for the current agent is acquired via the ns\_get\_cred\_obj against
+the agent.
+
+\item Then do a "new" for the agent class using the identity in question,
+the desired access for this agent (like read-only for an open), and the
+actual agency being exported.
+
+\item Free un-needed references.  At this point, the new agent holds a
+reference for the agency and the std\_cred.  When the method implementation
+no longer needs these objects, the references held by the method itself
+must be release via "mach\_object\_dereference" (see {\SECREF}
+\ref{sec:object-semantics} ``Class/Object Semantics/Control'' for more info.)
+
+\item Return the new agent.
+\end{itemize}
+
+\subsection{Class/Object Semantics/Control}
+\label{sec:object-semantics}
+Classes in the system can be separated into two groups, "normal" classes
+and "contained" classes.  All normal classes have as an ancestor the
+class "usTop".  The only classes that are not progeny of usTop are classes
+used as parts of other classes and occur as the types of instance variables
+within those classes.  Note: there can never exist pointers or references
+to contained classes.  Instances of contained classes occur entirely within
+a normal class, and are used only to support similar functionality in
+separate normal classes.  The rest of this discussion will be talking about
+normal objects in the system unless explicitly specified.
+
+Object garbage collection/lifetime is handled through a simple reference
+count mechanism.  References are logically "held" by individual parts
+of code by the following rules:
+\begin{itemize}
+\item Upon creation, a reference is automatically taken and given to
+the caller of the "new" function.
+
+\item When a copy of a pointer to an object is made, then another reference
+must be taken.  References are taken via the "mach\_object\_reference" routine.
+
+\item When a copy of a pointer will no longer be used, then the associated
+reference must be released with "mach\_object\_dereference".
+
+\item When an object is returned as an OUT parameter to a method, then
+that method's reference to the object is passed with it.
+
+\item Similarly, if an object is received as an out parameter to a method,
+then the caller receives a reference, and is responsible
+for disposing of it either by passing it on to its caller, or releasing
+it with "mach\_object\_dereference".
+
+\item When the reference count on an object goes to zero, then the destructor
+of the object is automatically called.
+\end{itemize}
+
+This is all well and good, but what about OSItems in directories?  Since
+all OSItem, including things like tasks and network endpoints, are found
+in some system directory,  by the rules given above, that directory
+should hold a reference to the objects representing those items.  This would
+mean that they would not go away until all normal references to them went
+away, and the directory reference was removed.  This extra directory
+reference would prevent the proper deallocation of volatile/transient
+system
+objects.  The problem is solved by the use of "vol\_agency" objects.  For
+these objects, the directory does not hold a counted reference to the object.
+The destructor for the object is called even though it is in a directory.
+
+A more specialized class is the tmp\_agency class.  Objects that derive
+from the class magically disappear from their directory when the counted
+references all go away.  To further this paradigm, there is even a
+tmp\_directory, which goes away when it no longer has anything in it.
+Tmp\_directories are currently used to represent job groups, so that when the
+last task in a job group completes, then the group itself does also.
+There is further documentation on tmp\_objects in the note "temp-agencies-US47.note''.
+
+\subsection{Error Reporting}
+\paragraph{Error Return Values}
+Standard error notification in Mach-US is done via the return value of
+each routine.  That is of type mach\_error\_t (an int) and the error values are
+defined in .../include/*err*.h and are itemized in the ``includes'' {\SECREF}
+\ref{sec:tour-includes} above.
+
+The emulation lib arbitrarily translates these values into UNIX error
+numbers (see files .../lib/emul/emul\_error*).  This indirect mapping
+may be a source of incorrect error values in some cases.
+
+When pre-existing UNIX code was used in servers,
+those UNIX error values
+are translated into mach\_errors\_t values.  This is done on a case by case
+basis wherever errors occur.
+
+\paragraph{Diagnostic Error Reporting}
+See the {\SECREF} \ref{sec:servers} on the diagnostic server and 
+{\SECREF} \label{sec:debug-technique}
+on debugging techniques.
+{\MORE}
+
+\subsection{Interrupts}
+There is an extensive system for handling interrupts in either servers
+or the emulation library.  Correct use of this system is essential for
+correct system expansion.  Most notably, long running method implementations
+in a server must be interruptible.  To learn the details of this system, read
+the note entitled "Interrupts.note".
+
+In general, there are
+routines called ``intr\_mach\_msg'', and ``intr\_cond\_wait''
+that should be used in code executed by threads that may be executing
+any syscall path.  In the emulation lib,  this will generally not come up
+as the remote object invocation runtime system takes care of this
+for interruptible RPCs (see ``Method Arguement Strings'' section of the
+`Libus++ Reference Manual''). 
+For more complex situations of long term computations or other forms of waits,
+the details found the the interrupts note are necessary.
+
+\section{Creating new servers}
+Probably the simplest way to do this is to look at what the pipenet
+server does and modify create a new modified version of it
+for your own purposes.
+{\MORE}
+
+\section{Debugging}
+Needles to say, debugging this system can be a bit complex.  Each server
+has many service threads and async notification of object death.
+There are many servers in the system, and the
+emulation lib converts the actual unix system calls into a series of server
+calls.  It has multiple threads for servicing 
+incoming signals/interrupts,  waiting, listening on the various objects
+in a select, or supporting simultaneous syscall emulation.
+
+We have found no magic bullets for solving this complexity.  But we do have
+a series of techniques/wrenches that we use to hunt and kill bugs.
+
+\subsection{Technique}
+\label{sec:debug-technique}
+The easiest environment to debug in is to run Mach-US beside the Mach-UX
+single server system.
+The general idea is to try and limit where the problem may be using
+test cases and system diagnostics followed by time in GDB.
+
+You run Mach-US as you normally would with Mach-UX.
+GDB is run in a standard single server window.  Not one started via
+the "config\_server".  You run GDB against the executable in question,
+either the appropriate server, or a local copy of bsd\_all.lib.  Then
+attach to the task you are interested in, put in
+your break points and run your test in a Mach-US shell.
+
+Since the config\_server supports a Mach\_US port name space (eg. snames) and
+Mach-US does not support a separate
+"mach\_id" server running on a system,  one
+cannot easily run GDB in an window started by the config server and thus
+a server or emulated process can not be run from inside of a GDB.  One must
+attach.
+
+There are some magical switches supported by the servers and emul\_init
+that will help and are used when invoking the part of the system in question.
+\begin{itemize}
+\item{-d<number>}: this switch specifies a debug level.  These debug levels are
+used by various debug statements throughout the system to vomit debuging and
+status
+info while running.  These messages are sent to the diagnostic server
+that then prints them out for the user.  The higher the number, the greater
+the tonnage of information.  Levels 1,2,3,99 are the only ones used.
+Many of the debug statements will be conditional on a global variable
+that can be set from GDB to turn on that additional set of debugging messages
+that may not be needed when debugging other parts of the system. Level 3
+does syscall tracing.
+
+\item{-D<number>}:  This switch to emul\_init specifies a debug {\em depth}.
+If value given
+is 7, then the 7th level deep of exec calls will suspend the emulation lib
+in that exec call, and the process is ready to be attached to with GDB,
+break points set, and off you go. Further more, this value is used
+for a magic suspension points.  If one is trying to debug a feature of forking,
+then one needs to be able to attach to the new process early in the fork
+process (GDB does bad things when you are attached across a fork).  Hence
+the value of "-D99" is used to suspend fork at such a useful point.  Others
+can be added at the developers convenience.
+
+\item{-s}:  This switch causes most servers to stop shortly after parsing
+its args before doing any actual work.  This is useful for debugging
+server startup.
+\end{itemize}
+To use the above switches, one generally edits the "rc.us" file to
+give the appropriate switches to the appropriate server, or modify
+the "multi" script to start emul\_init with the correct switches for the
+emulation lib (bsd\_all.lib).
+
+\subsection{Emulation lib debugging}
+GDB can attach to tasks using their mach\_id from "ms" preceded by a minus.
+Currently, the name of an emulated process will show up in "ms" output as
+"none" and the correct process is determined by knowing what you started last.
+
+In order to debug both a user program and the emulation lib, one can start
+GDB against the emulation lib, and load the user program symbols at location
+0x10000.  This way you can stop at a good place in your user program before
+putting breakpoints into the emulation lib itself.
+
+\subsection{Fsadmin}
+There exists a program for calling the various system servers directly.
+It is called {\em fsadmin}.  It is used by "rc.us" at startup to mount
+the various servers in the pathname name space, but can also be used to
+call a number of built in commands (ls,cpto,cpfrom,...).  It can be simply
+modified to call any method, or combination of methods seen in 
+the .../include/us\_*\_ifc.h interfaces.  It can be directed at a given server,
+or use the pathname server by default.  It is important to note that
+whatever server it is pointed at will show up as "/" within fsadmin.
+Hence the normal "/" would be found in "/ufs" and the other servers would
+also be seen as subdirectories of "/".  This process is made slightly
+more complex by the fact that fsadmin does not load the table of system
+path prefixes either.
+
+Fsadmin would need to be run in a shell or window started by
+the config\_server (instead of starting emul\_init), or it could be started
+directly by the config\_server (see the document
+entitled ``Installing and Running Mach-US''
+in the file ``us-install.ps'')
+
+
+\subsection{Other debugging packages}
+In the .../pkg part of the source subtree, there is a {\em malloc} package
+that can be used for tracing leaks if linked in to the executable in question.
+There are associated scripts/progs for processing the raw data into a usable
+form. For more detail here read the note in the file:
+``malloc-tracer-US29.note''.
+
+There is also a package for recording error msg ids into a ring buffer
+at runtime.  This is useful for bugs that might be effected by the
+timing cost of the standard debugging (-d) messages, and the corresponding
+IPC to the diagnostic server.  This module is found in .../local\_include/logging.h, .../lib/us++/logging.*.  The log\_reset and log\_dump routines would
+be called from inside GDB.  Examples of use are in the lib/us++ sources.
+
+\end{document}

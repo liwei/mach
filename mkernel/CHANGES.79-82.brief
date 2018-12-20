@@ -1,0 +1,211 @@
+==========================================================================
+   ***** MK Version MK79  (danner) *****
+    
+    
+New features:
+--- --------
+
+This is an intermediate merge done for internal purposes only.
+Several things are still broken.
+
+New architecture and platform support:
+
+	alpha - ADU, partial flamingo [af,jefferyh]
+	sparc - sun4c [berman]
+	i386  - ibm ps/2 microchannel boxes [mja et al]
+
+64 bit safe. sizeof(void *) > sizeof(int) works. [af]
+
+Ansi prototypes for many kernel files. [many]
+
+Mig output is much cleaner and ansi [pds].
+Ansi cpp cleanups [danner,pds]
+
+The luna is now quite viable [jfriedl]
+
+Pc sampling interface [rvb,cmeada]
+
+Pseudo dma support for ttylines. [af,danner]
+
+New build enviroment. A nuisance at cmu, but distributable to
+the outside world [mrt].
+
+Multiple atomic sequences per address space. 
+New task_ras_control interface. [bershad]
+
+The attach function in chips/busses.h now is of type void. [danner]
+
+The map function in device/conf.h now returns vm_offset_t. [af]
+
+Introduction of natural_t and integer_t. [af]
+Introduction of spl_t. [dbg]
+
+Ddb can now support multiple symbol table formats at once. [af,dbg]
+
+Machine independent multiprocessor ddb support [dbg].
+
+[PMAX] New atm code [jcb,bershad]. Dropped old ecc device.
+
+[PMAX] Dec Desktop bus support for maxine and friends. The keyboard will now 
+beep [jtp@hut.fi]
+
+
+Bug fixes:
+--- -----
+
+Multi and Uniprocessor eventcount fixes. [af,jfriedl,dbg,bershad,danner]
+
+Processor set code works again. [dbg]
+
+Many mp locking bugs found by the multiserver [jms,dpj,dbg]
+
+The standalone printf is protected against use before printf_init. [danner]
+
+Default pager DEBUG works again [pds]
+
+[I386] locore bug, disable broken fifo code. [dbg,rvb]
+
+Many others.
+
+Organizational changes:
+-------------- -------
+
+Converted to ODE make.
+Everyone now compiles with gcc-2.3.3.
+Everyone now compiles with -O2 -g, so all the kernel debuggers get
+line numbers. This makes the kernels a bit bigger on the i386.
+
+Special notes:
+------- -----
+
+Build/boot status:
+
+[I386]	STD+WS STD+SQT: build and booted (turtles,boris)
+	STD+PS2	      : builds but does not boot
+
+[SUN3]  STD+SWS	      : builds, boots w/o ethernet (rocky)
+
+[VAX]	STD+VAX6bb    : builds and boots (dbg)
+
+[PMAX]  STD+ANY	      : builds and boots (5000/200,5000/120)
+
+[ALPHA] STD+ANY	      : cross building from pmax - broken. Adu only.
+
+[LUNA]  STD+WS	      : builds and boot (halfmoon)
+
+[SPARC] STD+SWS	      : builds and boots single user (sun2)
+
+==========================================================================
+   ***** MK Version MK80  (mrt) *****
+    
+    
+New features:
+--- --------
+
+Added support for scsi CD-ROM devices
+
+[I386] and [PMAX]
+	Added support for profiling. libmach and libmach_sa
+	build with -pg switch
+
+[ALPHA]
+	lots of changes for the alpha machines.
+	It now runs on the Flamingo model.
+
+
+Bug fixes:
+--- -----
+
+More prototype and gcc cleanup
+
+Updated the kernel man pages
+
+[I386]
+	Fix to give a "reaonable" reply to get_disk_label even
+	when there isn't one
+
+	Fix for keyboard wedging on Gateway 2000 4DX2-66V
+
+[PMAX]
+	Fix to dma bug that has occasionally zero'ed disk blocks.
+
+[LUNA]  Many
+
+Special notes:
+------- -----
+
+The standard kernel configurations for the i386, pmax, luna, alpha and sun4
+all built with linenos on for debugging and are 1 to 2 Meg. Smaller verisons
+(STD+WS-lineno) are available for the i386 and pmax machines.
+
+
+
+==========================================================================
+   ***** MK Version MK81  (rvb) *****
+
+
+NOTE: THERE WILL NEVER BE A NEW VAX or SUN3 RELEASE DONE AT CMU.
+
+ODE has been revisited and made more friendly.  Now we do not build
+anything by default with line numbers or profiling.  On the other hand, simply
+setting "setenv CARGS -g" will turn on line number generation everywhere.
+To generate ux's with profiling enabled, do "odemake CONFIG=STDVICE+WS+gprof"
+or "odemake CONFIG=STDAFS+WS+gprof".  (This works for the i386 and pmax
+presently.)
+
+A lot of de-linting has taken place in MK and UX.  Now there are very
+few compiler warnings.  Some platforms have none.
+
+cthread_data and cthread_set_data are now macros's and fast.
+
+i386 and pmax:
+Serial line support is much better and modem control is supported.
+
+pmax:
+We have added supported for the 5000/240 from John Wroclawski (jtw@lcs.mit.edu).
+We do not have any 5000/240's to test this code on.
+
+i386:
+The Adaptec 1542C controller should be supported.
+
+- -C to xterm should correctly redirect output.
+
+The "TeleDebugger" (ttd) is installed and can be configured on.
+
+The ha device for bootstrap process now works correctly.
+
+A "rconsole" like facilities has been added.  In the debugger, you may
+set the variable "rcline" to a serial port number.  Then, while in the
+debugger, you may type on that serial line and the characters are spiced
+into the keyboard stream.  The debugger output will be sent
+to the serial line as well as the screen.  (This is great for debugging
+while X has control of the screen.)
+ONE IMPORTANT NOTE:  For security reasons, you can not enter the debugger
+by typing magic on the serial line.  You must type cnt-alt-d on the
+console keyboard or experience some system error/panic or hit a previously
+planted breakpoint.
+
+sun3:
+The boot flag "-d" causes the debugger to be entered shortly before
+the autoconf process.
+
+
+
+==========================================================================
+   ***** MK Version MK82  (rvb) *****
+    
+    
+Fix for i386 Adaptec 1542C controller.
+
+Fix a few problem in the release process of stripping .o's and emulators.
+
+
+****************** NOTE ****************** NOTE ****************** 
+
+The previous "diff latest vs merge" showed a few non checked in files in
+ux amd mk.  So I checked them in and now have rebuilt all ux's and of
+course I needed to rebuilt all kernels to get them to MK82.
+
+Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, 
+Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, Sigh, 
+

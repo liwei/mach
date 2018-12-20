@@ -1,0 +1,65 @@
+==================MK83A=============================
+ 
+New features:
+--- --------
+
+MiG has new syntax to align fields on arbitrary (power-of-2) boundaries,
+so that (for example) a structure of 32-bit integers can be aligned
+on either a 64-bit or a 32-bit boundary on the Alpha.  The syntax
+is:
+<type> = (<type name>, <size in bits>, <alignment boundary in bits>)
+
+Added the scripts and auxilary build tools to flatten the MK
+source tree and build with the NetBSD make files.
+
+Added the sources for a NetBSD boot program that will boot both
+MK and a vanilla NetBSD kernel
+
+Added a few changes from Johannes Helander to support LITES
+
+[I386AT]	now supports the AHA17 32-bit SCSI adapter.
+
+[I386PS2]	now supports the Ethernet adapter.
+
+Bug fixes:
+--- -----
+
+The 'device_write' bug HAS been fixed.  If the memory given to
+device_write_request is changed before the hardware has completed the
+IO, the user wil be forced to wait for the hardware IO to be done.
+The bug was in vm_copyin_to_page_list.
+
+host_info() now correctly returns min_timeout and min_quantum in
+milliseconds, as per the documentation.  These values, however,
+are somewhat arbitrary: min_timeout depends on the current resolution
+of the system clock, and the quantum varies on multiprocessors.
+
+The 'audio' device ignores drops: "it is less irritating to
+hear a glitch than to speed-ahead an entire block of samples"
+(Alessandro Forin).
+
+[ALPHA]	  'catch_exception_raise' has been made 64-bit clean: the
+	  'exception', 'code', and 'subcode' arguments are now
+	  longs, since 'subcode' contains a virtual address for
+	  EXC_BAD_ADDRESS.  This is an INCOMPATIBLE change, however;
+	  all programs that use 'exc_server' and 'catch_exception_raise'
+	  (and 'exc_user') MUST be relinked.  As a result, MK84 will
+	  NOT work with the current UX server (UX42 and below).  There
+	  will be a UX release in the very near future that works with
+	  MK84 on the Alpha.
+
+Special notes:
+------- -----
+
+Built and tested on i386AT, i386PS2, Sequent, DecStation 5000/120,
+Dec Alpha.
+
+The list of machines that CMU supports has once again dropped.  We
+now build for the I386 (ISA and PS/2), various flavors of Decstations
+(the MIPS R2000/R3000 processors), and the Dec Alpha (with Turbochannel).
+This release has been built and tested for the Sequent Symmetry.  However,
+since our Sequent has broken, it is unlikely that future releases will
+be built for it.
+
+We no longer support the Omron Luna88k.  The kernel has been compiled
+for the Luna88k, but not run.

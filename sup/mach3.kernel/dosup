@@ -1,0 +1,4 @@
+#!/bin/csh
+sup -dov supfile > suplog &
+tail -f suplog
+

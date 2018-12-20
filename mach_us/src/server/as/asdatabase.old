@@ -1,0 +1,10 @@
+all:0:S:Default Group:1:::
+sys_adm:1:P:System Administrator:1:secret::
+rds:2:P:Robert Sansom:1:robert:6:
+group1:3:S:Group One:2:4:7:
+group2:4:S:Group Two:2:5:3:
+group3:5:S:Group Three:2::4:
+server1:6:S:The first server group:2:2::
+group5:7:S:Group Five:2:3::
+group6:8:S:Group Six:2:::
+user1:9:P:User One:1:user1::

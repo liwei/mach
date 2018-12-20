@@ -1,0 +1,571 @@
+%!PS-Adobe-2.0
+%%Title: whatis_MachUS.mss
+%%DocumentFonts: (atend)
+%%Creator: J Mark Stevenson and Scribe 7(1700)
+%%CreationDate: 28 July 1994 16:58
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale
+    /showpage {} def
+    /letter {} def
+    /lettersmall {} def
+    /note {} def
+    } bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: 0 1
+BS
+0 SI
+13 /Helvetica-Bold AF
+25544 8148 MT
+(What is MachUS)SH
+10 /Helvetica AF
+26459 10681 MT
+(J. Mark Stevenson)SH
+27765 12364 MT
+(28 July 1994)SH
+12 /Helvetica-Bold AF
+7200 16119 MT
+(1. Introduction)SH
+10 /Helvetica AF
+8312 17545 MT
+(Mach-US is a multi-server OS developed as part of the CMU MACH project.  It has)
+22 W( been developed by)21 W
+7200 18971 MT
+(Dan Julin, myself and several others from CMU-Mach and OSF-RI. Its design goal is to)
+68 W( provide a set of)69 W
+7200 20397 MT
+(generic servers that can be used to)
+97 W( support various standard OS's and to allow easier experimentation)96 W
+7200 21823 MT
+(with OS interfaces.)SH
+8312 24390 MT
+(The current release supplies a Mach2.5/4.3BSD API and runs most of the non-administrative)
+154 W( UNIX)155 W
+7200 25816 MT
+(application binaries that are provided as part of the i386Mach release.)SH
+12 /Helvetica-Bold AF
+7200 29571 MT
+(2. Quick System Architecture Overview)SH
+10 /Helvetica AF
+8312 30997 MT
+(Mach-US is a)
+94 W( symmetric multi-server system.  It has a set of separate servers supplying generalized)93 W
+7200 32423 MT
+(system services \050file systems, network server, process-mgr, tty server,...\051 and an emulation library)
+22 W( loaded)23 W
+7200 33849 MT
+(into each user process.  This library uses the services to generate the semantics of an)
+46 W( industry standard)45 W
+7200 35275 MT
+(OS being emulated.  Some of the system servers are,)
+20 W( in part or whole, specific to the OS being emulated)21 W
+7200 36701 MT
+(while most are meant to be fully generic.  Thought was given when writing the OS specific ones to make)44 W
+7200 38127 MT
+(parts of them reusable for other OS's.  There is no "central")
+56 W( server, either for emulating a specific OS or)57 W
+7200 39553 MT
+(for general traffic control.  All multi-service actions are controlled by the emulation library.)SH
+8312 42120 MT
+(A detailed explanation of the system and its design can)
+110 W( be found in the paper entitled: "Generalized)109 W
+7200 43546 MT
+(Emulation Services for)
+45 W( Mach3.0:  Overview, Experiences, Current Status" from the Nov.'91 Usenix Mach)46 W
+7200 44972 MT
+(Symposium. This)
+2232 W( paper is available for anonymous FTP)
+977 W( at "mach.cs.cmu.edu" in)976 W
+7200 46398 MT
+("doc/published/mach_us-multiserver.ps")SH
+12 /Helvetica-Bold AF
+7200 50153 MT
+(3. Mach-US Flexibility)SH
+10 /Helvetica AF
+8312 51579 MT
+(The biggest single advantage of Mach-US is its flexibility.  It offers a whole new, highly modifiable OS)59 W
+7200 53005 MT
+(architecture without significant structural impediments to speed. This flexibility is accomplished)
+172 W( by the)171 W
+7200 54431 MT
+(following design features.)SH
+11 /Helvetica-Bold AF
+7200 58113 MT
+(3.1. Object-Oriented Generic OS Interfaces)SH
+10 /Helvetica AF
+8312 59539 MT
+(Several sets of C++ based object-oriented interfaces \050virtual classes/methods for multiple inheritance\051)66 W
+7200 60965 MT
+(define the semantics supplied by the system servers.)
+92 W( These)
+460 W( interfaces are: access mediation, naming,)91 W
+7200 62391 MT
+(I/O, net_control\050OSI-XTI based\051,)
+42 W( and async notification.  The various servers then support a combination)43 W
+7200 63817 MT
+(of these interfaces to do their work and an emulation library uses)
+105 W( these interfaces to emulate its target)104 W
+7200 65243 MT
+(OS.)SH
+8312 67810 MT
+(This uniformity of access makes it easy for new servers to supply additional functionality by sliding)
+28 W( into)29 W
+7200 69236 MT
+(the name-space under the known interfaces.  Then that functionality is generally available to the system)63 W
+7200 70662 MT
+(users through their pre-existing software \050for example, "ls /servers/net/tcp")
+202 W( will diplay the active TCP)203 W
+ES
+%%Page: 1 2
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(1)SH
+/Helvetica SF
+7200 7929 MT
+(sockets/connections\051.)SH
+8312 10496 MT
+(Since the interfaces are object-oriented it is simple to make refinements of them via inheritance.)SH
+8312 13063 MT
+(OS specific)
+65 W( services \050like the process-mgr\051, may supply specific interfaces within the same basic C++)64 W
+7200 14489 MT
+(virtual class model.)SH
+11 /Helvetica-Bold AF
+7200 18171 MT
+(3.2. Modular Services)SH
+10 /Helvetica AF
+8312 19597 MT
+(Different functionality is separated)
+305 W( into various servers:  configuration, authentication, pathname,)306 W
+7200 21023 MT
+(diagnostic, pipenet, ufs, process-mgr, tty, and network \050with)
+206 W( a University of Arizona xKernel protocol)205 W
+7200 22449 MT
+(engine\051. This)
+346 W( separation makes makes it simplier to develop and debug OS services.  One can also)
+34 W( add)35 W
+7200 23875 MT
+(and subtract services as needed for a given invocation of the system.  Furthermore, a bug in one service)34 W
+7200 25301 MT
+(doesn't crash or corrupt the entire system.)SH
+11 /Helvetica-Bold AF
+7200 28983 MT
+(3.3. Object Library/Code Reuse)SH
+10 /Helvetica AF
+8312 30409 MT
+(There is an extensive object library both for the support of the generic interfaces as well as)
+121 W( specific)122 W
+7200 31835 MT
+(classes to implement general server building blocks. Some of the functions that are provided)
+67 W( are: client-)66 W
+7200 33261 MT
+(server binding, name-space manipulation, mapped-files/shared-memory/page-objects,)
+167 W( IO/bulk-data and)168 W
+7200 34687 MT
+(protection. These)
+480 W( classes enable faster prototyping of a new server and ease creation)
+101 W( of servers from)100 W
+7200 36113 MT
+(foreign code.)SH
+8312 38680 MT
+(Two common)
+19 W( cases of considerable complexity are handled by the following packages of interface and)20 W
+7200 40106 MT
+(implemenation classes and macros:)SH
+/Symbol SF
+9242 41578 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Remote Method Invocation:  The remote method invocation system enables)
+153 W( clients of the)152 W
+9980 42721 MT
+(system services to simply invoke a method against an OS Item.  The appropriate method)
+63 W( is)64 W
+9980 43864 MT
+(correctly invoked on the appropriate server.  This occurs)
+43 W( with the needed authentication and)42 W
+9980 45007 MT
+(protection guarantees.)SH
+/Symbol SF
+9242 46822 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Interrupts/Signals: This)
+370 W( package enables server code to handle interrupts)
+46 W( and UNIX signals)47 W
+9980 47965 MT
+(in a consistent and relatively)
+324 W( painless fashion. The remote invocation system handles)323 W
+9980 49108 MT
+(informing a server when a)
+305 W( invocation should be interrupted. The macros and routines)306 W
+9980 50251 MT
+(provided by the)
+71 W( interrupt package can be placed in the server and emulation code at points)70 W
+9980 51394 MT
+(where they can enable interrupts to be handled punctually, correctly)
+145 W( and atomically.  This)146 W
+9980 52537 MT
+(package has been used to port previously interrupt ignorant)
+24 W( code into a server that responds)23 W
+9980 53680 MT
+(correctly to UNIX signals.  The portion of the interrupt system)
+156 W( that the servers use is not)157 W
+9980 54823 MT
+(specific to UNIX signals but works for any)
+422 W( source of interrupts \050pending invocation)421 W
+9980 55966 MT
+(cancelations\051. Most)
+308 W( of the emulation_lib side of this mechanism is either OS independent, or)16 W
+9980 57109 MT
+(easily modifiable for a different signaling semantic.)SH
+12 /Helvetica-Bold AF
+7200 60864 MT
+(4. What is the Mach-US status)SH
+11 SS 
+7200 64546 MT
+(4.1. Current functionality: What's running)SH
+10 /Symbol AF
+9242 66018 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Self Hosting: Mach-US has been used to build itself.)SH
+/Symbol SF
+9242 67833 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Test Software Development: It is)
+287 W( used as the default platform for development of test)286 W
+9980 68976 MT
+(software used to test Mach-US functionality.)SH
+/Symbol SF
+9242 70791 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Andrew Benchmark:  Runs.)SH
+ES
+%%Page: 2 3
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(2)SH
+/Symbol SF
+9242 8000 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Parallel Compile Test:)
+186 W( There)
+652 W( is a version of the standard Mach compile-test \050which just)187 W
+9980 9143 MT
+(compiles a number of small programs\051 that runs)
+235 W( many compile tests at the same time.)234 W
+9980 10286 MT
+(Mach-US runs)
+319 W( this test with heavy loads on uni-processor and shared memory multi-)320 W
+9980 11429 MT
+(processor boxes.)SH
+/Symbol SF
+9242 13244 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Day to day tools: Most of the common UNIX utilities we know)
+63 W( and love \050csh, vi, gnu-emacs,)62 W
+9980 14387 MT
+(find, ...\051 are working with out problems.)SH
+/Symbol SF
+9242 16202 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(FTP\050d\051/Telnet\050d\051/Inetd: Are used regularly.)SH
+11 /Helvetica-Bold AF
+7200 19884 MT
+(4.2. Current Reliability)SH
+10 /Helvetica AF
+8312 21310 MT
+(Positive:)SH
+/Symbol SF
+9242 22782 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Runs and works: One can log into this Unix system and do useful)
+83 W( work today.  Typing at a)84 W
+9980 23925 MT
+(cshell, one has full tty and job control, pipes)
+19 W( and signals, file access and access control.  It is)18 W
+9980 25068 MT
+(very much a real UNIX.)SH
+/Symbol SF
+9242 26883 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Stays up)
+107 W( indefinitely:  There is no noticeable system rot.  It does not crash in the night, or)108 W
+9980 28026 MT
+(during average use.)SH
+/Symbol SF
+9242 29841 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Handles heavy computation)
+142 W( stress:  The system has been stressed by various tests, self-)141 W
+9980 30984 MT
+(hosting, and general use.  It handles the stress well.)SH
+8312 33551 MT
+(Negative:)SH
+/Symbol SF
+9242 35023 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(First time applications uncover bugs:  When a large new bit of)
+38 W( software runs, it may uncover)39 W
+9980 36166 MT
+(either a bug or a small missing feature/ esoteric semantic.)SH
+/Symbol SF
+9242 37981 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Untried code paths:)
+18 W( There)
+312 W( is some code or odd interface features, that has never been used)17 W
+9980 39124 MT
+(and hence may not work.)SH
+/Symbol SF
+9242 40939 MT
+(\267)SH
+/Helvetica SF
+9980 XM
+(Different error values: Mach-US may return a different error or errno than)
+154 W( Mach2.5 would)155 W
+9980 42082 MT
+(have for the same error.)SH
+11 /Helvetica-Bold AF
+7200 45764 MT
+(4.3. Speed)SH
+10 /Helvetica AF
+8312 47190 MT
+(In general the CMU Mach single-server\050Mach-UX\051 runs %10-%20 faster than Mach-US for common)135 W
+7200 48616 MT
+(usage tests.)
+173 W( Yet)
+625 W( in a highly parallel task \050parallel compile test\051 on our multi-processor Sequent box,)174 W
+7200 50042 MT
+(Mach-US performs slightly better than Mach-UX.  It has also)
+150 W( been measured to run much faster than)149 W
+7200 51468 MT
+(Mach-UX for FTP.)SH
+8312 54035 MT
+(Because of the sophistication of our emulation lib, most syscalls \050as defined by occurrence during)
+26 W( test\051)27 W
+7200 55461 MT
+(do not make any calls to the servers, but instead are handled in the client)
+92 W( process.  By this property, it)91 W
+7200 56887 MT
+(should be possible to make Mach-US run faster than)
+38 W( the Mach-UX system in general.  Furthermore, with)39 W
+7200 58313 MT
+(the exception of remote)
+112 W( method invocation, we have yet to find the time to meter it heavily to discover)111 W
+7200 59739 MT
+(what slowdowns exist.)
+48 W( Simple)
+375 W( changes alone, driven by such metering, should make the system as fast)49 W
+7200 61165 MT
+(or faster than Mach-UX.)SH
+8312 63732 MT
+(Yet, there are other obvious places for speedup:  bundling common)
+167 W( server call sequences, shared)166 W
+7200 65158 MT
+(libraries for server text, optimizing forking and signaling, and optimizing out some)
+505 W( debugging)506 W
+7200 66584 MT
+(mechanisms.)SH
+ES
+%%Page: 3 4
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(3)SH
+12 SS 
+7200 8075 MT
+(5. Release and Distribution)SH
+10 /Helvetica AF
+8312 9501 MT
+(Mach-US is now distributed via SUP to any hosts that)
+30 W( are enabled to SUP other mach3 collections. To)29 W
+7200 10927 MT
+(get a fully functional system a site must have a Mach 3.0 license and the prerequiste 4.3BSD license.)SH
+8312 13494 MT
+(There is also a license-free release available. It is missing the sections of the ufs)
+74 W( and tty servers that)75 W
+7200 14920 MT
+(are derived from BSD code as well as parts of the libmach3 library)
+27 W( that are derived from libc.a. While this)26 W
+7200 16346 MT
+(release of the code will)
+189 W( not support UNIX applications, it is available for study or reuse. The object-)190 W
+7200 17772 MT
+(interface library, the remote invocation method and the interrupt)
+197 W( handling package including the task)196 W
+7200 19198 MT
+(master server may be of real value to designers of other object-oriented distributed systems.)SH
+8312 21765 MT
+(For details on)
+83 W( SUP'ing and running the Mach-US system see the note "Installing and Running Mach-)84 W
+7200 23191 MT
+(US" in the file us-install.{ps,doc} in this directory or FTP'able from public/doc/mach_us/us-install.{ps,doc}.)SH
+8312 25758 MT
+(--------------------------------------------)SH
+/Courier-Bold SF
+7200 27563 MT
+(Thank you for your interest,)SH
+16800 28694 MT
+(J. Mark Stevenson)SH
+16800 29825 MT
+(Senior Research Programmer)SH
+16800 30956 MT
+(jms@cs.cmu.edu)SH
+ES
+%%Page: i 5
+BS
+0 SI
+10 /Helvetica-Bold AF
+30461 4329 MT
+(i)SH
+12 SS 
+25533 8075 MT
+(Table of Contents)SH
+11 SS 
+9036 9319 MT
+(1. Introduction)SH
+53388 XM
+(0)SH
+9036 10563 MT
+(2. Quick System Architecture Overview)SH
+53388 XM
+(0)SH
+9036 11807 MT
+(3. Mach-US Flexibility)SH
+53388 XM
+(0)SH
+10 SS 
+11092 12956 MT
+(3.1. Object-Oriented Generic OS Interfaces)SH
+53444 XM
+(0)SH
+11092 14105 MT
+(3.2. Modular Services)SH
+53444 XM
+(1)SH
+11092 15254 MT
+(3.3. Object Library/Code Reuse)SH
+53444 XM
+(1)SH
+11 SS 
+9036 16498 MT
+(4. What is the Mach-US status)SH
+53388 XM
+(1)SH
+10 SS 
+11092 17647 MT
+(4.1. Current functionality: What's running)SH
+53444 XM
+(1)SH
+11092 18796 MT
+(4.2. Current Reliability)SH
+53444 XM
+(2)SH
+11092 19945 MT
+(4.3. Speed)SH
+53444 XM
+(2)SH
+11 SS 
+9036 21189 MT
+(5. Release and Distribution)SH
+53388 XM
+(3)SH
+ES
+%%Trailer
+%%Pages: 5
+%%DocumentFonts: Helvetica Helvetica-Bold Symbol Courier-Bold

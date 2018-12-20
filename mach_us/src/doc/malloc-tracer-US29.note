@@ -1,0 +1,13 @@
+(3) malloc tracer
+
+Created a new library with functions to trace memory allocation and
+detect memory leaks through malloc/free. The sources are in
+./pkg/malloc; there is a library (libmalloc.a), a shell script to
+analyze the traces (mallck) and a manual page (mallck.1).  See the man
+page for instructions about usage.
+
+This package was derived from a similar package circulated on USENET,
+but it uses the malloc/free functions from the Mach cthreads library
+instead. See the man page for details.
+
+

@@ -1,0 +1,1436 @@
+%\documentstyle[draftmode]{cmu-art}
+\documentstyle{cmu-art}
+
+\newcommand{\comment}[1]{}
+%\newcommand{\note}[1]{\marginpar{\begin{sloppypar} #1 \end{sloppypar}}}
+\newcommand{\note}[1]{}
+
+\topmargin 0in
+\textheight 9in
+\oddsidemargin 0.25in
+\evensidemargin 0.25in
+\textwidth 6in
+\makeatletter
+\def\section{\@startsection {section}{1}{\z@}{-3.5ex plus -1ex minus 
+ -.2ex}{2.3ex plus .2ex}{\large\bf}}
+\def\subsection{\@startsection{subsection}{2}{\z@}{-3.25ex plus -1ex minus 
+ -.2ex}{1.5ex plus .2ex}{\large\bf}}
+\def\subsubsection{\@startsection{subsubsection}{3}{\z@}{-3.25ex plus 
+-1ex minus -.2ex}{1.5ex plus .2ex}{\large\bf}}
+\makeatother
+
+%\pagestyle{empty}
+%\date{}
+
+\input epsf
+\special{! /@scaleunit 100 def }
+
+\title{\Large\bf Generalized Emulation Services for Mach 3.0 \\
+Overview, Experiences and Current Status
+\unmarkedfootnote{
+This research was sponsored in part by The Defense
+Advanced Research Projects Agency, Information Science and Technology
+Office, under the title ``Research on Parallel Computing'', ARPA Order
+No. 7330, issued by DARPA/CMO under Contract MDS972-90-C-0035 and in
+part by the Open Software Foundation (OSF).  The views and conclusions
+contained in this document are those of the authors and should not be
+interpreted as representing the official policies, either expressed or
+implied, of DARPA, OSF, or the U.S. government.
+}
+}
+\author{\large\it Daniel P. Julin
+\hspace{2em} Jonathan J. Chew
+\hspace{2em} J. Mark Stevenson \\
+\large\it Carnegie Mellon University \\
+\\
+\large\it Paulo Guedes
+\hspace{2em}Paul Neves\thanks{Paul Neves is currently with the Swiss
+Bank Corporation / O'Connor Assoc. L.P., Chicago IL}
+\hspace{2em} Paul Roy \\
+\large\it Open Software Foundation}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\unmarkedfootnote{
+This paper will appear in the Proceedings of the Second USENIX Mach
+Symposium, Monterey, November 1991.
+}
+
+\comment{
+\renewcommand{\thefootnote}{}
+\footnotetext{
+This research was sponsored in part by The Defense
+Advanced Research Projects Agency, Information Science and Technology
+Office, under the title ``Research on Parallel Computing'', ARPA Order
+No. 7330, issued by DARPA/CMO under Contract MDS972-90-C-0035 and in
+part by the Open Software Foundation (OSF).  The views and conclusions
+contained in this document are those of the authors and should not be
+interpreted as representing the official policies, either expressed or
+implied, of DARPA, OSF, or the U.S. government.
+
+Paul Neves is currently with the Swiss Bank Corporation / O'Connor
+Assoc. L.P., Chicago IL
+}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\protect}%\comment
+
+\begin{abstract}
+This paper reports on an ongoing project to develop a general
+understanding of the problems encountered when building emulators for
+various operating systems at the user-level on top of a Mach 3.0
+micro-kernel, and to propose a common framework to construct
+emulations for a wide range of target systems and environments. It
+presents an overview and discussion of the major techniques and
+experiments that characterize the design of the proposed system. Some
+of the relevant aspects include the combination of several independent
+servers to create a complete system, generic service interfaces
+relying on the emulation library as an interface translator, the use
+of object-oriented technology to define standard interfaces and to
+simplify the implementation of common facilities, moving portions of
+the system state and processing from the servers into a smart
+emulation library, and a few general-purpose facilities that simplify
+the generation of a complete system. A number of practical
+observations and experiences are also presented, in the context of the
+development of a prototype for the emulation of UNIX 4.3 BSD.
+\end{abstract}
+
+\section{Introduction}
+
+Defining and standardizing a powerful micro-kernel base is only the
+first step in realizing the potential of the architecture proposed
+with the overall Mach approach. The next step, and perhaps the one
+richest in design possibilities, is to learn how to construct a wide
+range of useful higher-level systems on top of this simple kernel. A
+particular class of such systems is the so-called {\em emulation
+systems}, that implement the application programming interface of an
+existing complete operating system or {\em target system} with various
+combinations of user-level components (servers and/or libraries)
+operating on top of a Mach kernel. The emulation system provides an
+{\em operating system environment} for a number of {\em emulated
+processes}, such that programs executing in these processes can
+operate as if they were running under a native implementation of the
+target system.  The main benefits expected from this overall emulation
+approach, met at various degrees by different system architectures,
+include increased modularity, portability, flexibility, security and
+extensibility, as well as simpler development, debugging and
+maintenance.
+
+With the increasing maturity of the Mach 3.0 micro-kernel, an
+ever-growing number of pure and applied research groups are now
+undertaking to design, build and study such emulation systems for a
+range of targets that span from relatively simple systems like MS-DOS
+to considerably larger systems such as
+VMS\cite{RASHID89,GOLUB90,TIS90,RASHID91}. All these systems have a
+few common characteristics: a Mach kernel, one or more servers, and an
+{\em emulation library} associated with each emulated process, that
+intercepts the system calls issued by that process and redirects them
+to the appropriate emulation services. But beyond these broad
+similarities, a number of different approaches are taken.  Some
+systems use a single monolithic server that more-or-less reproduces
+the internal structure of the native implementation of the OS being
+emulated.  Others attempt to decompose the functionality of the single
+native kernel into several independent servers. Still others follow a
+mixed approach, with one main central server and a number of auxiliary
+servers implementing specific portions of functionality that are more
+easily or usefully separated. Furthermore, some designs attempt to
+keep all emulation code strictly out of the kernel, while others
+define various controlled mechanisms to assist emulation by
+integrating some specialized modules into the protected kernel space.
+
+\comment{
+Furthermore, some systems place emphasis on reusing existing code from
+the native OS implementation, while others do not.
+\protect}%\comment
+
+In general, most efforts to develop emulation systems so far are being
+pursued in a mostly ``ad-hoc'' fashion. The precise organization of
+the interactions between the components of each emulation system is
+often largely determined by extrapolating from the architecture of the
+native implementation of the target operating system.  Moreover, each
+individual component is typically designed specifically for the
+particular system in which it is to be used, and implemented either
+entirely from scratch or by adapting code from the native OS
+implementation.  However, it appears that a number of basic design and
+organizational issues,
+\comment{
+for example the mechanisms for client-server interactions and for
+authentication, are in fact essentially identical among various
+emulation systems for different targets. Furthermore, there
+\protect}%\comment
+and even the specification of some high-level functions, are in fact
+quite similar between various emulation systems for different
+targets\note{list some examples? client-server interactions,
+authentication, I/O, access mediation,...}. In response, this
+paper reports on an ongoing effort to take a broader view of the
+problem of OS emulation in general, 
+\comment{
+, to develop a global understanding of the issues and design
+trade-offs pertinent to this area,
+\protect}%\comment
+and to propose a common framework to minimize the duplication of
+effort for the development of multiple emulation systems for the
+widest possible range of target systems and environments. This range
+may include several different ``traditional'' operating systems (UNIX,
+VMS, DOS, etc.), various specialized systems or configurations related
+to a single main target, or even completely new programming
+environments.
+
+\comment{
+the various components to be used in a particular emulation system are
+usually constructed specifically for that system, with little or no
+concern to find commonalities between different systems and to avoid
+duplication of effort between various groups and various target
+systems.  This paper reports on an ongoing effort to study the
+technology of operating system emulation, with the main focus on the
+general problem and not on any individual target system.  The goal is
+to develop a broad understanding of the various issues and design
+trade-offs involved in the design of such systems, and to propose a
+common framework to develop emulations for a range of target systems
+and environments that is as wide as possible.
+\protect}%\comment
+
+\comment{
+Emulation problem in general
+\begin{itemize}
+\item	architecture
+\item	desirable properties
+\end{itemize}
+
+Types of approaches
+\begin{itemize}
+\item	provide operating environment for native implementation
+\item	single-server
+\item	master server + auxiliaries
+\item	full multi-server
+\item	native code vs. new code
+\end{itemize}
+
+Field of study: how to do emulation well } % comment
+
+\section{Approach and Overview}
+
+The primary focus of this work is the definition and refinement of a
+general-purpose architecture for operating system emulation. This
+design is not directly tied to the emulation of any particular
+operating system, nor does it attempt to imitate the structure of any
+particular existing operating system implementation. Instead, this
+work attempts to take an original look at the problems and
+opportunities presented by a micro-kernel architecture for emulation,
+and to develop a global understanding of the pertinent design
+trade-offs.  It concentrates on identifying common issues and
+proposing general solutions or practical mechanisms to address them.
+The main challenge is to define such a general architecture so that
+the resulting systems remain practical and competitive when compared
+with traditional monolithic kernel-based architectures, particularly
+in the areas of simplicity of implementation, robustness and, of
+course, performance.
+
+\comment{
+Finally, the whole design is based on the premise that
+no emulation code can be placed in kernel space, so that the kernel
+remains completely general and provides maximum security and fault
+isolation. 
+\protect}%\comment
+
+\note{no focus on specific BSD semantics, but on the general
+principles: who cares if the signal semantics are exactly right, etc.}
+To provide a concrete environment in which to evaluate the design, we
+are implementing a prototype of a complete emulation system for UNIX
+4.3 BSD, often referred to as the ``Mach 3.0 multi-server emulation
+system''. However, this particular prototype is not intended to be the
+major or single final product of this work. Rather, it is used as a
+vehicle with which to test general ideas about the system organization
+and to experiment with particular implementations of these ideas. The
+overall development of the design proceeds through successive
+refinements of the prototype, such that each consecutive version
+constitutes a new working emulation environment with better
+characteristics than the one preceding it, while allowing all design
+decisions to be reconsidered at each stage in light of the experiences
+accumulated during this process. The ``final'' prototype after the
+design and evaluation are complete might then be used as a basis for
+further engineering work to construct a production-quality system for
+BSD emulation, or for other UNIX emulations.
+
+The overall architecture is shown on figure~\ref{fig:architecture}.
+The major elements in this architecture are the kernel, the emulated
+processes, and a collection of servers.
+
+\begin{figure}[hbt]
+\vspace{12cm}
+\special{psfile="main-architecture.ps" vscale=55 hscale=55 angle=90 hoffset=435}
+\caption{Overall System Architecture}
+\label{fig:architecture}
+\end{figure}
+
+The kernel is the ``pure'' Mach kernel, exporting only the basic Mach
+primitives. It is completely general, and contains no code specific to
+any emulation system. This decision is intended to maximize security
+and fault isolation.
+
+Each emulated process is implemented in a separate Mach task that
+contains the unmodified user code from various application programs
+and an emulation library that intercepts and implements system calls
+issued by instructions embedded in the user code.  Although both of
+these regions of code reside in the same address space, we often refer
+to the circumstances when a thread is executing user code as
+``executing in {\em user space}'', and when a thread is executing code
+in the emulation library as ``executing in {\em emulation space}''.
+The emulation library is relatively large; it manages a considerable
+portion of the process state and the emulation functions locally.
+
+The rest of the functionality of the emulation system, that is not
+handled in the emulation library itself, is distributed among a
+``federation'' of servers each operating in a separate Mach task.
+These servers are independent of each other and can be replaced or
+re-configured at will, to provide for maximum flexibility.  Examples
+of servers in the BSD prototype include file servers, a process
+manager, a TTY server, a pipe/socket server, etc.
+
+The primary mode of communication between components in the system is
+the Mach IPC facility.  Every individual UNIX abstraction (files,
+sockets, pipes, etc.) in every server is represented by a separate
+Mach port.  However, Mach shared memory may also be used in
+client-server interactions when appropriate: for example, file data is
+typically mapped directly into the address space of each client for
+fast I/O access.
+
+Finally, to maximize the potential for building different
+configurations or collections of servers, as well as to minimize
+communication overheads, the emulation libraries communicate directly
+with each server whenever needed without any central coordinating
+agent or server.  As a consequence, the state of the system is
+effectively distributed among the various servers and emulation
+libraries operating in each emulated process. 
+
+\comment{
+A complete emulation for a particular target system is normally
+composed of a target-specific emulation library, several reusable
+servers, and various specialized servers built with the help of
+reusable code fragments and design guidelines from the general-purpose
+architecture.  The major servers in the BSD prototype are a few file
+servers, a process manager, a TTY server, a pipe/socket server and a
+network server, plus a group of servers that do not directly provide
+any user-visible services, but support the operation of the other
+servers.
+\protect}%\comment
+
+The following sections elaborate on the main technical aspects of this
+organization and the basic ideas and experiments that we are
+evaluating, along with a number of our concerns and experiences with
+the design and the current prototype.
+
+\comment{
+Major goals and design considerations
+
+Approach
+\begin{itemize}
+\item	general solutions to general problems
+\item	not tied to existing implementations
+\item	experiments
+\item	successive refinements
+\item	4.3 BSD prototype with OSF
+\end{itemize}
+
+Next section: enumerate some of the main aspects, along with current
+experiences with their application.  } % comment
+
+\section{Major Design Considerations and Experiences}
+
+\subsection{Generic Service Layer}
+
+A first key idea underlying the design is the definition of two
+separate functional layers in the emulation system architecture,
+corresponding to generic and target-specific functions. Such a
+separation is suggested by the observation that the emulation library
+is the {\em only} system component that interacts directly with the
+application programs operating in the emulated environment; it
+provides the necessary indirection allowing the decoupling of the
+interface provided by the collection of servers and the application
+programming interface. Accordingly, the first layer, or {\em service
+layer}, contains a collection of components or servers that provide
+basic services, defined in such a way as to be as generic as possible,
+so that they can be useful for the emulation of several different
+high-level operating systems and/or for various configurations.  The
+second layer or {\em specialization layer} implements the aspects of
+interface or functionality that are specific to a particular emulation
+target, and operates as a translator between the emulated application
+programming interface and the generic services exported by the service
+layer.  This specialization layer is concentrated as much as possible
+in the emulation library.
+
+\comment{
+A first key idea underlying the entire design is the observation that
+the emulation library is the {\em only} system component that
+interacts directly with the application programs operating in the
+emulated environment; it provides the necessary indirection allowing
+the decoupling of the application programming interface and the
+interface provided by the collection of servers.
+\comment{
+The programming interface of the target operating system
+to be emulated need only be exported at the boundary between these
+application programs and their emulation library and not directly by
+the collection of servers. 
+\protect}%\comment
+This distinction provides a convenient opportunity to establish two
+distinct layers in the system architecture. The first layer, or
+``service layer'', contains a collection of components or servers that
+provide basic services, defined in such a way as to be as generic as
+possible, so that they can be useful for the emulation of several
+different high-level operating systems and/or for various
+configurations.  The second layer implements the aspects of interface
+or functionality that are specific to a particular emulation target,
+and operates as a translator between the emulated application
+programming interface and the generic services exported by the first
+layer.  This second layer is concentrated as much as possible in the
+emulation library.
+\protect}%\comment
+
+This approach leads to the definition of a new ``system programming
+interface'' between the emulation library and the service layer that
+is not directly visible to application programs. Its design can thus
+concentrate on issues of security, performance and most of all
+flexibility, thereby increasing the potential for making the service
+layer more generic. Issues of simplicity and ease of use of this
+interface by programmers, while still important, are nonetheless
+secondary when compared to this main consideration. Similarly, the
+modes of interactions between the components inside the service layer
+can be defined freely to maximize the flexibility, configurability and
+reusability of this layer, with little concern for the requirements of
+application programs in each specific target system.
+
+In practice, the service layer can, of course, only be partially
+generic.  Current observations from the design of our prototype
+indicate that high-level services such as file management, network
+access and local ``pipe-style'' interprocess communication, can be
+expected to be directly useful for a variety of operating system
+environments.  In addition, many ancillary services that are not
+directly exported at the application program level, such as
+authentication, location of servers (coarse-grain naming),
+configuration management, etc., can also be reused in many different
+system configurations.  On the other hand, process management remains
+largely tied to the semantics of each particular target operating
+system, mainly because of the complexity of the definitions of groups
+of emulated processes and the associated rules for access mediation.
+However, we have started and continue to develop a set of low-level
+core components that can be assembled and customized to construct
+different variations of process managers.  Finally, terminal
+management (``TTY'') has not been considered for generalization so
+far; the main difficulties in this area stem from the semantic
+richness of the line management strategies, together with the multiple
+user-controllable options ({\em ioctl()}).
+
+
+
+\subsection{Standard Object-Oriented System Interfaces}
+
+To capitalize on the idea of using generic services, most high-level
+functions are defined in terms of an object-oriented framework.  Each
+operating system service is represented by one or more abstract {\em
+OS objects} or {\em items}, exporting a well-defined set of
+operations.  Examples from the UNIX domain are files, pipes, sockets,
+tty's, etc., but in practice, each of those UNIX abstractions may, of
+course, be represented by a more neutral item, corresponding to a
+generic service that can be specialized by the emulation library for a
+given emulated environment.  Each server normally implements a large
+number of similar, but independent items.  Note that the various
+servers and items may themselves be implemented using object-oriented
+techniques; the word {\em item} is used to avoid confusion with the
+actual objects used at the implementation level.
+
+\comment{
+In particular, special attention is given to avoid imposing any
+particular subdivision of services between servers, or any specific
+server implementation.
+\protect}%\comment
+
+The operations exported by each item are categorized into several
+independent functional groups which are standard throughout the
+system. Each such group of functions is represented by a specific
+``standard'' interface.  These interfaces are important both to allow
+a degree of target-system independence at the service level, and to
+allow for the easy combination and integration of many independent
+servers or services.  The major categories of functions currently
+defined for our BSD prototype, that appear to be well-suited in both
+of these respects, are:
+\begin{description}
+
+\item[access mediation:] access to all entities ({\em items}) in the
+system is mediated through a standard facility using general-purpose
+access control lists and a uniform representation for user
+credentials.  The requirements of particular target OS'es can
+typically be handled with special initialization and interpretation of
+the standard abstractions. There is a ``secure'' variation of this
+system, targeted at the B3 level of security\cite{TIS90}.
+
+\item[naming:] all entities in the system can be named and accessed
+through a uniform name space, that also handles garbage-collection and
+access mediation for item creation. There is a common name resolution
+protocol to navigate the global name space, locate servers and locate
+individual items inside a server (e.g., files in a file server, pipes in
+a pipe server, etc.).  This name space is largely independent of
+syntactic issues for path names, such as the interpretation of
+symbolic links, UNIX ``..'', etc. It supports user-centered naming
+through the use of {\em prefix tables}\cite{WELCH86}.
+
+\item[I/O:] the I/O interface provides a neutral model for the
+identification and transfer of data. It supports both byte-level and
+record-level data access, as well as sequential and random access
+operation. Most issues of synchronization are left to the clients
+(emulation libraries) for maximum flexibility: when necessary,
+asynchronous operations are simply implemented with multiple client
+threads. In addition, various caching and buffer management policies
+can be implemented within the same I/O framework.
+
+\item [network control:] the network control operations deal with the
+creation and management of transport endpoints, to the exclusion of
+actual I/O on those endpoints.  This interface is largely inspired by
+XTI\cite{XTI90}, with some changes to facilitate sharing of endpoints
+between multiple clients, and for integration in the uniform name
+space.
+
+\item[asynchronous notifications:] this subsystem can be used by
+servers to deliver all kinds of notifications to clients, such as UNIX
+signals, VMS events, etc.
+
+\end{description}
+Each of these basic interfaces does not directly define the complete
+functionality exported by any individual item; rather, they correspond
+to lower-level services that must be combined to define the complete
+item. For example, network endpoints typically export operations from
+both the I/O and network control interface categories.
+
+Many primitives of various target operating environments can simply be
+implemented with an equivalent primitive from a standard system
+interface, or with a combination of such primitives. However, it does
+not seem either possible or practical to define all standard
+interfaces to incorporate every feature of every conceivable target
+system. Therefore, there must be exceptions that must be handled with
+more specialized system primitives.  The object-oriented framework
+provides a sound basis for the definition of such specialized
+functions, either through the addition of new specialized interfaces
+alongside the standard ones for various specialized items, or through
+the ``derivation'' of specialized interfaces from the standard ones by
+adding more complex or modified operations.  Since the definitions of
+all the items are cleanly separated from each other, such extensions
+can be made with minimal impact on the system as whole.\note{examples?}
+
+It is clear that a trade-off exists between defining standard
+interfaces that represent the union of many different target systems,
+and resorting to specialization of interfaces to handle some
+less-common or less-generalizable features.  In general, a complete
+system contains a mix of generic and specialized interfaces, as well
+as a mix of generic and specialized servers. One significant example
+of this trade-off is the definition of a collection of attributes for
+various items, that can be used to implement the UNIX {\tt stat()}
+operation: the set of all possible attributes and combinations is
+simply too large. Accordingly, we have defined a ``reasonable'' set of
+standard attributes, and rely on additional specialized operations to
+manipulate all other attributes.
+\comment{
+This problem is exacerbated by the fact that some typical UNIX
+attributes, such as the 16-bit device identifier associated with each
+file, does not map well into the larger spaces needed to handle modern
+distributed systems.
+\protect}%\comment
+\note{talk about the mapping of ns\_mgr\_id\_t into dev\t?} Some other
+examples of OS features that seem best handled through specialization
+are the combination of multiple I/O channels into one (message queues
+in UNIX System V, reading out-of-band data inline on BSD sockets),
+complex protections that do not fit the simple access control list
+scheme (AFS, UNIX ``sticky bit'' on directories), special blocking
+options for {\tt open()} on UNIX TTY's, etc.
+
+\comment{
+However, in many cases, each element of functionality that can be
+generalized increases the overall flexibility of the system and
+simplifies the task of implementing and integrating new servers.
+\protect}%\comment
+
+\note{talk about exporting standard interfaces directly to
+applications?}
+
+Regardless of the resolution of the trade-off between generalization
+and specialization, it remains the case that the generic interfaces
+are typically more complex than the corresponding ones in any
+particular target OS, since they must often support a richer set of
+features, and tend to have many service options. As mentioned earlier,
+this complexity is not visible to application programs and is thus not
+a primary problem, but it does significantly complicate the task of
+providing correct and complete server implementations of each
+interface. We have found that a good ``standard library'' of reusable
+components or building blocks is crucial to solving this problem.
+
+In addition, in order to maximize flexibility, complex operations are
+sometimes decomposed into several simpler primitives in the generic
+interfaces. For example, most UNIX file system operations are
+implemented with a combination of one or more steps to navigate
+through the system name space to locate a particular entity in the
+file system, followed by one or more additional steps directed at the
+item returned in the previous phase.  Similarly, several steps are
+typically needed to completely set-up a socket (creation,
+establishment of service options, installation in the user-visible
+name space).  This approach gives rise to two new considerations:
+
+First, whenever the state of the system or item is visible between
+individual steps of such a sequence of operations, there is a question
+as to the management and protection of that state. The design of the
+item interfaces is such that, in most cases, this does not cause
+significant difficulties. The relevant state information is either
+naturally made visible and accessible to all (e.g., item references or
+locks) or it is abstracted away through the use of options and
+information maintained by the client and provided explicitly with each
+primitive (e.g., I/O modes and current offset). In one case, however,
+we have had to introduce a special mechanism: it is possible to create
+a ``reserved entry'' in a directory to lock a name until a complete
+entry can be established.  This entry prevents another entry from
+being created with the same name, but it cannot be looked-up in the
+traditional fashion. In general, we have considered introducing a
+general-purpose locking facility to protect groups of operations, but
+have not found such a facility to be required so far.
+
+Second, and probably more importantly, the use of sequences of
+operations to perform common tasks raises legitimate performance
+concerns. This question introduces another design trade-off, to define
+a set of special ``composite operations'' to optimize selected
+functions without unduly compromising the flexibility and reusability
+of the various servers. The number of these operations must be kept
+small, because they may in principle have to be implemented by every
+server participating in every emulation system.  The prime example of
+this question is again provided by the UNIX {\em stat()} operation:
+the design defines a composite operation that combines a simple name
+resolving step to locate a file and a simple operation to retrieve a
+set of common attributes. This composite operation only covers the
+most common usage pattern in the system; if the resolving process has
+to be more complex (e.g. follow mount points or symbolic links), or if
+special attributes must be retrieved, the clients must fall back on
+the more primitive operations.
+
+To try to provide another approach to
+this problem, we are also planning to investigate extensions in the
+RPC system to allow ``batching'' or grouping of several primitive
+operations in a single high-level invocation without requiring changes
+to the simple interfaces.
+
+\comment{
+Results: 	- they work OK so far 	- need special care to
+optimize common operations 	- easy to integrate new servers - need
+a server library to simplify programming w/ complex, rich interfaces -
+need to know where to draw the line: TTY, special protection 	-
+performance concerns wrt combination of basic operations 	+ TIS
+system blends in } % comment
+
+
+\subsection{Modular Services}
+
+In order to maximize the overall flexibility, and to take advantage of
+the potential offered by the idea of reusable services, the design
+aims to define as many independent servers as possible. Those servers
+can then be used as a collection of standardized building blocks that
+can be assembled in various ways to create different systems. In
+addition to its great flexibility, such an architecture also increases
+the security and robustness of the system by isolating faulty or
+potentially malicious components into separate, protected address
+spaces. Moreover, it sometimes simplifies the implementation of some
+servers, by allowing the use of multiple instances of one server
+instead of a single more complicated server (for example, one simple
+file server for each disk partition). However, such a desire for
+maximum modularity must be balanced by a number of practical
+considerations:
+\begin{itemize}
+
+\item Interactions between servers are more expensive than
+interactions between modules inside a particular server. The
+separation of services and the corresponding interfaces must be
+carefully defined to minimize those interactions. We have tried to
+limit each basic user-level operation to require the intervention of
+only one server. There are two main examples where this principle
+creates difficulties in our prototype: the interaction between the
+process manager and the TTY server to handle job control, and the
+general problem of UNIX {\tt fork()}, where the parent emulated
+process, which is normally in contact with many servers, must arrange
+for the child process to inherit access to all those servers, along
+with a consistent client state. We have no solution to the job control
+problem. We handle the {\tt fork()} problem by defining the system
+interfaces such that a single association between a client and a
+server (i.e. a Mach port) can be transparently shared between all the
+processes in a UNIX process tree, without requiring the explicit
+intervention of each server. Note that with this scheme, from the
+perspective of a server, all the client processes that share the same
+authentication credentials are normally indistinguishable.
+
+In general, the separation between servers, and between servers and
+clients, increases the importance of distributed shared state in the
+system. Much of this difficulty is solved by appropriate selection of
+the location of each item of information throughout the system (see
+``Smart Emulation Libraries'' below). In addition, we are
+investigating the possibility of using a general-purpose facility
+(blackboard service) that allows more-or-less arbitrary data elements
+to be shared efficiently between any number of servers and clients,
+according to a schema that can be adapted to the needs of various
+specific emulations.
+
+\item The authentication logic in the system can become complicated,
+since each server is normally responsible for verifying the identity
+of its clients independently.  This policy also introduces additional
+difficulties if different authentication schemes are to be used with
+different servers and if the system must handle mutual suspicion
+between clients and arbitrary servers. The standard access control and
+naming interfaces offer basic support for these requirements by
+providing a good separation between the functions related to normal
+client access and the authentication function itself: clients may be
+arbitrarily requested to re-authenticate themselves whenever they
+start referring to any specific new item, and the particular
+authentication mechanism to be used may be different in each case.
+
+\item Although each server typically performs a different high-level
+function, there are many low-level functions that must be performed
+similarly by all servers, such as access mediation, name space
+management, buffer management, etc. Modules implementing most of these
+functions are stored in a common library used by all servers, but the
+overall run-time memory usage of the system is considerably greater
+than that of an equivalent monolithic system.  This problem could be
+partially solved by the use of a shared library to eliminate
+duplication of code segments, but it remains the case that much data
+space is essentially wasted.
+
+\end{itemize}
+
+In general, the design of the system interfaces is such that clients
+(emulation libraries) are unaware of which server is handling which
+item, so that servers can be combined or separated freely without
+requiring changes in the clients. The few elements of state that are
+logically associated with each client-server pair (mostly
+authentication information) appear to the clients as if they were
+attached to each individual item, and are transparently replicated and
+inherited among multiple items managed by the same server as
+appropriate.  However, there is also a need for a global knowledge of
+the system, to handle operations such as orderly shutdown, startup,
+administration and maintenance, etc., as well as to keep track of
+information needed by all components, such as the current time zone,
+node identity, etc.  We are currently building a {\em system
+configuration server} to keep track of all the servers in the system
+and to perform those duties.  Finally, the question of implementing
+global system usage accounting and of enforcing global resource limits
+has received little attention so far; the main difficulties in this
+area are the need for servers to identify individual client processes
+(and not just groups of processes with the same identity), and of
+efficiently collecting them among a collection of independent servers.
+
+In practice, our BSD prototype contains or will contain the following
+servers:
+\begin{description}
+
+\item[Servers that provide services directly visible to application
+programs (through emulation libraries):] ~\
+
+\begin{itemize}
+
+\item one or more file servers, handling different file systems (UFS,
+NFS, AFS, etc.) and/or physical devices.
+
+\item a terminal server managing all serial lines and implementing the
+equivalent of all UNIX tty's and pty's.
+
+\item a local IPC server or ``pipenet server'', responsible for all
+intra-node emulation-level (non-Mach) IPC: pipes, UNIX-domain sockets,
+and possibly System V queues and VMS mailboxes.
+
+\item a process management server or ``task master'', to keep track of
+all emulated process and process groups, and handle signal
+dispatching.
+
+\item one or more network servers implementing socket-like entities
+for a variety of network protocol families. This server is currently
+derived from the x-kernel from the University of
+Arizona\cite{PETERSON90}.
+
+\item a device server handling raw access to the hardware devices,
+grouped in a ``/dev'' directory.
+
+\end{itemize}
+
+\item[Servers that support the operation of the other servers:] ~\ 
+
+\begin{itemize}
+
+\item one or more {\em root name servers} tying all the other servers
+into a single hierarchical name space through a collection of {\em
+mount points}.
+
+\item a simple authentication server providing trusted
+translations between client {\em tokens} and explicit {\em
+credentials}.
+
+\item a blackboard server managing distributed state stored in pages of
+shared memory mapped in various servers and client emulation libraries.
+
+\item a configuration/admin/startup server that starts all the other
+servers and provides centralized access to global information.
+
+\item various ancillary servers not directly related to the emulation
+system, for diagnostics, network shared memory, network IPC, etc.
+
+\end{itemize}
+\end{description}
+
+\comment{
+Multiple servers a pain in the b*tt.  	- complex forking -- many
+servers 	- distributed state 	- authentication problems -
+size -- repeated code 	+ increased security } % comment
+
+
+\subsection{Client-side Processing and Smart Emulation Libraries}
+
+Independent of providing a convenient mechanism for introducing a
+separation between a generic and a target-specific layer in the
+system, the emulation library also provides an opportunity to optimize
+or simplify many client-server interactions by displacing some of the
+processing required to implement various functions from the system
+servers into the clients of these services themselves, and to
+concentrate system state in these clients. This approach is
+illustrated by three main strategies:
+\begin{itemize}
+
+\item The design of many service interfaces is such that the client
+itself is primarily responsible for managing important pieces of
+information (UNIX file descriptor table, signal mask and handlers,
+current working directory, etc.) and performing complex functions
+(pathname resolution, {\tt exec()} logic, etc.).
+
+\item Whenever a server grants access for a given item to a given
+client, a special code fragment or {\em proxy object}\cite{SHAPIRO86}
+is installed by the run-time system in the address space of that
+client to act as a local representative for the associated item. This
+proxy, which is defined and supplied by the server, provides a
+convenient level of indirection between clients and servers. Simple
+proxies just forward all client requests directly to the server via
+Mach IPC, but more complex ones can implement optimizations such as
+caching item information, or managing a window of shared memory
+containing file data or other I/O or control information. Proxies are
+currently statically linked with each emulation library, but we expect
+that they will eventually be dynamically loaded.
+
+\item The emulation library can itself operate as an active element,
+to simplify and relieve some of the burden on servers. For example,
+the UNIX emulation library currently contains an active thread to
+handle incoming asynchronous notifications and transform them into the
+appropriate UNIX signals. We also plan to use active emulation library
+threads to implement most forms of asynchronous I/O.
+
+\end{itemize}
+
+It is clear that there are limitations to the use of client-side
+processing. There are many system functions that require
+synchronization and sharing of information or resources between
+several clients.  Although there are mechanisms to handle a number of
+these problems with minimal server overhead, the need for external
+agents or servers cannot be completely eliminated. More importantly,
+the decision to place more responsibility for various system functions
+in an emulation library that is not protected from incorrect or
+malicious user programs has obvious implications in the areas of
+robustness and security. Clearly, the more code and information that
+is stored in the emulation library, the greater the risk is of
+accidental or intentional modification, which can lead to very complex
+failure modes. One interesting example of this problem is presented by
+the {\tt copyin} and {\tt copyout} routines, that are used in
+traditional UNIX systems to transfer system call arguments between
+user space and the protected system space. In our emulated system,
+these routines may verify the validity of the user buffers when they
+are invoked and even copy the associated data to separate
+emulation-space buffers, but there is no way to effectively protect
+this data from modifications at any time while it is being used inside
+the emulation library.
+
+In accordance with the goal of supporting very secure system
+implementations, our design policy is to avoid any optimization that
+can allow a malicious emulated client to gain unauthorized access to
+protected resources, or to affect the integrity of another emulated
+client in ways that would not be possible simply through the use of
+the ``published'' application programming interface being emulated.
+On the other hand, we believe that reasonable compromises are
+acceptable in trading-off performance against the robustness of
+individual clients. An incorrect user program may be allowed to
+corrupt the data structures of its own emulation library. As a result,
+it may even modify the external behavior of the whole emulated
+process, but only in ways that could also be achieved with a different
+(correct) user program.  The key element that permits the
+implementation of such a policy resides in the use of port
+capabilities for all individual items manipulated by the client: these
+can be destroyed or even swapped, but never actually forged.  However,
+this approach requires very careful design, and we know of no formal
+method to guarantee its correct application. \note{talk about set-uid
+exec()?}
+
+\comment{
+Two other schemes have also been proposed with respect to the location
+and protection of the emulation library: placing it in kernel space
+within each emulated task, and placing it in a second Mach task
+distinct from the one containing the emulated user code, so that each
+emulated process is represented by two Mach tasks. The first scheme is
+contrary to our basic design decision to avoid including any
+specialized emulation code in kernel space; it has not been considered
+further within the scope of this particular investigation.  The second
+scheme is theoretically possible, but exhibits two drawbacks that require
+special consideration.
+\protect}%\comment
+
+We have also considered a scheme in which a substantial portion of the
+emulation library is kept separate from the emulated process itself in
+a different protected Mach task, so that each emulated process is
+represented by two Mach tasks.  However, the communication bandwidth
+between an emulated process and such a separate library is per
+necessity lower than that of the fully-shared case, since at least
+some data must cross address space boundaries, and since control must
+be transferred between threads.  In addition, the cost of creating a
+new emulated process is typically significantly higher, since two Mach
+tasks must be created instead of one.  Consequently, the decision to
+use a protected or unprotected emulation library must be made by
+balancing the added performance of one against the added robustness of
+the other. We feel that in a system such as UNIX, where {\tt fork()}
+operations are frequent, the unprotected approach is probably
+preferable. On the other hand, in a system such as VMS, where process
+creation is rare, the trade-off may lean the other way. Note that this
+particular trade-off does not detract from the potential for reuse of
+server components and generic services for the emulation of different
+target systems, since emulation libraries are necessarily specific to
+each target operating system.
+
+Two other schemes have also been proposed with respect to the location
+and protection of the emulation library: placing it in kernel space
+within each emulated task, and displacing all of its function into a
+single centralized server independent of the emulated processes
+themselves. Both of these schemes are obviously feasible, but they
+contradict our basic design decisions to avoid including specialized
+emulation code in kernel space and to avoid using a centralized
+coordinating agent, respectively. Consequently, they have not been
+considered further within the scope of this particular investigation
+
+Independent of these high-level considerations, the increased
+complexity of smart emulation libraries also creates very significant
+difficulties at the technical level: increased size, expensive
+management of client state and complexity due to multi-threading.
+
+The size of a smart emulation library tends to be considerably larger
+than that of a simple library that blindly forwards all system calls to
+one or several servers. This results in an increased load on the
+virtual memory system, both in the form of normal paging activity and
+in the form of copy faults when creating new emulated processes (UNIX
+{\tt fork()}).
+
+\comment{
+In addition, while memory is naturally inherited across process
+creation, the Mach kernel does not provide for similar automatic
+inheritance of port rights. In a system where the emulation library
+communicates with many different servers, and deals with even more
+independent items each represented by a port, the explicit copy of
+those port rights may create a significant overhead. In this view, it
+is not clear at this time how much effort should be put into copying
+various ports that are simply cached in the emulation library, versus
+re-acquiring some of them later when appropriate.
+\protect}%\comment
+
+Smart emulation libraries also tend to contain significant amounts of
+state that must be inherited or re-created during process creation.
+Simple memory can be naturally inherited through the services of the
+Mach kernel, but other elements of state cannot, such as active
+threads and port capabilities. This introduces potentially significant
+overheads.  In particular, it is clear that a trade-off exists with
+respect to inheritance of information simply cached in the emulation
+library, versus simply re-creating this cached information when and if
+needed.  This trade-off has not yet been satisfactorily explored.
+
+Finally, smart emulation libraries naturally need to be
+multi-threaded, both to support multiple user threads issuing system
+calls, and to support active threads internal to the emulation
+library. We have found that the existing implementations of the Mach
+cthreads library are poorly adapted to operate inside an emulation
+library. We have had to introduce modifications to handle interactions
+with threads in the emulated process itself, for correct transfer of
+thread state at {\tt fork()} time (clean-up stacks and cthread data
+structures), and to implement an interrupt handling facility for
+signal delivery.  Even with these extensions, multi-threaded emulation
+libraries are still difficult to write.  Furthermore, it does not
+appear that newer implementations of user-level threads libraries will
+reduce the magnitude of this problem. In particular, the current trend
+towards mixing coroutines and kernel-level threads clearly complicates
+matters, since the emulation system must often still deal with ``raw''
+kernel threads for Mach exceptions and for interrupts.
+
+\comment{
+
+\subsection{Distributed Shared State}
+
+\note{this whole section is being eliminated to make room, since it is
+not yet implemented anyway}
+
+\newpage
+
+A natural result of our approach of concentrating information on the
+client-side of client-server pairs and of separating functions between
+many servers, is the creation of many elements of system state that
+must be efficiently shared between several components in different
+address spaces and manipulated with appropriate synchronization
+guarantees. Examples include:
+\begin{itemize}
+
+\item UNIX file descriptor state, sometimes shared between multiple
+UNIX processes
+
+\item file size and control information, shared between a file server
+and potentially many clients that map the file data into their
+emulation library
+
+\item information maintained by various servers and cached in the
+emulation library, such as the user and process identifiers
+
+\end{itemize}
+The most direct approach to deal with this issue is to integrate
+support for each specific data sharing requirement rigidly in the
+design of each concerned server or client, possibly using various
+pages of shared memory to maximize communication performance. A
+variation of this approach would be to construct a server that is
+specific to the operating system being emulated, to act as a
+centralized repository for all shared information in this system.
+Instead, in order to try to minimize the physical memory requirements
+on the system, as well as to minimize the overall complexity of the
+system and simplify the integration of new components, we are
+currently developing a general-purpose facility that can address such
+sharing problems in many different applications.
+
+The model for the shared state management facility is based upon the
+abstractions of {\em shared records} and {\em blackboards}, managed by
+a central {\em blackboard server}. Each element of data in the system
+that must potentially be shared by several components is represented
+as a separate abstract record allocated by the blackboard server and
+uniquely identified throughout the system. Each client of the sharing
+facility is associated with a private blackboard item in the
+blackboard server, that holds the collection of shared records
+accessible to this client. The data stored in those shared records can
+be manipulated by each client through simple operations exported by
+the proxy for the blackboard. Note that in general, by the very nature
+of a shared state facility, a single shared record may be accessible
+through many client blackboards. Clients use an explicit {\em attach}
+primitive to gain access to specific records in the context of their
+own blackboard.
+
+The preferred implementation of this facility is for each blackboard
+to correspond to a region of memory shared between one client and the
+blackboard server, storing a copy of all the relevant shared records.
+The blackboard server is then responsible for keeping track of client
+accesses and for copying the most up-to-date information into each
+blackboard as appropriate. When this full shared-memory implementation
+is not possible, the blackboard facility can also be implemented with
+other caching schemes at the client level, or even with no caching at
+all, by forcing each client to communicate with the blackboard server
+via RPC for each data access.
+
+This shared state facility is still under development, and its
+usefulness cannot be evaluated yet. We hope that it will eventually
+evolve to accommodate all synchronization and locking requirements in
+the emulation system, in a way similar to the VMS {\em lock
+server}\cite{DEC88B}. We expect that the primary difficulty introduced
+by its use will be the overhead of allocating new shared records, and
+the occasional need to contact the blackboard server in addition to
+any other specific server when ``attaching'' records.
+
+\protect}%\comment
+
+\subsection{Object-oriented Service Library}
+
+\comment{
+In a modular system such as the one considered here, there are many
+examples of functions and problems that must be addressed in several
+different servers, or in several specialized versions of the same
+service. To maximize the potential for extensibility and ease of
+modification, as well as to reduce the overall complexity and avoid
+code duplication, the system includes a growing library of
+``standard'' low-level mechanisms, represented by a collection of
+reusable code fragments or objects.  The main areas currently covered
+by this common library are:
+\protect}%\comment
+
+In order to avoid unnecessary duplication of code, the system design
+includes a common library implementing many functions that must be
+provided in several different servers, or in several specialized
+versions of the same service. Such a library, through its modularity,
+greatly contributes to the extensibility and ease of modification of
+the system and also reduces the overall complexity of the entire
+system implementation.  Our prototype contains a growing collection of
+reusable code fragments or objects; the main areas currently covered
+are:
+\begin{itemize}
+
+\item access mediation for arbitrary items (access control lists, user
+credentials, authentication, etc.).
+
+\item simple building blocks to construct a name space collecting all
+the items managed by one server, and to handle item creation and
+deallocation when appropriate.
+
+\item mapped-file access, including pagers and appropriate proxy
+objects.
+
+\item sequential streams of data following the standard I/O interface
+(connections, buffering, data transfer across address spaces, etc.).
+
+\item simple pathname resolution from the client side, including a
+user-controlled prefix table and caching of mount points and symbolic
+links.
+
+\item a layer of code to export the standard I/O and naming interfaces
+from a server based internally on {\em vnodes}\cite{KLEIMAN86}.
+
+\end{itemize}
+Considerable effort has been put in the design and implementation of
+this common library, and we have been served very well by this
+approach in practice.  Some servers (root name server, pipenet server)
+are constructed almost exclusively from modules in this library.  The
+only non-common code in these servers is a small {\em main} procedure
+for startup and a few lines of code to specialize the operation of
+various modules in the library and supply some operating parameters.
+This specialization is normally realized through derivation in the
+class hierarchy defined by the library.  Other servers (UFS, NFS, TTY,
+network) contain a large body of ``internal'' specialized code, often
+inherited from other sources. They have been integrated in the system
+in a matter of hours simply by linking them with an ``upper-layer'' of
+code from the common library.
+
+\comment{
+As a minor side point, it also turns out that this common library is
+sometimes slowing down the development of our prototype, because
+changes to common facilities or interfaces must be propagated to all
+servers, thereby eliminating much potential for incremental
+re-compilation. We feel
+\protect}%\comment
+
+Several of these modules were first developed in earlier versions of
+our prototype using a straight ``C'' coding style, but it became
+quickly evident that this style was poorly adapted to writing the kind
+of polymorphic, reusable code desired for such a library. The library
+has since been converted to use object-oriented technology (first
+using MachObjects\cite{JULIN89}, then C++), augmented by a
+powerful remote procedure call package closely integrated with the
+object-oriented language itself (see below). We have found that this
+switch in implementation style has considerably simplified the task of
+writing new modules and integrating them with the rest of the system.
+Several observations can be made with respect to the use of
+object-oriented technology in this context\cite{GUEDES91}
+
+First, multiple-inheritance significantly simplifies the design of the
+library. We use it in several instances for the combination of
+independent interfaces for the definition of items, as suggested
+above. We also use it routinely for the combination of independent
+pieces of functionality for the implementation of items, for example
+to add a protection module or a buffer management module to an item
+representing a file or socket.  In addition, in the C++ implementation
+of the library, we use multiple inheritance to allow classes
+implementing various functions in the system to inherit both from base
+classes in a normal ``implementation'' hierarchy, and from classes in
+an abstract hierarchy representing the standard system interfaces
+(used for defining the same interfaces on the client- and
+server-side).
+
+Second, we need some form of runtime type checking in the language.
+Although static type checking clearly offers important benefits in
+terms of program reliability and maintenance, it cannot be used in all
+situations, specifically for the implementation of method invocations
+across a client-server boundary. When first resolving a name to obtain
+a reference to an item in our standard naming subsystem, as with the
+UNIX {\tt open()} primitive, only the name of that item is known. The
+actual type and the exact collection of operations exported by that
+item can only be determined at run-time. This information must then be
+explicitly obtained by the client upon acquiring or using a proxy for
+that item.  The total number of defined interfaces makes it very
+impractical to define a single exported type that exports the union of
+all possible operations.  Further, if we allow for maximum flexibility
+and the definition and integration of new servers and interfaces over
+the life the system, even the complete set of possible operations may
+not be known in advance.  With the MachObjects system, this problem is
+moot since all method invocations are checked at run-time. In the C++
+system, we use static type checking wherever possible, coupled with a
+package similar to the NIH class library\cite{GORLEN90} to provide the
+required extended functionality for run-time type checking.
+
+\note{put in a request for run-time info provided by the compiler?}
+Lastly, it is very useful to be able to manipulate classes and methods
+as first-class abstractions in the language. The proxy mechanism,
+which is based on the run-time specification of a class to instantiate
+in a client, obviously creates a need to refer to classes explicitly
+and directly. In addition, the RPC package integrated with the
+object-oriented programming environment manipulates method references
+directly at run-time to transparently forward some invocations without
+the need to generate explicit stubs, thereby greatly enhancing the
+flexibility of this system and speeding-up the design and prototyping
+process. Method references are also manipulated by the access
+mediation subsystem, which uses a simple table lookup to determine if
+a given method invocation is to be allowed for a given caller and
+object combination.  As is the case for run-time type checking, these
+features are handled trivially in MachObjects, and with the help of an
+extension package in C++.
+
+\note{talk about MachObjects invocation overheads and object creation
+overheads?}
+
+
+\subsection{Hiding Complexity in the Tools}
+
+In addition to the common library mentioned above, the design also
+attempts to reduce the complexity directly visible to implementors by
+aggressively hiding functionality in a collection of powerful run-time
+and library tools. These tools can be used largely as opaque ``black
+boxes''; they create another degree of fine-grain layering in the
+overall system design.  The design of many such complicated tools
+could easily constitute a research project in itself, considerably
+beyond the scope of our current goals.  Accordingly, our focus is not
+on developing ideal general-purpose solutions in this area, but on
+solving the specific problems and issues raised in our design, and
+only as we encounter them. Our success with this approach so far
+encourages us to continue in this direction.
+
+A first example of this approach is the use of the extended cthreads
+library described above, that takes care of many of the difficulties
+inherent in the implementation of emulation libraries. The main
+complexity introduced at this level is a facility used to interrupt
+pending operations in the emulation library. This facility must be
+invoked whenever the reception of a UNIX signal must cause the
+execution of a system call to be prematurely aborted. It includes a
+relatively general exception handling mechanism, and it interacts with
+the RPC system to propagate such interruptions to various servers as
+appropriate. Another example is the set of extensions to the
+object-oriented run-time system described in the previous section.
+
+More importantly, the last and probably most far-reaching example is a
+sophisticated remote procedure call package integrated with the
+object-oriented language used for the implementation of the prototype.
+This RPC package is the key to many of the features mentioned in the
+rest of this overview. It transparently converts local method
+invocations into RPC's as appropriate, and makes it very easy to
+define new RPC's. It handles interruptions of arbitrary RPC's through
+a special message protocol that is implemented in all servers.  It
+automatically takes care of transferring item references across
+address spaces and of instantiating the correct proxy objects.
+Finally, it completely hides all details of the management of ports
+and Mach IPC semantics from its users, including taking care of
+automatic garbage-collection of item references using the
+``no-more-senders'' facility of the Mach IPC system.\note{we could say
+more about no-more-senders, but this is not really the place}
+
+Not surprisingly, this RPC package turns out to be very complex, and
+to be a significant factor for the performance of the prototype.
+However, we feel that most of this complexity is essentially
+unavoidable, and would simply have to be distributed through other
+parts of the system if it was not concentrated in the RPC module.
+Therefore, we plan to continue to extend the RPC package in directions
+that we think will improve the performance and flexibility of the
+overall system. Some proposed experiments include automatic
+initialization of complex proxies, the use of polymorphic abstract
+data types as arguments for certain calls, and batching of operations
+to reduce the total number of messages used in the system.
+
+
+\section{Status and Evaluation}
+
+The main observation to be made at this stage is that the overall
+architecture appears to be sound and effective. The current system
+prototype for BSD does work with completely modular services and has
+already reached a relatively high level of functionality and practical
+utility. The flexible technology for interface definition is adequate
+and we expect that it will continue to be successful as we refine that
+prototype.  The framework for integrating servers into the system,
+centered on the naming and access mediation components, has proven to
+be extremely useful.  Finally, the use of modular servers has been and
+continues to be invaluable in helping with the incremental
+construction and debugging of the system: we routinely restart or
+replace individual servers while the whole system is operating, and
+debug them ``on-the-spot'' using the Mach task and thread control
+facilities.
+
+The BSD prototype currently implements all the essential functionality
+for {\tt fork()} and {\tt exec()}, general file access services,
+signal and process management (including interrupted system calls),
+TTY management, pipes, and UNIX-domain and IP/UDP sockets. In
+practice, the system can be started or ``booted'' on top of the {\em
+POE} low-level emulator, run an emulated login process, start a shell
+and run various editors and common UNIX commands, up to and including
+compilation of programs. Still missing are TCP sockets, raw device
+access, and a number of more specialized or less frequently used
+features in the above subsystems, for example asynchronous I/O,
+set-uid {\tt exec()}, sharing of file descriptors between processes,
+resource control, etc.  We continue to add new features in these areas
+and to integrate new facilities.  The major implementation activity at
+the present time is a conversion to use C++ as the standard
+implementation language.
+
+We have not made any significant efforts to improve the robustness and
+performance of the prototype until its level of functionality was
+sufficient to make such efforts meaningful.  We feel that this point
+has now been reached, and detailed evaluation and tuning should begin
+in earnest as soon as the conversion to C++ is complete.  A first
+short-term objective is to make the prototype self-hosting.
+
+\comment{
+With respect to going beyond this level, it is important to remember
+that we are essentially re-implementing a complete operating system
+from scratch.  The ``progress curve'' is clearly asymptotic, and
+further enhancements in functionality are becoming harder and harder
+to realize and to measure.  We feel however that the flexible
+techniques presented here provide us with a good set of tools to
+continue along this path.
+\protect}%\comment
+
+The degree to which various elements of this system are reusable is
+still a matter of discussion, but early observations are encouraging.
+We feel that the design of many servers and high-level components,
+coupled with the generic service interfaces, has very good potential
+for flexibility and reusability under various operating conditions. In
+addition, the smaller-level reusability of the pieces of the common
+service library has already been largely demonstrated; we believe that
+the current prototype could not have been built without it. A
+desirable further step in this direction should be the construction of
+a similar library for the implementation of emulation libraries.
+
+On the negative side, the size and complexity of the current prototype
+are clearly causes for concern. The memory usage of the multiple
+servers is large, and the load that they impose on the machine is
+important.  Re-compilation of the prototype is slow, due to the volume
+of code involved. Several of our low-level mechanisms and sub-systems
+are very large and seem overly complicated, for example the facility
+to handle interrupted system calls and all the logic around UNIX {\tt
+fork()}.  Hopefully, the magnitude of these problems will decrease as
+the design and its implementation become more mature, but it is not
+clear if they will ever be completely resolved.
+
+Finally, we cannot yet draw conclusions on the experiment with the use
+of ``smart'' emulation libraries in general or the degree to which
+this general approach can and should be applied.  There are practical
+examples of other systems where this approach has been
+useful\cite{GOLUB90}, but none that goes as far as the present design.
+The difficulties in terms of complexity, robustness and increased {\em
+fork()} overhead cannot be ignored. We will reserve final judgment on
+this experiment until more experience has been gained with
+implementing and using systems that rely on this aspect of the
+architecture.
+
+
+\section{Conclusion}
+
+We are conducting experiments and proposing a number of techniques
+with the goals of helping the development of emulation systems, and of
+minimizing the duplication of effort for the implementation of several
+independent emulations.  There is no question that achieving these
+goals is highly desirable; the present effort, although still
+incomplete, shows that there are many opportunities to make
+significant progress in this direction.  Furthermore, several of the
+proposed general-purpose components or mechanisms constitute
+significant practical steps toward improving the current state of the
+technology, and the results from our BSD prototype encourage us to
+continue this effort.  We expect that the experiences from this
+investigation, combined with the lessons from other efforts in the
+same area, will eventually lead to the development of a complete
+practical framework for the implementation of many emulators, and
+maybe to the emergence of a new software industry for the production
+of replaceable, modular components for Mach-based systems.
+
+\comment{
+This work is investigative in nature. Its success will be judged by
+the value of the lessons and experiences that it contributes to the
+field of operating system emulation in general, by how many useful
+technologies we can eventually develop to help with future systems,
+and by how well these future systems perform in practice.  It is still
+too early to make a complete evaluation, but we have observed that
+many of the proposed general-purpose components or mechanisms appear
+to work well in the BSD prototype.
+\protect}%\comment
+
+
+\section*{Acknowledgments}
+
+Many people at CMU and at the Research Institute of OSF have
+participated in various stages of the design of the system and the
+implementation of successive versions of the BSD prototype. Beside the
+authors, they are: Robert Baron, Alessandro Forin, Jeffrey Heller,
+Michael Jones, Keith Loepere, Douglas Orr, Richard Rashid, Franklin
+Reynolds and Richard Sanzi. In addition, the whole Trusted-Mach team
+at Trusted Information Systems has often contributed many valuable
+insights.
+
+%\bibliographystyle{plain}
+%\bibliography{dpj}
+
+\begin{thebibliography}{10}
+
+\bibitem{GOLUB90}
+David Golub, Randall Dean, Alessandro Forin, and Richard Rashid.
+\newblock {Unix} as an application program.
+\newblock In {\em Proceedings of the 1990 Summer Usenix}. Usenix, June 1990.
+
+\bibitem{GORLEN90}
+Keith~E. Gorlen, Sanford~M. Orlow, and Perry~S. Plexico.
+\newblock {\em Data Abstraction and Object-Oriented Programming in {C++}}.
+\newblock John Wiley and Sons, 1990.
+
+\bibitem{GUEDES91}
+Paulo Guedes and Daniel~P. Julin.
+\newblock Object-oriented interfaces in the {Mach 3.0} multi-server system.
+\newblock To appear in the proceedings of the Second International Workshop on
+  Object-Orientation in Operating Systems, Palo Alto, 1991.
+
+\bibitem{JULIN89}
+Daniel~P. Julin and Richard~F. Rashid.
+\newblock {MachObjects}.
+\newblock Internal document, Mach Project, Carnegie Mellon University, 1989.
+
+\bibitem{KLEIMAN86}
+S.~R. Kleiman.
+\newblock {V}nodes: An architecture for multiple file system types in {S}un
+  {UNIX}.
+\newblock In {\em Proceedings of the 1986 summer Usenix}, pages 238--247.
+  Usenix, 1986.
+
+\bibitem{XTI90}
+Open Software Foundation.
+\newblock {\em {OSF/1} Network Programmer's Guide}, 1990.
+
+\bibitem{PETERSON90}
+Larry~L. Peterson, Norman~C. Hutchinson, Sean~W. O`Malley, and Herman~C. Rao.
+\newblock The {\it x}-{K}ernel: A platform for accessing internet resources.
+\newblock {\em IEEE Computer}, 23(5):23--33, May 1990.
+
+\bibitem{RASHID89}
+Richard Rashid, Robert Baron, Alessandro Forin, David Golub, Michael Jones,
+  Daniel Julin, Douglas Orr, and Richard Sanzi.
+\newblock Mach: A foundation for open systems.
+\newblock In {\em Proceedings of the Second Workshop on Workstation Operating
+  Systems}, pages 109--113. IEEE Computer Society, September 1989.
+
+\bibitem{RASHID91}
+Richard Rashid, Gerald Malan, David Golub, and Robert Baron.
+\newblock {DOS} as a {Mach 3.0} application.
+\newblock To appear in the proceedings of the Second USENIX Mach Symposium,
+  November 1991.
+
+\bibitem{SHAPIRO86}
+Marc Shapiro.
+\newblock Structure and encapsulation in distributed computing systems: the
+  {P}roxy principle.
+\newblock In {\em The 6th International Conference on Distributed Computing
+  Systems}, Boston ({USA}), May 1986.
+
+\bibitem{TIS90}
+{Trusted Information Systems, Inc.}
+\newblock Trusted {M}ach system architecture.
+\newblock Internal Report, April 1990.
+
+\bibitem{WELCH86}
+B.~Welch and J.~Ousterhout.
+\newblock Prefix tables: A simple mechanism for locating files in a distributed
+  system.
+\newblock In {\em Proceedings of the 6th International Conference on
+  Distributed Computing Systems}, pages 184--189. IEEE, May 1986.
+
+\end{thebibliography}
+
+\end{document}

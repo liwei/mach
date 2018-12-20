@@ -1,0 +1,2 @@
+mach3.release release=i386free host=x29.mach.cs.cmu.edu hostbase=/usr2 base=/afs/cs/project/mach/public/src prefix=release/src use-rel-suffix 
+mach3.release release=mipsfree host=x29.mach.cs.cmu.edu hostbase=/usr2 base=/afs/cs/project/mach/public/src prefix=release/src use-rel-suffix 

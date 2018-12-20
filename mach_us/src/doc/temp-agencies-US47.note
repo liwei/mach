@@ -1,0 +1,39 @@
+(5.1) Temporary agencies (from jms)
+
+  tmp_prop:
+    By using the "DECLARE_TMP_PROP" and "DEFINE_TMP_PROP" macros, it is
+    now possible to make any object a "temporary" object.  A temporary object
+    is and object which derives (directly or indirectly) from vol_agency
+    and is expected to "disappear" from the directory when it is "done".
+    "Disappearing" even includes invocation of the destructor(s) of
+    the tmp object.
+
+    A temporary object is "done" when there are no remaining agents or
+    stronglinks to it and the "ns_tmp_last_chance" check succeeds.  The last
+    chance check is supplied to give the individual temporary object
+    a chance to hang around longer.  Unless overidden by the tmp object,
+    ns_tmp_last_chance just returns ERR_SUCCESS.  For a "tmp_dir" the
+    object specific version only returns ERR_SUCCESS of the directory is
+    empty.
+
+    The tmp_prop is actually made up of the tmp_prop class contain methods
+    which correspond to a number of vol_agency methods, and macros do make
+    a tmp_prop a member of a tmp object and override the vol_agency methods
+    with calls into the tmp_prop.
+
+    If there are no special "last chance" semantics, and the inheritance
+    hierarchy permits,  it is generally better to derive from the simple
+    tmp object "tmp_agency".  It uses the tmp_prop with all its defaults
+    and is derived from by tmp objects like pipes and sockets.
+
+    For more info on how to use tmp_props, examine the tmp_agency and
+    tmp_dir objects.
+
+  tmp_dir:
+    A tmp_dir is a directory which disappears when it is empty, has no agents,
+    and no strong links to it.  It is useful to create more complex
+    directory objects with this property. For example, a task_group is a
+    tmp_dir.  When there are no longer any tasks in a task_group
+    (task entries in the task_group directory) then the task group
+    automatically disappears.
+

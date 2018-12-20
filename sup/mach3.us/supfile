@@ -1,0 +1,1 @@
+mach3.us release=licensefree host=x29.mach.cs.cmu.edu hostbase=/usr2 base=/afs/cs/project/mach/public/src prefix=mach_us/src crypt=testing

@@ -1,0 +1,10 @@
+#!/bin/csh
+(cd ../mkernel/src; tar cvf - -e ./bootstrap/mips -e ./bootstrap/i386 -e ./bootstrap/m88k -e ./kernel/mips -e ./kernel/i386at -e ./kernel/i386 -e  ./kernel/i386ps2 -e ./kernel/i386ipsc -e ./kernel/ipsc -e ./kernel/intel -e ./kernel/sqtconf -e ./kernel/sqtmbad -e ./kernel/sqtsec -e ./kernel/sqtzdc  -e ./kernel/sqt -e ./kernel/luna88k -e ./kernel/luna88kdev -e ./kernel/luna88kif  -e ./kernel/motorola -e ./kernel/m88k -e ./kernel/mach/mips  -e ./kernel/mach/m88k -e ./kernel/mach/i386  . | compress > ../default.tar.new)
+
+(cd ../mkernel/src; tar cvf  - bootstrap/mips kernel/{mips,mach/mips} | compress > ../mips.tar.new)
+
+(cd ../mkernel/src; tar cvf  - bootstrap/i386 kernel/{i386,i386ps2,i386at,i386ipsc,ipsc,intel,sqt,sqtconf,sqtmbad,sqtsec,sqtzdc,mach/i386} | compress > ../i386.tar.new)
+
+(cd ../mkernel/src; tar cvf - bootstrap/m88k kernel/{m88k,luna88k,luna88kdev,luna88kif,motorola,mach/m88k} | compress > ../luna88k.tar.new)
+echo -n `cat ../mkernel/src/kernel/conf/version.variant` > ../mkernel/VERSION
+echo  `cat ../mkernel/src/kernel/conf/version.edit` >> ../mkernel/VERSION

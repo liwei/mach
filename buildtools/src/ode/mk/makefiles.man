@@ -1,0 +1,870 @@
+.ds f. makefiles.5
+.TH "Makefiles" 5 "11/6/91"
+.\"
+.\" Copyright (c) 1990, 1991, 1992  
+.\" Open Software Foundation, Inc. 
+.\"  
+.\" Permission is hereby granted to use, copy, modify and freely distribute 
+.\" the software in this file and its documentation for any purpose without 
+.\" fee, provided that the above copyright notice appears in all copies and 
+.\" that both the copyright notice and this permission notice appear in 
+.\" supporting documentation.  Further, provided that the name of Open 
+.\" Software Foundation, Inc. ("OSF") not be used in advertising or 
+.\" publicity pertaining to distribution of the software without prior 
+.\" written permission from OSF.  OSF makes no representations about the 
+.\" suitability of this software for any purpose.  It is provided "as is" 
+.\" without express or implied warranty. 
+.\"
+.\"
+.\" ODE 2.1.1
+.\"
+.\" HISTORY
+.\" $Log:	makefiles.man,v $
+.\"Revision 2.2  93/03/20  00:32:56  mrt
+.\"	 	First checkin.
+.\"	[93/03/20            mrt]
+.\"
+.SH NAME
+Makefiles - Contents of ODE Makefiles.
+.SH INTRODUCTION
+The ODE build environment is composed of two types of makefiles.  They
+are component makefiles and common makefiles.  Each component makefile
+contains variable definitions.  There is a component makefile in each
+directory that has items to be built and/or installed.  Each component
+makefile has an include statement which reads the common makefiles.
+The common makefiles contain all the rules used to compile and process
+files in the ODE environment.
+.P
+This manual page describes the standard ODE build targets and how to
+adjust the build environment to meet specific build requirements.
+Project specific changes and additions to the standard ODE environment
+are detailed in the ODE project supplement document for the specific
+project.
+.SH DESCRIPTION
+A component Makefile can look nearly empty.  This is because all of
+the build rules are located in the common Makefiles.  An example of an
+ODE makefile to build the program hello.c would look like
+this:variables:
+.in 5
+ PROGRAMS = hello
+.br
+ ILIST = ${PROGRAMS}
+.br
+ IDIR = /usr/bin/
+.br
+ \.include <${RULES_MK}>
+.in
+.P
+From this small bit of information, however, ODE knows how to build
+hello because the rules in the common makefiles.  ODE knows that how
+to take various types of sources and turn them into programs.  The
+definition of PROGRAMS=hello causes make to look for a hello.c and
+then, when it finds it, to run the c compiler to produce the hello
+executable.  PROGRAMS could just as well be a list of programs to be
+built, each program name separated by a space.
+.P
+ILIST and IDIR tell make what to install and where to install it.  For
+example, the only file to be installed is \fBhello\fR, and it is to
+reside in /usr/bin.  The owner, group, and mode are not listed so the
+defaults in common makefiles be used.  ODE has a standard common
+makefile structure, which is pointed to by the environment variable
+RULES_MK.  
+.P
+From looking at the few variables that are defined in the component
+makefiles it is easy to determine what is getting built and installed.
+Once familiar with the variables ODE uses in its Makefiles (described
+below), makefiles will be easy to write and maintain because there is
+no need to worry about the actual rules.  Having common rules defined
+for the whole project also result in a higher degree on maintainability
+when altering the build process on a global scale.
+
+Most ODE make variables can be used in two forms, as is and with the 
+name of file in front, for example, \fBLIBS\fR can be set for all the
+\fBPROGRAMS\fR in the Makefile with a line like:
+.P
+.ti 5
+LIBS = -lm
+.P
+or for just one file by using:
+.P
+.ti 5
+file_LIBS = -lm
+.SH TARGETS AND PASSES
+
+The ODE build environment uses multiple passes to order builds.  Each
+pass is intended to traverse the sources and build specific parts.
+Passes are used to export include files, build and export programs needed
+during the building process,  compile and export libraries,
+build the remainder of the commands, and to perform installation.
+Ordering builds is necessary because header files must be put in place
+before libraries can be built and libraries must be in place before
+commands are built.
+.P
+A pass descends some or all of the source tree, checking each of the
+Makefiles in its route for targets associated with the current pass.
+The built-in passes include:
+.IP EXPINC
+Builds and exports public include files to the export directory.
+.IP EXPBIN
+Builds and exports tools needed for the build and installation
+process.
+.IP EXPLIB
+Builds and exports public libraries to the export directory.
+.IP STANDARD
+The STANDARD pass builds the remaining programs, scripts, etc, that
+were not built in the export passes.
+
+Specific projects may define other passes as needed.
+
+Each target runs one or more passes.  For example export_all will run
+all the export passes, exporting all the include files, binaries and
+libraries, traversing only the directories that are listed for those
+two pasess.  The following targets are standard:
+.IP export_all
+build and export all the include files and libraries.
+.IP comp_all
+Runs in the STANDARD pass and builds everything that is not build
+during export_all
+.IP build_all
+This is the equivalent of building export_all followed by comp_all.
+It runs all the passes and builds all the targets in each pass.
+.IP install_all
+Runs in the STANDARD pass and installs all items listed in ILIST to a
+specified location.
+.IP clobber_all, clean_all, lint_all
+These all run in the STANDARD pass and perform the respective functions.
+.P
+All of the above targets in the form of action_all can be generalized
+to action_file also.  So an install_awk would install just the program
+awk.
+.SH STANDARD VARIABLES
+This section discusses the uses of the standard variables found
+in the ODE Makefiles.  Individual projects may change or add this
+list.  Consult the project specific documentation for more information.
+.P
+.IP SUBDIRS
+This variable lists the sub-directories to descend into and run
+another make in.  Typically, the list would not include
+machine-dependent directories.
+.IP EXPINC_SUBDIRS
+This version of \fBSUBDIRS\fR lists the sub-directories to descend when
+exporting include files.
+.IP EXPBIN_SUBDIRS
+This version of \fBSUBDIRS\fR lists the sub-directories to descend when
+exporting tools needed during the rest of the build passes.
+.IP EXPLIB_SUBDIRS
+This version of \fBSUBDIRS\fR lists the sub-directories to descend when
+exporting libraries.
+.IP VPATH
+This variable provides additional paths in which to search for files.
+It can be used to locate dependencies not found in the current
+directory.  The items in this variable are separated by colons.
+.IP PROGRAMS
+This variable lists the files which need to be compiled.
+.IP LIBRARIES
+This variable lists the libraries which need to be built.
+.IP OFILES
+This variable specifies the object files for programs and libraries.
+If not specified, the name of the program or library will be used with
+.o appended.  For example hello_OFILES = hello.o hello_prep.o would
+cause both object files to get compiled and linked into the hello program.
+.IP OBJECTS
+OBJECTS is used to specify \fB.o\fR files that are to be
+released as object files, for example crt0.o.
+.IP SCRIPTS
+SCRIPTS should be used to list the .sh and .csh scripts to be built.
+.IP OTHERS
+This variable lists files to be built which do not fall into
+another categories.  These file are built by make but the common
+makefiles do not have any rules on how to build OTHERS.  To build
+others, specific make rules will have to be specified in the component
+makefiles.
+.IP MANPAGES
+This variable lists the man pages to be built.
+It should be set in all Makefiles that define MANSECTION.
+The list of man pages should not contain the filename suffix:
+for example, "MANPAGES=bci bcreate" instead of "MANPAGES=bci.1
+bcreate.1".
+.IP MANSECTION
+This variable should be set in all Makefiles with man page targets.
+Its value should be a digit describing the man page section for all
+the files.
+.IP MSGHDRS
+This variable lists all the message headers to be built.
+.IP CATFILES
+This variable lists all the catalog files to be built.
+.IP INCFLAGS
+This variable specifies which directories should be searched for
+header files by the c compiler.  It format is INCFLAGS = -I<path>
+-I<path>. This variable is expanded relative to the object directory,
+the source directory and any master source directories.
+.IP LIBFLAGS
+This variable specifies which directories should be searched for
+libraries by the c compiler.  It format is LIBFLAGS = -L<path>
+-L<path>. This variable is expanded relative to the object directory,
+the source directory and any master source directories.
+.IP INCLUDES
+This variable list the header files which will be exported during the
+include file export pass.
+.IP EXPINC_TARGETS
+This variable is used to override \fBINCLUDES\fR when not all of the
+files specified in INCLUDES should be exported.  Files listed in
+\fBEXPINC_TARGETS\fR should be specified in their target form ie..
+export_filename. 
+.IP EXPBIN_TARGETS
+This variable defines any programs or scripts that should be exported
+for use during the rest of the build. Files listed in
+\fBEXPBIN_TARGETS\fR should be specified in their target form ie..
+export_filename. 
+.IP EXPLIB_TARGETS
+This variable is used to override \fBLIBRARIES\fR when not all of the
+libraries specified in LIBRARIES should be exported.  Files listed in
+\fBEXPLIB_TARGETS\fR should be specified in their target form ie..
+export_libname.a. 
+.IP EXPDIR
+This variable indicates which directory to export the files into.
+If it is not set, the value of \fBIDIR\fR is used.
+.IP ILIST
+This variable lists the files to install.
+.IP IDIR
+This variable indicates which directory to install the files into.
+.IP IOWNER
+This variable indicates the owner of the files installed.
+It defaults to bin.
+.IP IGROUP
+This variable indicates the group of the files installed.
+It defaults to bin.
+.IP IMODE
+This variable indicates the modes of the files installed.
+It defaults to 755.
+.IP ILINKS
+This variable indicates any links which should be created to the files
+installed.  If the Makefile installs more than a single file, this
+variable would have to be used in the \fIfile_\fRILINKS format.
+.IP OPT_LEVEL
+This variable is used to determine optimization and debugging level.
+It default to -O.  The value of this variable is passed to both the
+compiler and loader.
+.IP CC_OPT_LEVEL
+This variable is used to set the optimization level for the compiler
+only.
+.IP CFLAGS
+This variable sets the flags to be passed to the C compiler.
+.IP YFLAGS
+This variable sets the flags to be passed to yacc.
+.IP LDFLAGS
+This variable sets the flags to be passed to ld.
+.IP LINTFLAGS
+This variable sets the flags to be passed to lint.
+.IP "NROFFFLAGS"
+This variable is used in \fIosf.man.mk\fR to set flags for
+\fInroff\fR.  If not defined in the Makefile, NROFFFLAGS defaults to
+"-man -h."
+.IP SED_OPTIONS
+This variable is used to add sed patterns to the rules for building
+scripts and datafiles.
+.IP CCTYPE
+This variable is used to change the compiler type from the default
+\fBansi\fR.  Legal values are \fBwritable_strings\fR, \fBhost\fR, and
+\fBtraditional\fR.
+.IP HFILES
+This variable lists the header files \fBall\fR object files in the
+Makefile depend upon.
+.IP LIBS
+This variable specifies any libraries that programs should be
+linked with.
+.IP GARBAGE
+This variable lists the files which are created during the build process
+which should be removed after completing the build.
+.IP LINTFILES
+This variable lists the files to lint.
+If not specified, the files listed in OFILES will be used.
+.IP CLEANFILES
+This variable lists the files to be removed when the \fBclean\fR rule
+is invoked.
+If not specified, the objectfiles, and \fBGARBAGE\fR files will be removed.
+.SH "READ-ONLY VARIABLES"
+The following variables are Read Only in the sense that the user
+should not change their values.
+The are set by the appropriate tools:
+.IP ALWAYS
+This variable is used for dependencies for rules which must always be executed.
+For example, /usr/include/sys/Makefile has the line:
+.P
+.ti 10
+dir.h: ${ALWAYS}
+.IP
+which forces the file \fBdir.h\fR to always be built.
+\fBALWAYS\fR is defined in \fBosf.std.mk\fR.
+.IP MACHINE
+This is the machine type that make was compiled to run on.  This
+variable is not used.  TARGET_MACHINE is the preferable way to
+determine the machine that is being built from.
+.IP MAKETOP
+This is the directory the represents the path to the top of the source tree.
+.SS "Utilities"
+The following commands are defined in \fBosf.std.mk\fR.  In almost all
+cases, the programs are defined as lower case versions of the upper
+case name, for example CP=cp.  On occasion, another version of the
+program is substituted such as: MKCATDEFS=xmkcatdefs.  In the case of
+the compiler tools they are set based on the value of CCTYPE, and are
+in the form _VARIABLE_.  The defaults can be over ridden by defining a
+value to the variable in the Makefile, the make command line, or in
+the shell environment.  This would allow the use of an alternate version
+of any given utility.
+.IP
+.TS
+.if \n+(b.=1 .nr d. \n(.c-\n(c.-1
+.de 35
+.ps \n(.s
+.vs \n(.vu
+.in \n(.iu
+.if \n(.u .fi
+.if \n(.j .ad
+.if \n(.j=0 .na
+..
+.nf
+.nr #~ 0
+.if n .nr #~ 0.6n
+.ds #d .d
+.if \(ts\n(.z\(ts\(ts .ds #d nl
+.fc
+.nr 33 \n(.s
+.rm 80 81 82 83 84
+.nr 80 0
+.nr 31 0
+.nr 32 0
+.nr 38 \w_AR_
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wCP
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \w_LD_
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wMD
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wRELEASE
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wTAR
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wYACC
+.if \n(32<\n(38 .nr 32 \n(38
+.80
+.rm 80
+.if \n(32>=\n(80 .nr 80 \n(32u+2n
+.nr 60 \n(31
+.nr 38 \n(60+\n(32
+.if \n(38>\n(80 .nr 80 \n(38
+.if \n(38<\n(80 .nr 60 +(\n(80-\n(38)/2
+.nr 81 0
+.nr 31 0
+.nr 32 0
+.nr 38 \wAS
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wCTAB
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wLEX
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wMIG
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wRM 
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wTOUCH
+.if \n(32<\n(38 .nr 32 \n(38
+.81
+.rm 81
+.if \n(32>=\n(81 .nr 81 \n(32u+2n
+.nr 61 \n(31
+.nr 38 \n(61+\n(32
+.if \n(38>\n(81 .nr 81 \n(38
+.if \n(38<\n(81 .nr 61 +(\n(81-\n(38)/2
+.nr 82 0
+.nr 31 0
+.nr 32 0
+.nr 38 \wAWK
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wECHO
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wLINT
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wMKCATDEFS
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wSED
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wTR
+.if \n(32<\n(38 .nr 32 \n(38
+.82
+.rm 82
+.if \n(32>=\n(82 .nr 82 \n(32u+2n
+.nr 62 \n(31
+.nr 38 \n(62+\n(32
+.if \n(38>\n(82 .nr 82 \n(38
+.if \n(38<\n(82 .nr 62 +(\n(82-\n(38)/2
+.nr 83 0
+.nr 31 0
+.nr 32 0
+.nr 38 \w_CC_
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wGENCAT
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wLN
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wMV
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wSORT
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wUUDECODE
+.if \n(32<\n(38 .nr 32 \n(38
+.83
+.rm 83
+.if \n(32>=\n(83 .nr 83 \n(32u+2n
+.nr 63 \n(31
+.nr 38 \n(63+\n(32
+.if \n(38>\n(83 .nr 83 \n(38
+.if \n(38<\n(83 .nr 63 +(\n(83-\n(38)/2
+.nr 84 0
+.nr 31 0
+.nr 32 0
+.nr 38 \wCHMOD
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wGENPATH
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wMAKEPATH
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \w_RANLIB_
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wTAGS
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wXSTR
+.if \n(32<\n(38 .nr 32 \n(38
+.84
+.rm 84
+.if \n(32>=\n(84 .nr 84 \n(32u+2n
+.nr 64 \n(31
+.nr 38 \n(64+\n(32
+.if \n(38>\n(84 .nr 84 \n(38
+.if \n(38<\n(84 .nr 64 +(\n(84-\n(38)/2
+.nr 38 1n
+.nr 79 0
+.nr 40 \n(79+(0*\n(38)
+.nr 80 +\n(40
+.nr 60 +\n(40
+.nr 41 \n(80+(3*\n(38)
+.nr 81 +\n(41
+.nr 61 +\n(41
+.nr 42 \n(81+(3*\n(38)
+.nr 82 +\n(42
+.nr 62 +\n(42
+.nr 43 \n(82+(3*\n(38)
+.nr 83 +\n(43
+.nr 63 +\n(43
+.nr 44 \n(83+(3*\n(38)
+.nr 84 +\n(44
+.nr 64 +\n(44
+.nr TW \n(84
+.if t .if \n(TW>\n(.li .tm Table at line 316 file makefiles.5 is too wide - \n(TW units
+.nr #I \n(.i
+.in +(\n(.lu-\n(TWu-\n(.iu)/2u
+.fc  
+.nr #T 0-1
+.nr #a 0-1
+.eo
+.de T#
+.ds #d .d
+.if \(ts\n(.z\(ts\(ts .ds #d nl
+.mk ##
+.nr ## -1v
+.ls 1
+.ls
+..
+.ec
+.ta \n(80u \n(81u \n(82u \n(83u \n(84u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'_AR_\h'|\n(61u'AS\h'|\n(62u'AWK\h'|\n(63u'_CC_\h'|\n(64u'CHMOD
+.ta \n(80u \n(81u \n(82u \n(83u \n(84u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'CP\h'|\n(61u'CTAB\h'|\n(62u'ECHO\h'|\n(63u'GENCAT\h'|\n(64u'GENPATH
+.ta \n(80u \n(81u \n(82u \n(83u \n(84u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'_LD_\h'|\n(61u'LEX\h'|\n(62u'LINT\h'|\n(63u'LN\h'|\n(64u'MAKEPATH
+.ta \n(80u \n(81u \n(82u \n(83u \n(84u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'MD\h'|\n(61u'MIG\h'|\n(62u'MKCATDEFS\h'|\n(63u'MV\h'|\n(64u'_RANLIB_
+.ta \n(80u \n(81u \n(82u \n(83u \n(84u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'RELEASE\h'|\n(61u'RM \h'|\n(62u'SED\h'|\n(63u'SORT\h'|\n(64u'TAGS
+.ta \n(80u \n(81u \n(82u \n(83u \n(84u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'TAR\h'|\n(61u'TOUCH\h'|\n(62u'TR\h'|\n(63u'UUDECODE\h'|\n(64u'XSTR
+.ta \n(80u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'YACC\h'|\n(61u'\h'|\n(62u'\h'|\n(63u'\h'|\n(64u'
+.fc
+.nr T. 1
+.T# 1
+.in \n(#Iu
+.35
+.TE
+.if \n-(b.=0 .nr c. \n(.c-\n(d.-10
+If you are writing custom rules in a component makefile, it is best to
+use the utilities by refering to the above name (for eample ${AWK}
+would run awk) instead of hardwiring the command name.  This allows
+greater flexibility in changing versions of the utilities with out
+having to edit all the Makefiles.
+.SS Defaults
+Each of the variables listed below has a default value
+which will be used if the developer does not override it.
+In most cases the user can override it for the entire Makefile,
+for example "OPT_LEVEL=" to override the default optimization,
+and on a file-by-file basis, for example "file_OPT_LEVEL=-g"
+to turn on debugging for one particular file.
+.IP
+.TS
+.if \n+(b.=1 .nr d. \n(.c-\n(c.-1
+.de 35
+.ps \n(.s
+.vs \n(.vu
+.in \n(.iu
+.if \n(.u .fi
+.if \n(.j .ad
+.if \n(.j=0 .na
+..
+.nf
+.nr #~ 0
+.if n .nr #~ 0.6n
+.ds #d .d
+.if \(ts\n(.z\(ts\(ts .ds #d nl
+.fc
+.nr 33 \n(.s
+.rm 80 81
+.nr 80 0
+.nr 38 \w\f3Variable\fP
+.if \n(80<\n(38 .nr 80 \n(38
+.nr 31 0
+.nr 32 0
+.nr 38 \wCCTYPE
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wOPT_LEVEL
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wARCHIVE_FORMAT
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wLINTFLAGS
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wIOWNER
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wIGROUP
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wIMODE
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wI18N_FLAG
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wRMFLAGS
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wARFLAGS
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wTROFFFLAGS
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wNROFFFLAGS
+.if \n(32<\n(38 .nr 32 \n(38
+.80
+.rm 80
+.if \n(32>=\n(80 .nr 80 \n(32u+2n
+.nr 60 \n(31
+.nr 38 \n(60+\n(32
+.if \n(38>\n(80 .nr 80 \n(38
+.if \n(38<\n(80 .nr 60 +(\n(80-\n(38)/2
+.nr 81 0
+.nr 38 \w\f3Default\fP
+.if \n(81<\n(38 .nr 81 \n(38
+.nr 31 0
+.nr 32 0
+.nr 38 \wansi
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \w-O
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wCOFF
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \w-hc
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wbin
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wbin
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \w755
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wNLS
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \w-ef
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \wcr
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \w-mm
+.if \n(32<\n(38 .nr 32 \n(38
+.nr 38 \w-man -h
+.if \n(32<\n(38 .nr 32 \n(38
+.81
+.rm 81
+.if \n(32>=\n(81 .nr 81 \n(32u+2n
+.nr 61 \n(31
+.nr 38 \n(61+\n(32
+.if \n(38>\n(81 .nr 81 \n(38
+.if \n(38<\n(81 .nr 61 +(\n(81-\n(38)/2
+.nr 38 1n
+.nr 79 0
+.nr 40 \n(79+(0*\n(38)
+.nr 80 +\n(40
+.nr 60 +\n(40
+.nr 41 \n(80+(3*\n(38)
+.nr 81 +\n(41
+.nr 61 +\n(41
+.nr TW \n(81
+.if t .if \n(TW>\n(.li .tm Table at line 348 file makefiles.5 is too wide - \n(TW units
+.nr #I \n(.i
+.in +(\n(.lu-\n(TWu-\n(.iu)/2u
+.fc  
+.nr #T 0-1
+.nr #a 0-1
+.eo
+.de T#
+.ds #d .d
+.if \(ts\n(.z\(ts\(ts .ds #d nl
+.mk ##
+.nr ## -1v
+.ls 1
+.ls
+..
+.ec
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(40u'\f3Variable\f\n(31\h'|\n(41u'\f3Default\f\n(31
+.nr 36 \n(.v
+.vs \n(.vu-\n(.sp
+\v'-1p'\h'|0'\s\n(33\l'|\n(TWu\(ul'\s0\v'2p'\h'|0'\s\n(33\l'|\n(TWu\(ul'\s0\v'-1p'
+.vs \n(36u
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'CCTYPE\h'|\n(61u'ansi
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'OPT_LEVEL\h'|\n(61u'-O
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'ARCHIVE_FORMAT\h'|\n(61u'COFF
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'LINTFLAGS\h'|\n(61u'-hc
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'IOWNER\h'|\n(61u'bin
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'IGROUP\h'|\n(61u'bin
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'IMODE\h'|\n(61u'755
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'I18N_FLAG\h'|\n(61u'NLS
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'RMFLAGS\h'|\n(61u'-ef
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'ARFLAGS\h'|\n(61u'cr
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'TROFFFLAGS\h'|\n(61u'-mm
+.ta \n(80u \n(81u 
+.nr 31 \n(.f
+.nr 35 1m
+\&\h'|\n(60u'NROFFFLAGS\h'|\n(61u'-man -h
+.fc
+.nr T. 1
+.T# 1
+.in \n(#Iu
+.35
+.TE
+.if \n-(b.=0 .nr c. \n(.c-\n(d.-18
+.SH Common Makefiles
+The common makefiles are broken down into many sub makefiles each
+containing the build rules for particular types of objects.  The top
+level common makefile is called osf.rules.mk.  This is what the
+RULES_MK variable points to.  osf.rules.mk includes several
+submakefiles based on what environment variables are defined in the
+component makefile.  The structure looks something like this:
+
+osf.rules.mk -+- osf.std.mk --- osf.<project>.mk --- osf.<project>.passes.mk
+              |
+              +- osf.prog.mk
+              |
+              +- osf.lib.mk
+              |
+              +- osf.obj.mk
+              |
+              +- osf.script.mk
+              |
+              +- osf.man.mk
+              |
+              +- osf.doc.mk
+              |
+              +- osf.depend.mk
+
+.P
+The following is the description of what each common makefile does.
+.IP osf.std.mk
+This is the common makefile which provides the rules needed by all
+component makefiles.  It is always included by osf.rules.mk
+.IP
+Among other general definitions, \fBosf.std.mk\fR defines
+\fBbuild_all\fR as the default target; it sets the defaults for
+variables not explicitly defined; it sets the C compiler variations,
+the optimization level, and the flags defined from the command line
+arguments, the Makefiles, and the environment.  It also includes
+definitions for variables like YACC, _CC_, etc.
+.IP
+\fBosf.std.mk\fR defines the common targets including: all, build,
+tags, lint, clean, rmtarget, clobber, tags, export, and install.
+Finally, \fBosf.std.mk\fR includes the common makefiles
+\fBosf.<proj_name>.mk\fR and \fBosf.<proj_name>.passes.mk\fR, the
+makefile which enables each of the common targets listed above to
+descend the portion of the source tree necessary to complete its
+tasks.
+.IP osf.<proj_name>.mk
+\fBosf.<proj_name>.mk\fR defines all the variables that are used to
+customize the build environment for a project.
+.IP osf.<proj_name>.passes.mk
+\fBosf.<proj_name>.passes.mk\fR implements the multi-pass approach to
+building OSF/1.  At this time, there are three passes for completing
+an entire build: one to export headers, a second to export libraries
+and crt0, and the final pass to do the remaining compilation.  This
+file is project specific and each project can define their own passes
+as needed.
+.IP
+Any pass may visit some or all of the tree.
+In the current arrangement, the first two passes only search in selected
+areas for header files and libraries to export;
+the third pass traverses the entire tree.
+.IP
+Other calls, such as clean and install, use the mechanism set up for
+the compilation pass, as they too traverse the entire tree.
+These, however, are independent calls to build and are therefore 
+separate passes.
+.IP osf.prog.mk
+\fBosf.prog.mk\fR contains the rules for constructing executable programs,
+any object that has a compile/link cycle.
+In particular, the variable \fBPROGRAMS\fR is evaluated in this
+makefile.
+.IP osf.libs.mk
+\fBosf.libs.mk\fR contains the rules and variables for constructing libraries.
+In particular, the variable \fBLIBRARIES\fR is evaluate in this makefile.
+.IP osf.obj.mk
+\fBosf.obj.mk\fR provides the rules and variables for constructing 
+object files.
+.IP osf.script.mk
+\fBosf.script.mk\fR contains the rules for building sh and csh scripts.
+These rules involve passing the scripts listed in the variable \fBSCRIPTS\fR
+through \fBsed\fR to remove all comment lines.
+.IP osf.man.mk
+\fBosf.man.mk\fR contains the rules and variables for constructing
+man pages using the various formatting tools such as nroff and troff.
+It particular the variables \fBMANSECTION\fR and \fBNROFFFLAGS\fR are evaluated in
+this makefile.
+This makefile builds man pages by running them
+through "nroff -man -h" and placing the output into the object tree.
+Regardless of what number suffix the man page has,
+the output is numbered 0.
+For example, the original man page for \fBgrep\fR is \fBgrep.1\fR;
+the output will be called \fBgrep.0\fR.
+.IP osf.depend.mk
+This makefile is included when the \fBDEPENDENCIES\fR variable is defined.
+It causes MD to be run as the final step in each directory so that
+compiler dependency output can be converted to Make dependency format.
+.IP osf.mig.mk
+This makefile is included if any of the \fBMIG_HDRS, MIG_USRS\fR, or \fBMIG_SRVS\fR
+variables are defined. It contains rules to run mig to build the header
+or RPC stub files from the the Mig specifications files.
+
+.SH "HARDWARE/SOFTWARE DEPENDENCIES"
+There are provisions in ODE for isolating and handling code
+dependencies on particular hardware or software.  When there is need
+for hardware or software dependent code, the code should be isolated
+in a subdirectory named after the dependency. Examples of things there
+may be dependencies on are the machine type, the operating system, the
+cpu type, or layered software.  All these dependencies are in terms of
+the HOST (compile) machine and the TARGET machine.  Most projects have
+the following variables set in the build environment
+
+.IP TARGET_MACHINE
+.IP TARGET_OS
+.IP TARGET_CPU
+.IP HOST_MACHINE
+.IP HOST_OS
+.IP HOST_CPU
+
+For most environments all the HOST_ variables would be the same as the
+TARGET_ variables, except in cross compiling, where the code to run on
+one machine type is being compiled on a totally different machine type.
+Additional qualifiers can be specified for specific projects if there
+is dependencies on some other categories.
+
+The following shows how a dependency on a TARGET_MACHINE type should
+be handled.  Dependencies on other categories should be handled in a
+similar way
+
+.IP machdep.mk
+Whenever a user's Makefile needs to access a machine dependent
+Makefile, that Makefile should be in a subdirectory named for the
+machine type and called \fBmachdep.mk\fR, for example, \fBPMAX/machdep.mk\fR.
+The Makefile should contain the lists of variables and any rules
+which are specific to a particular machine.
+Generic content should still be in the user's Makefile.
+.IP
+The machine dependent Makefile is included in the upper level Makefile
+by using the following line:
+.br
+.ti 10
+.B '.if exist(${TARGET_MACHINE}/machdep.mk)'
+.B '.include "${TARGET_MACHINE}/machdep.mk"'
+.B '.endif'
+.IP TARGET_MACHINE
+The TARGET_MACHINE variable is expanded into the name of the target
+machine, machines like: PMAX, MMAX, and AT386.
+It is used to reference machine dependent components of the system.
+For instance, a component called 'mumble' may have two machine-INDEPENDENT
+modules, foo and bar, and one machine DEPENDENT module,
+baz and bam; one for each architecture.
+The machdep.mk would have lines of the form:
+.br
+.in 10
+MMAX_OFILES = bam
+.br
+PMAX_OFILES = baz
+.in
+and the upper level Makefile would have something like the following
+.br
+.in 10
+OFILES = foo bar ${${TARGET_MACHINE}_OFILES}
+.in
+.SH "SEE ALSO"
+make(1), build(1), \fIODE Development Users Guide\fR , \fIODE Project Supplement\fR
+
+
+

@@ -1,0 +1,22 @@
+SUP 7.26 (4.3 BSD) for file supfile at Aug 18 14:09:35
+SUP Upgrade of mach3.buildtools-default at Thu Aug 18 14:09:35 1994
+SUP Fileserver 7.13 (4.3 BSD) 3706 on X29.MACH.CS.CMU.EDU at 14:09:35
+SUP Requesting changes since Jun 18 13:56:58 1993
+SUP Receiving file MERGE_HISTORY
+SUP Receiving file Makefile-version
+SUP Receiving file bin/xstrip/xstrip_mips.c
+SUP Receiving file conf/version.edit
+SUP Receiving file ode/mk/osf.mach3.mk
+SUP Receiving file ode/setup/Makefile
+SUP Created directory ode/setup/pmax_ultrix for ode/setup/pmax_ultrix/Makefile
+SUP Receiving file ode/setup/pmax_ultrix/Makefile
+SUP Receiving file ode/setup/pmax_ultrix/setup.sh
+SUP Receiving file ode/setup/pmax_ultrix/setvar.csh
+SUP Receiving file ode/setup/setup.sh
+SUP Updated directory ode/setup/pmax_ultrix
+SUP Updated directory ode/setup
+SUP Updated directory ode/mk
+SUP Updated directory gnu/gcc
+SUP Updated directory conf
+SUP Updated directory bin/xstrip
+SUP Upgrade of mach3.buildtools-default completed at Aug 18 14:10:06 1994

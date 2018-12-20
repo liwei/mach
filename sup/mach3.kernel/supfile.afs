@@ -1,0 +1,4 @@
+mach3.kernel release=defaultfree host=x29.mach.cs.cmu.edu hostbase=/afs/cs/project/mach base=/afs/cs/project/mach/public/src prefix=mkernel/src use-rel-suffix crypt=testing
+mach3.kernel release=i386free host=x29.mach.cs.cmu.edu hostbase=/afs/cs/project/mach base=/afs/cs/project/mach/public/src prefix=mkernel/src use-rel-suffix crypt=testing
+mach3.kernel release=mipsfree host=x29.mach.cs.cmu.edu hostbase=/afs/cs/project/mach base=/afs/cs/project/mach/public/src prefix=mkernel/src use-rel-suffix crypt=testing
+mach3.kernel release=luna88k host=x29.mach.cs.cmu.edu hostbase=/afs/cs/project/mach base=/afs/cs/project/mach/public/src prefix=mkernel/src use-rel-suffix crypt=testing

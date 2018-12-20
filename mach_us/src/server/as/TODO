@@ -1,0 +1,7 @@
+Don't pass back receive rights to private port when we have no-senders notification.
+
+Make local server multi-threaded.
+
+Implement replicated central servers.
+
+

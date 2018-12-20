@@ -1,0 +1,105 @@
+Diagnostics system:
+
+There are now a few standardized macros to replace the plethora of
+diag_printf(), diag_format(), printf(), diag_message(), etc used until now
+in various modules. The new macros are intended to be easily re-implemented
+and easily enabled/disabled with conditional compilation (-D_DEBUG_). They
+provide run-time control of the level of diagnostics output emitted by any
+server.  There is a global object named "Diag", of class "diag",  that
+concentrates all output from one task and forwards it to the diagnostic
+server.
+
+Specifically, all output should be done using one of the following 6 macros:
+	CRITICAL((object,format_string,arg1,arg2,...))
+	ERROR((object,format_string,arg1,arg2,...))
+	INFO((object,format_string,arg1,arg2,...))
+	DEBUG0(condition,(object,format_string,arg1,arg2,...))
+	DEBUG1(condition,(object,format_string,arg1,arg2,...))
+	DEBUG2(condition,(object,format_string,arg1,arg2,...))
+
+Each macro is associated with a different debug level, so that the verbosity
+of the output can be easily controlled. CRITICAL is at level -3, ERROR at
+-2, INFO at -1, DEBUG0 at 0, DEBUG1 at 1 and DEBUG2 at 2. The global
+variable "us_debug_level" controls the global debug level: a message is
+produced if it is at a level stricly smaller than the current debug level.
+The debug level comparison is performed in-line in each macro, so as to
+minimize the overhead for inactive debugging statement. By default, the
+debug level is 0, so that only CRITICAL, ERROR and INFO messages are
+produced.
+
+CRITICAL() should be used for errors from which the server cannot recover
+(i.e panics); it generates a message both on the diagnostic server output
+and on stderr.  All other macros generate messages only on the diagnostic
+server output.  ERROR() should be used for error conditions that are not
+fatal for the whole server. INFO() should be used for informational messages
+about the operation of the server, that are interesting even when the server
+is not being debugged. DEBUG0() should be used for major (coarse-grained)
+debugging messages; its use should be limited to allow a server to operate
+with just enough debugging output to figure out what it is doing. DEBUG1()
+should be used for all fine-grained debugging messages, to be enabled only
+when all operations of the server are to be examined in detail. DEBUG2() is
+reserved for extremely verbose output, and will almost never be enabled;
+currently, it is used to trace all invocations against all objects in a
+server.
+
+In each macro, the "object" argument is the address of a MachObject to be
+associated with the message. It can be any specific object derived from the
+"base" class, or the special global object "Diag", to be used for messages
+not associated with any specific object or in servers that do not use
+objects. The "format_string" and following arguments are identical to the
+arguments to printf(); note the double parentheses used to allow a variable
+number of arguments. The "condition" argument for the debugging macros can
+be any boolean expression, which will be evaluated at run-time in-line
+within the macro; the message is produced only if that condition is true, or
+if the global variable "us_debug_force" is true, in which case the condition
+is ignored. The intention is to have each interesting module or sub-module
+define it own debugging flag, but the implementors are free to do whatever
+they want in this respect.
+
+All the diagnostics definitions are contained in the file "debug.h". The
+simplest way to get everything in the right order is to include "base.h".
+The entire diagnostics system is started by a call to "diag_startup()", with
+a single string argument representing a name to be used to identify the
+current task within the diagnostic server. diag_startup() must be called
+after mach_object_init() has been called. After that, the us_debug_level
+variable, as well as any module-specific debugging flag, can be patched with
+gdb. Most of the servers and programs (fsadmin, tm_init, task_master, ufs,
+nfs, tty_server, nameserver) have a "-d" switch to specify a debug level
+other than 0 (the default) on startup. Usage:
+	"<server-name> -d<debug-level> <other-arguments>"
+When the debug level is set to 0, the system is actually usable in real time.
+
+All old diag_* functions are now obsolete and should not be used when
+writing new code. For expendiency, I have written front-end routines so that
+many old diag_* functions still work, allowing old servers to be relinked.
+The functions for which there is no front-end have been removed from the
+libraries and will cause linking errors, with the exception of
+diag_initialize(). That function is now defined in the diag class, but with
+different arguments than in the old code; be very careful not to call it by
+accident.
+
+There are also macros to replace printf() and mach_error(), so that it is
+possible to compile code written for traditional output streams. The
+"-DUsePrintf" conditional compilation switch disables those replacements.
+The old MACH_ERROR macro is no longer supported.
+The old libdebug.a has been completely removed.
+
+Finally, the MachObject library produces debugging messages at level 1 for
+incoming and outgoing remote invocations, and at level 2 for all
+invocations.  Those messages are controlled by the global us_debug_level,
+and by the variable "mach_object_debug_level".
+
+For additional (but not critical) flexibility, the name associated with each
+object, as well as a per-object debug level can be set with the
+set_diag_name() and set_diag_level() methods, handled by the "base" class.
+A message is produced by an object if both the global debug level and the
+local debug level of that object are greater than the message's level.  At
+startup, the local debug level for each object is set to the maximum value,
+allowing everything to go through.  Individual objects may be "disabled" by
+resetting their local debug level.  The definitions for those methods have
+been moved from base_methods.h to diag_methods.h for consistency.  Those
+same methods can also be invoked against the global Diag object; in that
+case, they affect the global debug level (us_debug_level), and the name by
+which the current task is designated within the diagnostic server.
+
+

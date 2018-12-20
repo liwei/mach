@@ -1,0 +1,30 @@
+This directory is for the LITES server, a free Unix server
+based on the 4.4BSD LITE distribution.
+
+Maintained by Chris Maeda <cmaeda@cs.cmu.edu>
+Last updated: 24 March 1995
+
+
+Mach4 / LITES
+
+Your best bet for getting a Mach 3.0/Unix system running on NetBSD for
+FreeBSD or Linux is to pick up the current Mach4 kernel from Utah and
+the LITES server from Helsinki.  For more information:
+
+Mach4:	http://www.cs.utah.edu/projects/flexmach/mach4/html/Mach4-proj.html
+LITES:	http://www.cs.hut.fi/lites.html
+
+However, the OSF/1 microkernel is coming.  Watch this space for more
+details.
+
+
+Contents:
+
+
+lites-1.1.tar.gz	-- LITES 1.1
+
+
+user22.tar.gz
+
+	The USER22 collection.  Contains mach_init, snames, machid, etc.
+	This is the raw source tree, unmodified for netbsd.

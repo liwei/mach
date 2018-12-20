@@ -1,0 +1,28 @@
+Article: 4317 of comp.os.mach
+From: dramit@mykonos.csi.forth.gr (Dramitinos Georgios)
+Newsgroups: comp.os.mach
+Subject: Mach kernel ported on a DEC 3000 model 300
+Date: 5 May 1994 14:48:50 GMT
+Organization: FORTH - ICS, P.O.Box 1385, Heraklio, Crete, Greece 71110 
+       tel: +30(81)221171, 229302 fax: +30(81)229342,3 tlx: 262389 CCI
+Lines: 17
+
+The Mach microkernel (MK82) has been ported on a Pelican, that is a DEC-Alpha
+3000 model 300.CMU does not support this model, although they have ported Mach
+on a Flamingo, that is a DEC-Alpha 3000 model 500.All the files of the kernel 
+collection that have been modified or created in order to port Mach on a 
+Pelican are available for anonymous FTP to nemesis.csi.forth.gr The file 
+
+pub/pelican_mach.tar.Z
+
+contains all the files mofified/created and also a built kernel.
+
+Greetings,
+
+George Dramitinos
+
+Institute of Computer Science 
+Foundation for Research and Technology Hellas
+
+
+

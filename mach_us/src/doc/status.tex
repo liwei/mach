@@ -1,0 +1,228 @@
+\documentstyle[11pt]{cmu-art}
+
+\newcommand{\comment}[1]{}
+%\newcommand{\MORE}{(More-Text-Here)}
+\newcommand{\MORE}{}
+\newcommand{\CHECK}{(Check-This-Info)}
+
+\topmargin 0in
+\textheight 9in
+\pagestyle{empty}
+\makeatletter
+\def\@oddfoot{\hfil\em DRAFT-\arabic{page}\hfil}
+\let\@evenfoot=\@oddfoot
+
+\def\@listi{
+\leftmargin\leftmargini 
+\topsep 4pt plus 2pt minus 2pt
+\parsep 3pt plus 1pt minus 1pt
+\itemsep \parsep}
+
+\def\section{\@startsection {section}{1}{\z@}{-1.6ex plus -.2ex minus 
+ -.2ex}{.01ex plus .1ex}{\large\sf\bf}}
+\def\subsection{\@startsection{subsection}{2}{\z@}{-1.4ex plus -.2ex minus 
+ -.2ex}{.01ex plus .1ex}{\normalsize\sf\bf}}
+
+
+\makeatother
+
+%\input draft
+%\special{' @draft}
+\special{! /@scaleunit 100 def }
+
+\title{Mach US: Current Status}
+\author{J. Mark Stevenson \\
+\\
+School of Computer Science \\
+Carnegie Mellon University \\
+Pittsburgh, PA 15213 \\
+jms@cs.cmu.edu \\
+}
+\date{October, 1994}
+
+\begin{document}
+
+\maketitle
+\section{Code Status}
+The system can now be built using the same tools
+and compiler as the rest of the Mach3.0 system (see ``Building Mach 3.0''
+in \verb|.../public/doc/unpublished/mach3_build.{doc,ps}.|)  Further build info
+can be found in ``Installing and Running Mach-US'' in the file\\
+\verb|.../public/doc/unpublished/us-install.{doc,ps}|
+
+
+\section{Current Usability}
+\begin{itemize}
+\item{Self Hosting}: Mach-US has been used to build itself.
+
+\item{Test Software Development}: It is used as the default platform for
+development of test software used to test Mach-US functionality.
+
+\item{Andrew Benchmark}:  Runs.
+
+\item{Parallel Compile Test}:  There is a version of the standard Mach compile-test
+(which just compiles a number of small programs) that runs many compile tests
+at the same time.  Mach-US runs this test with heavy loads on uni-processor
+and shared memory multi-processor boxes.  
+
+\item{Day to day tools}: Most of the common Unix utilities we know and love
+(csh, vi, gnu-emacs, find, ...) are working without problems.
+
+\item{FTP(d)/Telnet(d)/Inetd}: Are used regularly.
+\end{itemize}
+\section{Current Reliability}
+Positive:
+\begin{itemize}
+\item{Runs and works}: One can log into this Unix system and 
+do useful work today.
+
+\item{Typing at a cshell}: One has full tty and job control,
+pipes and signals, file access and access control.
+It is very much a real Unix.
+
+\item{Stays up indefinitely}:
+There is no noticeable system rot.  It does not crash
+in the night, or during average use.
+
+Handles heavy computation stress:  The system has been stressed by various
+tests, self-hosting, and general use.  It handles the stress well.
+\end{itemize}
+
+Negative:
+\begin{itemize}
+\item{First time applications uncover bugs}:  When a large new bit of software
+runs, it may uncover either a bug or a small missing feature or
+esoteric semantic.
+
+\item{Untried code paths}:  There are some code or odd interface features,
+that have never been used and hence may not work.
+
+\item{Different error values}: Mach-US may return a different error or errno
+than Mach2.5 for the same error.
+\end{itemize}
+
+\section{Speed}
+In general the CMU Mach single-server(Mach-UX) runs 10\verb|%|-20\verb|%|
+faster than Mach-US for common usage tests.
+Yet in a highly parallel task (parallel compile test) on our 
+multi-processor Sequent box,
+Mach-US performs slightly better than Mach-UX.
+It has also been measured to run much faster than Mach-UX for FTP.
+
+Because of the sophistication of our emulation lib,
+most syscalls (as defined by
+occurrence during test) do not make any calls to the servers, but instead
+are handled in the client process.
+By this property,  I believe that Mach-US could be
+made to run faster than the Mach-UX system in general.
+Furthermore, with the exception of remote method invocation,
+we have yet to find the time to
+meter it heavily to discover what slowdowns exist.
+Simple changes alone, driven by such metering, should make the system as fast
+or faster than Mach-UX.
+
+There are other obvious places for speedup:  bundling common server call
+sequences, shared libraries for server text,
+optimizing forking and signaling, and optimizing out some
+debugging mechanisms.
+
+\section{Warnings}
+\begin{itemize}
+\item
+The TTY server is slow/clumsy, most notably the ``VUS'' version for
+running beside the single server.  This appears to be because of the
+use of a dull blade to slice it from the earlier BSD world.  The worst
+effect of this is that keyboard interrupts are slow to take effect.
+Quite a bit of data can find its way through to the screen before
+your ``\verb|^C|'' takes effect.  DON'T BOUNCE ON IT.  Because of bugs in the
+system, such repeated pounding of interrupts can cause problems.
+
+Also remember that you can always use \verb|mkill|
+to waste any emulated process
+safely.  Unlike the Mach-UX single server, Mach-US detects task death,
+not just a combination of \verb|kill| and \verb|exit|.
+
+\item
+The network server has some mixed bugs on apparent connection lifetime.
+In general this is not a big problem, but in some contexts, repeated
+connections and disconnections can have problems with naming clashes.
+This problem should be fixed in the next release.
+\end{itemize}
+
+\section{Missing features}
+As of 10/94 there were a few features missing.  The features are missing,
+not because of any structural problems, but primarily because of a lack of
+developer time.  These are as follows.
+\begin{itemize}
+\item{Setuid exec}:
+For fully correct setuid exec, it is necessary to pickle the state of
+the emulation lib that can survive an exec, have the task\_master create
+a new task with the right ids, filter the pickled state and inject it into
+the new process.  All of this has been postponed.  An incomplete answer
+that will be implemented soon, is to just have the task\_master bless a process
+with the new ids.
+
+At the current time, the only way to run something as root is to run it from a
+shell that is running as root.  The initial process is started as root.
+
+\item{Device Server}:
+There is currently no way to get at devices directly.  The tty\_server handles
+ttys, the ufs servers handle disk partitions, and right now, that is it.
+Most notably, there is no access to a screen device for X and the such.
+The device server is expected soon.  It has yet to be done because it is so
+simple.  The server merely needs to support "opens" for device objects,
+an intelligent proxy will be able to translate all other requests directly into
+kernel calls for the device in question.
+
+\item{Mixed Admin Stuff}:
+It was not considered an early priority to get all of the system administrator
+style features to work in the classic Unix fashion.
+Many administrative features do not work, or do nothing.  mount/unmount
+do not work because this function is done differently.
+(see the ``fsadmin'' explanation in the
+document entitled ``Installing and Running Mach-US'').
+Sync is not currently connected and
+will return successfully without doing anything.
+(wait a bit and the UFS servers
+will sync).  The utilities for network configuration and administration
+generally do nothing at all because the network subsystem is totally unrelated
+to that of BSD,  Again see the ``Installing and Running Mach-US'' document.
+
+\item{Xwindows}: No X applications have been run to date, and the there
+is currently no way for a default Xserver to access the screen device.
+\end{itemize}
+
+\subsection{Compliance Testing}
+We have run some 4.3BSD compliance tests from PERENNIAL Inc.
+Many of the bugs uncovered were fixed.  Some bugs were problems with
+the tests themselves or were concerned with features that
+we did not implement.  There are several bugs remaining:  mixed problems with
+esoteric semantics of sockets, esoteric signal semantics, and the tsymlinks
+to ttys in the ``/dev'' area don't work for the ``tty'' program.
+
+\section{Futures}
+There are no new features expected from CMU for this system in the future.
+We are now in distribution/support/maintainence mode on this system.
+New and Old
+system users will be supported, bugfixes will be accepted, and some
+additional bug fixes may be made when they are truly needed.
+\comment{
+The following things are expected to be available in a release in the
+near future:
+\begin{itemize}
+\item{Mixed Bug Fixes}
+\item{Ps/Ms Style Exec Strings}
+\item{``Free'' subset made available via anon FTP}
+\end{itemize}
+
+Some other possibilities in the medium term are:
+\begin{itemize}
+\item{Mixed Bug Fixes}
+\item{Setuid Exec}
+\item{X Window Clients and Server}
+\end{itemize}
+
+The long term prospects for this system are not totally clear.   Here at CMU,
+multiple changes in facility, staff, and students have restricted development.
+}
+\end{document}

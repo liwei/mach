@@ -1,0 +1,240 @@
+ Interrupt Package
+ -----------------
+ The interrupt package is designed on the belief that code naturally
+ falls into "regions" where cleanup for an interrupt is similar, may involve
+ access to local variables, and is well defined.  The interrupt package
+ supplies a way of defining such a region and associating a handler with it.
+
+ There are two different kinds of interrupts recognized: synchronous and 
+ asynchronous.  These labels describe the way that the interrupt is generated.
+ A synchronous (intr_sync) interrupt would occur when specific error in the
+ code causes an interrupt (e.g. EFAULT, EFLOAT).  The emulation translates mach
+ exceptions into synchronous interrupts.  Asynchronous interrupts (intr_async)
+ occur when some bit of software chooses to interrupt a thread for reasons
+ other than the target threads actual code execution.
+
+ Another concern about interrupts is when they are delivered.  Obviously
+ synchronous interrupts must be handled immediately, yet it is useful
+ to be able to delay the delivery of asynchronous interrupts to an
+ appropriate point in the code.  Furthermore, some kinds interrupt delivery
+ have more costly setup than others.  Hence each region/handler
+ has an associated type.  These types are as follows:
+	INTR_SYNC_IMMEDIATE	Deliver sync interrupt to handler immediately
+	INTR_ASYNC_IMMEDIATE	Deliver async interrupt to handler immediately
+	INTR_ASYNC_BOUNDS	Deliver when entering/leaving the region
+	INTR_ASYNC_TEST		Deliver at user test points/entering/leaving
+	INTR_ASYNC_BLOCKED	Hold for BOUNDS/TEST sub-region/handler.
+
+ The following is an example of an interrupt region (via interrupt.h):
+	INTR_REGION(INTR_SYNC_IMMEDIATE | INTR_ASYNC_TEST)
+		/* Note: INTR_TEST only in a INTR_ASYNC_TEST region */
+		.
+		.
+		.
+		/*
+		 * Invoke handler "here" for innermost INTR_ASYNC_TEST
+		 * region iff INTR_ASYNC is marked/pending.
+		 */
+		INTR_TEST;
+		.
+		.
+		.
+	INTR_HANDLER	
+		/* Handle interrupts.  Optional when "blocked"  */
+
+		intr_type_t 	type;
+		mach_error_t	error;
+		int 		code, subcode;
+		INTR_INFO(&type, &error, &code, &subcode); /* Optional */
+		.
+		.
+		.
+		/* 
+		 * Optional return from the routine,
+		 * NOTE: Normal "return" not valid from inside of INTR_HANDLER
+		 * or INTR_REGION !!!
+		 */
+		INTR_RETURN(EXCEPT_SOFTWARE);	/* Optional */
+	INTR_END
+
+ It is important to be aware of the following properties of regions/region
+ types before using them.
+	- Each region is contained within a routine and the INTR_REGION,
+	  INTR_HANDLER, and INTR_END are all at the same C scope.
+
+	- Since regions are variant upon a current instruction pointer,
+	  the interrupt mechanism works on a per thread basis.
+
+	- One region/handler may field both synchronous and asynchronous
+	  interrupts.
+
+	- Regions may contain other regions, either directly or via subroutine
+	  calls.  Hence active regions can be thought of as existing in two 
+	  stacks.  A stack of "synchronous" regions and a stack of
+	  "asynchronous" regions. One region/handler may reside on both stacks.
+	  interrupts are delivered to the top/current handler on the
+	  appropriate stack even if that region is not in the current
+	  routine.
+
+	- While in a handler for a given type of interrupt, the interrupt is 
+	  held/masked until the end of the handler at which time may be 
+	  delivered to a containing region (if any).  Interrupt are only 
+	  masked while they are being handled.
+	  
+	- Only the oldest un-delivered interrupt of a given type
+	  and its associated INTR_INFO are kept.  Subsequent interrupts
+	  are discarded until the interrupt is serviced.  The same holds for
+	  masked interrupts.  The question is not "how have I been interrupted"
+	  but "have I been interrupted".
+
+	- There is no way to "reraise" an interrupt to a region which contains
+	  the current region.  Info and errors are propagated via return
+	  values et.al.  A handler may choose to "post" an interrupt that
+	  will be handled just as if anyone had posted it.
+
+	- If the top/current region on the async stack is not an 
+	  "INTR_ASYNC_IMMEDIATE" region, or there is no region on the async
+	  stack, a "posted" async interrupt is marked as pending until a
+	  delivery point is reached.  It may be that such a point will
+	  not be reached and the interrupt will never be delivered.  It is
+	  possible to reset the pending/masked states and the region stacks
+	  upon completion of processing of a given request.
+
+	- The user can/should supply a routine to be called iff there
+	  is not a top/current region on the sync interrupt stack when
+	  a sync interrupt is posted.
+
+	- INTR_SYNC_IMMEDIATE, INTR_ASYNC_IMMEDIATE, and INTR_ASYNC_TEST
+	  regions are slower to setup and much slower for delivery.
+
+ Other Interrupt Routines
+ ------------------------
+ Obviously, there is more to the interrupt interface than just the
+ region/handler macros.  Here it is:
+	- intr_post_interrupt(intr_cthread_id, delivery_type, 
+				interrupt_type, error, code, subcode)
+		Mark an interrupt as having occurred and optionally
+		attempt to deliver it.
+
+	- intr_mach_msg(msg, option, send_size, rcv_size, rcv_name,
+				timeout, notify);
+		An asynchronously interruptible form of mach_msg.
+		this routine is used just like mach_msg except that
+		it is interrupted when an INTR_ASYNC occurs.
+		it returns the same interrupt values that mach_msg
+		normally returns.
+
+	- intr_cond_wait(cond, lock)
+		A form of condition wait that can be interrupted
+		by INTR_ASYNC interrupts.  It used the same way as
+		a normal condition wait except that the "condition
+		loop" cannot be in a region where INTR_ASYNC interrupts
+		are delivered immediately.  The return value is the
+		INTR_EVENT/INTR_ERROR value for the interrupt else,
+		ERR_SUCCESS.
+
+	- intr_set_sync_default(sync_default_routine)
+		Set the routine to be called when a synchronous
+		interrupt is posted and there is no current sync handler.
+
+	- intr_cthread_id_self()
+	- intr_thread_to_cthread_id(thread)
+	- intr_cthread_id_to_thread(id)
+		Get/manipulate intr_cthread_ids
+
+	- intr_init()
+		Initialize the interrupt mechanism.
+	- intr_reset()
+		Remove all of the thread_info structures associated
+		with the current process.  Useful for resetting
+		interrupts after forking.
+	- intr_reset_self()
+		Reset the current thread clearing it of any pending 
+		interrupts. Useful when the code to be interrupted
+		(the syscall or RPC) has completed.
+
+ Interrupt Usage in Mach3.0 MultiServer
+ -------------------------------------
+ Interrupts are used as a tool for the implementation of BSD style signals
+ that occur during execution of a syscall.  In specific, interrupts are used
+ to back us out of places in syscall emulations where pauses may occur.  Higher
+ level code in the emulation library then calls the appropriate signal handler
+ and retries as needed.  
+
+ The following is a high/middle level view of signal implementation:
+	- The TaskMaster receives all of the mach_exceptions for all threads
+	  and forwards them to the notify thread in the emulation.  It also
+	  sends all inter-process events to that thread.  Intra-process
+	  events are posted directly without the aid of the TM or notify 
+	  thread.  For "hard" signals (SIGSTOP/SIGKILL) the TM gives the
+	  emulation a limited amount of time to cleanup before doing
+	  the action to the process itself (via "tm_hurtme", more later).
+	  
+	- If we are not in a syscall, the notify thread stops the appropriate
+	  emulated thread, posts the signal according to the standard BSD
+	  rules, and then does the signal delivery and goes on its merry way.
+	  Note: there is a default target thread for process events.
+	  
+	- If we are in a syscall, the signal gets posted and
+	  the appropriate thread gets posted with the
+	  (a)sync interrupt.  If the thread reaches an interrupt point
+	  (may be immediate) it executes the handler and unwinds.
+
+	- Unwinding is done by returning an exception error (exception_error.h)
+	  usually "EXCEPT_SOFTWARE".  Higher level routines detect the error
+	  and do further cleanup and return the error again.  The top level
+	  (emul_syscall) recognizes this specific subsystem of errors, delivers
+	  the signal(s) as in the previous case, and retries the syscall if 
+	  need be.
+
+	- If no interrupt point was encountered, the posted interrupts are
+	  cleared and the signals are delivered just prior to returning from
+	  emul_syscall.
+
+	- The default signal handlers and the "handlers" for SIGSTOP/SIGKILL
+	  invoke the TaskMaster method, "tm_hurtme", which will call
+	  task_suspend/task_terminate and adjust its own state.
+	  For each event, only the first call to "tm_hurtme" takes any action.
+
+	- The intr_async handler for remote invocation in MachObjects sends an
+	  "abort" message to the "agent" of the invoke being interrupted.  The
+	  agent posts interrupts to each of its active invocation threads
+	  This is generally just the one. An extra interrupt without
+	  a corresponding signal just causes the syscall to retry (needed for
+	  trivial signals like SIGCHILD anyway).
+	  
+	- If the server hits a interrupt point (never immediate) it just
+	  cleans up and again returns "EXCEPT_SOFTWARE" otherwise it runs
+	  to completion.
+	  Note: All waits/mach_msg receives/et.al which do unbounded pauses
+	  or potentially "long" pauses must be async interruptible iff they
+	  are on a syscall emulation/remote invocation path.  At this time
+	  a disk read/write is not considered "long".
+
+	- The server sends a reply to the client that either contains
+	  the EXCEPT_SOFTWARE, or the normal completion.
+
+	- The MachObject invoke async interrupt handler is waiting/able
+	  to accept either a normal reply or the interrupt reply and
+	  reacts/returns appropriately.  If the method return value does not
+	  show that it was interrupted, the interrupt is re-posted for
+	  subsequent interrupt points if any.
+
+ The following are policy statements for when/how interrupts effect the
+ implementation of syscall emulations and servers:
+	- Interrupt regions should occur at the lowest possible level to
+	  give all levels of software a chance to cleanup.
+
+	- Intr_mach_msg/intr_cond_wait (which contain intr_regions) should
+	  be used whenever mach_msg/condition_wait would have been used 
+	  iff the code is executed as part of any syscall emulation.
+	  
+	- Code must take into account that a subroutine may return an error
+	  which cannot be ignored. "EXCEPT_SOFTWARE"
+
+	- "Immediate" and "test" regions should be avoided in "normal" flow of
+	  control situations because of the costs associated with region setup.
+
+	- A routine has been installed via "intr_set_sync_default" and
+	  further sync interrupt regions are unnecessary for normal syscall
+	  emulation.

@@ -1,0 +1,820 @@
+@make(article)
+@device(file)
+@comment{@device(postscript)}
+@begin(comment)
+ # HISTORY: 
+ # $Log:	fs_fork_tcp_tour.mss,v $
+ # Revision 2.3  94/07/27  15:20:48  mrt
+ # 	fixed spelling of comment
+ # 
+ # Revision 2.2  94/01/11  17:48:18  jms
+ # 	Initial Version
+ # 	[94/01/09  18:18:26  jms]
+ # 
+@end(comment)
+@heading(A Tour of Mach_US: Open/Read/Write, Fork/Exec, TCP Connect)
+Authors: J. Mark Stevenson, Daniel P. Julin
+
+@section(Intro)
+The following  is a quick and dirty not to describe the flow of control/logic
+that occurs for Open/Read/Write, Fork/Exec, TCP Connect.
+
+It's purpose is to give people with a basic understanding of the structure and
+nature of Mach_US how these individual actions happen, and by extrapolation,
+learn more about the system on the whole.
+@comment(-------------------------------------------------------------)
+@section(File Open/Read/Write Tour)
+@subsection(An Open Happens)
+@begin(itemize)
+Enter at emul_open(pathname)
+
+Clean-up the pathname so that it can be compared against entries in
+the prefix table:
+"foo//bar" -> "foo/bar","./foo" -> "foo", "foo/./bar" -> "foo/bar".
+Do NOT remove ".." components, unless you are emulating a system
+other than vanilla UNIX, where you need to be very careful
+about symbolic links.
+@end(itemize)
+
+@subsection(Prefix Table)
+Pathname matched against prefix table, to find the longest matching
+prefix. This gives you a pointer (usName proxy) for a server where
+to start looking for the file
+
+The prefix table contains three types of entries: system, user, cache.
+@begin(itemize)
+@b(System)
+@begin(itemize)
+"system": permanent entries that configure the shape of the
+name space for this particular user:
+
+"/" -> server that handles the root of the UFS name
+space
+
+"/usr2", "/usr3", etc. -> other UFS servers in the system
+
+"/server" -> "root name server", that contains mount
+points for other servers not necessarily interesting in
+the UFS world
+
+any other servers and prefixes that you care to
+configure in the system, for example a special server
+handling a super-fast "/tmp" file system, servers for
+other kinds of file systems ("/afs"), etc.
+
+the "system" entries effectively constitute multiple
+roots for the name space, independent of each other. You
+never need to go through one system entry to reach a
+server hanging behind another system entry
+
+conversely, since each system entry is independent of
+the others, there is no way to establish a new system
+entry by designating a server through previously-defined
+entries. Each system entry must be established by "god",
+who provides a hard pointer (proxy) to the target
+server, obtained through initialization magic (or
+netname for us simple people...)
+
+note that each user/process may have a different set of system
+entries in  his/her prefix table, and thus a different
+name space. The config server is in charge of giving
+each user this initial prefix table. Currently,
+everybody gets the same initial prefix table.
+@end(itemize)
+@b(User)
+"user" entries: these can be manipulated by the user. 
+@begin(itemize)
+created by specifying a prefix and a path to an existing
+location in the name space:
+@begin(itemize)
+the path is interpreted according to the current
+contents of the prefix table, i.e. system entries
+and previously-created user entries.
+
+the existence of that path (called "canonical path")
+is the big difference between user entries and
+system entries. System entries don't have one, and
+must be installed by "god".
+@end(itemize)
+after a user entry has been created, it acts like an
+alias to an "interesting" place in the name space where
+the user like to go often
+
+only example of system entry in UNIX: "", pointing to
+the current directory for the process. Note that since
+there exists a system entry named "/", and since the
+rule of prefix table operation is to look for the
+longest matching prefix, absolute path names will
+naturally go through the root, and relative pathnames
+naturally go through this "" entry. You don't need any
+special-case code.
+
+other systems may have additional user entries:
+VMS logical names,
+"tilde" names in someone's paper, I forgot who.
+@end(itemize)
+@b(Cache)
+@begin(itemize)
+As described below, the pathname resolving
+logic will sometimes iterate through servers while
+traversing a pathname. The "cache" entries are automatically
+managed by the prefix table object to try and remember those
+steps (mount points/symlinks/..)
+taken in resolving a long pathname, and jump directly
+to the right server.
+
+Also used to cache the evaluation of
+symbolic links encountered during previous pathname operations.
+@end(itemize)
+@end(itemize)
+Main advantages of the prefix table approach:
+@begin(itemize)
+easy customization of name spaces, which is a goal of many
+modern systems
+
+independence between servers: no need for one server to
+contain a mount point for another (unless you want to)
+@begin(itemize)
+simplifies server implementation
+
+no bottleneck at the server containing the mount
+point(s)
+
+different users may see different mount points
+@end(itemize)
+caching provides best possible performance in a multi-server
+world
+@end(itemize)
+
+Main issue with prefix table approach is:
+@begin(itemize)
+the naming context is large, and potentially different for
+each user. Difficult to transfer it to another process that
+must operate on your behalf.
+
+Some cached entries can be made incorrect by name motion.
+@end(itemize)
+@subsection(NS_Resolve Loop)
+strip the prefix from the pathname, and invoke ns_resolve() with the
+remainder against the usName proxy obtained from the prefix table.
+
+emul_resolve() will return one of four results:
+@begin(itemize)
+"I have traversed the whole path, and found a
+file/tty/whatever at the end. Here is a proxy for this
+object."
+We have found what we need; see below.
+
+"After traversing n characters in the path, I have
+encountered a special "mount point" entry. Here is a proxy
+for a usName object that was stored in the mount point."
+@begin(itemize)
+Strip the first n characters off the path.
+
+Call emul_resolve() with the new proxy.
+@end(itemize)
+
+"After traversing n characters in the path, I have
+encountered a special "symbolic link" entry. Here is a
+proxy for the directory corresponding to these first n
+characters of the path, and here is the string stored in the
+symbolic link entry."
+@begin(itemize)
+Strip the first n characters off the path.
+
+Prepend the symbolic link string to the rest of the
+path, or do whatever your system requires to interpret
+symbolic links (evaluate embedded environment variables,
+@@sys, etc.)
+
+if the symlink is absolute (begins with "/"), go back to
+the prefix table and restart the whole name resolution
+process with the new pathname.
+
+if the symlink is relative, call emul_resolve() with the
+proxy corresponding to the directory containing the
+symlink, as returned previously.
+@end(itemize)
+"After traversing n characters of the path, I have run into
+a component that does not match any existing name in my name
+space. Here is a usName proxy for the directory
+corresponding to the first n characters of the path."
+@begin(itemize)
+if the next component in the path name is "..",
+interpret it according to the rules of whichever system
+you are emulating, construct a modified pathname, and
+continue the name resolution with it, as you would for a
+symlink or mount point.
+
+if the next component in the path name is some other
+string that you want to interpret specially (e.g.
+"@@sys"), interpret it and proceed as above
+
+otherwise, declare "NAME_NOT_FOUND" and abort
+@end(itemize)
+@end(itemize)
+@begin(comment)
+I'm actually lying a little bit about that last case
+(ns_resolve() stops when it find something unknown). Currently,
+it just returns an error and nothing else. The emulation library
+logic parses the whole path name ahead of time looking for ".."
+and "@@sys", and only feeds to ns_resolve() chunks that it knows
+it has a chance of understanding. But things should really be
+modified to work as I described above...
+@end(comment)
+
+in UNIX, the handling of ".." through symbolic links requires
+some tricky hackery. While processing a full pathname, the
+emulation library logic actually constructs a "canonical path"
+corresponding to the original path, but with all the symlinks
+expanded. ".." is actually interpreted as a backspace in that
+canonical path instead of the original path, and the resolving
+loop proceeds with the modified canonical path after the ".."
+has been interpreted. The beauty of this is that it works, even
+though the NS interface knows nothing about this complexity
+
+Main advantages of this form of resolving loop:
+@begin(itemize)
+same user-centered approach as found in NFS: the user-side
+code (emulation library) can interpret various funny
+components in pathnames in a UNIX-dependent way, without
+hardwiring anything into the servers. However, since a
+server may choose to traverse as much or as little of the
+path as it wants before returning, you can use hardwired
+server-side semantics if you want.
+
+unlike NFS, we try to process as many pathname components in
+the server as possible or reasonable before returning to the
+user. This minimizes the number of RPC's. NFS makes a server
+RPC for each individual component, because it needs to check
+its mount table at each step. We don't have to, because the
+prefix table took care of that for us.
+
+Standard case your prefix table directs you to the proper 
+"top level" directory object for the correct server and it returns
+the OS item that you wanted.  The exceptions only occur for the first
+time though a given path to a server.
+
+servers are still largely independent, and never talk to
+each other. Failure of one server does not prevent another
+from functioning.
+@end(itemize)
+@subsection(Authentication)
+@begin(itemize)
+each proxy is associated with a set of credentials representing
+the user to which this proxy has been handed-out
+
+there is one special set of credentials, called the "ANON"
+credentials, that represent nobody.
+
+you can give a proxy with ANON credentials to any user, but the
+server will refuse to execute any operation invoked on that
+proxy except for ns_authenticate(). In effect, such a proxy lets
+a user designate an item, but no do anything with it.
+
+whenever a user receives a ANON proxy from somewhere, it invokes
+ns_authenticate on it and supplies an authentication token. This
+returns a new proxy with real credentials corresponding to the
+authentication token supplied by the user. A server will
+normally accept various requests invoked on such a proxy, in
+accordance with the proxy credentials and the item's ACL.
+
+whenever a server returns a proxy as part of the name resolving
+process, it normally returns an ANON proxy. It is up to the user
+to use that ANON proxy to get a new authenticated proxy before
+proceeding with the resolving loop.
+
+as an optimization, when a server involved in a resolving loop
+returns a usName proxy corresponding to a directory managed by
+this server itself, it may elect to return a proxy already
+associated with the same credentials as those on the proxy on
+which the ns_resolve() came. But such "credentials inheritance"
+never takes place across server boundaries.
+@end(itemize)
+
+Main advantages of this approach:
+@begin(itemize)
+each server is independent of all other servers
+
+servers need not trust each other
+
+different server might use different authentication servers,
+authentication domains, etc. Authentication is a private
+matter between each particular user and each particular
+server.
+@end(itemize)
+Main issues with this approach:
+there is no automatic or standard way for a server to
+inherit the authentication credentials of a client and act
+on his/her behalf when talking to other servers. All this
+can be done, but it must be specifically hacked.
+
+@subsection(Access Modes)
+Independent of authentication and access control, it
+may be necessary for a server to know what kind of operations a
+client intends to invoke on one of its items. For example, the
+server may not return the same kind of proxy to a client that only
+wants to stat() a file, to one that wants to read it, or to one that
+wants to write it. Or even if everyone gets the same kind of proxy,
+the server might simply want to know if there exists clients that
+have the file open for write, or if the file is currently read-only
+across the whole system. To that effect, each proxy is also
+associated with a set of "access mode" bits that specify what the
+client intends to do. These bits are simply specified by the client
+in all primitives that return a proxy, such as ns_resolve() and
+ns_authenticate(). 
+
+@subsection(Accessing a File)
+Once the pathname has been resolved and the user
+has received a (authenticated) proxy for the target file, it may
+start invoking io_read() and io_write() operations on that file.
+@begin(itemize)
+files are purely random-access objects. They do not support
+io_read_sequential() and friends. Conversely, only purely
+sequential objects (those for which there is an INTRINSIC notion
+of sequence, such as pipes, tty's, etc.) support
+io_read/write_sequential and not io_read/write.
+
+If the user (emulation library) wants to simulate sequential
+access to a file, it must keep track of the current offset
+him/herself, and supply it with each io_read() call.
+
+there are two special mechanisms to share a "current offset"
+between two user processes:
+@begin(itemize)
+store the offset in a blackboard object (not implemented)
+
+hack for appending to LOG files with multiple writers (eg. compiling)
+@end(itemize)
+@end(itemize)
+advantages of this approach:
+@begin(itemize)
+files may be accessed concurrently by many different groups
+of users, which independent notions of "current offset".
+This approach avoids the need to keep track of all these
+offsets in the server, and makes the server more
+"stateless".
+
+any funny semantics of offset sharing, seek() or whatever
+are pushed in the OS-specific emulation library, and out of
+the generic server
+
+seek() can be  really fast!
+@end(itemize)
+
+Issues with this approach:
+
+offset sharing is tough, and maybe expensive. Note that
+there is no reason why offset manipulation need be expensive
+when no sharing takes place.
+
+@subsection(Mapped Files)
+Default file access is done by mapping the file into the users emulator space.
+A mapped file is just a special kind of proxy
+@begin(itemize)
+a file server that wishes to use mapped files simply returns a
+mapped-file proxy in ns_resolve() instead of just a default
+usIO_proxy. The remote invocation mechanism takes care of
+instantiating the right kind of proxy on the client side (the
+proxy string name actually travels in the Mach message)
+
+when a mapped-file proxy is instantiated and activated, it calls
+back its "home" server asking for a pager port and some
+house-keeping information. It then simply maps the file
+(invisibly to the user) and away we go!
+@begin(itemize)
+the call to obtain the pager port is lazy-evaluated until
+someone actually invokes io_read() or io_write() on the
+proxy. This is because many files are opened but never read,
+and also because a parent process might open a file and just
+pass it to its child without reading it itself.
+
+the remote invocation facility should be extended to pass
+the pager port and other info along with the basic proxy
+specification in the return from ns_resolve(), instead of
+forcing such a call-back.
+@end(itemize)
+mapped-file proxies are careful when cloning, since mapped-file
+areas are not normally inherited across task_create()
+
+in addition to the pager port, a proxy also needs to know the
+actual size of the file when reading from the mapped area, and
+must inform the server when changing that size when appending or
+truncating the file. Ideally, the file size should be managed as
+a shared data element through a blackboard server. For now, we
+just use a heuristic to let proxies keep a private copy of the
+size:
+@begin(itemize)
+when activating the proxy, the server indicates the current
+size
+
+when touching data inside the "current size", the proxy
+simply assumes that the file is never truncated, and goes
+ahead locally
+
+when reading past the assumed end of file, the proxy first
+checks with the server before returning an eof indication to
+the user. If the file has grown since the last time we
+checked, the proxy updates its notion of the "current size".
+
+when appending to the file, the proxy writes the data in the
+mapped area, but also sends a short message to the server to
+inform it of the change in size. I'm not sure, but I may not
+have implemented this completely, and the whole io_write()
+may just be sent to the server without writing to the mapped
+area.
+
+NOTE that this issue is different from the issue of shared
+seek offsets. There may be different seek offsets for
+different groups of processes that have opened the file
+independently. But there is only one file size!
+@end(itemize)
+@end(itemize)
+@comment(-------------------------------------------------------------)
+@section(Fork Exec Tour)
+Note: Both "fork" and "exec" are primarily emulation library activities
+with the mach kernel.  Very little server participation is needed.
+
+@subsection(Before the Fork)
+Whenever an emulation lib receives OS item proxy obj
+or creates its own complex object,
+the obj is registered with the Clone Master (an emulation side object).
+Either directly, or indirectly
+via a registered emul_lib object like the file descriptor table.
+
+Each of these registered objects has the methods: clone_init, clone_abort,
+clone_complete used to recreate an object within a new task (more below).
+
+@subsection(Forking in the Parent)
+@begin(itemize)
+Fork request comes in.
+
+Prepare cthreads for a task_create
+
+Do the mach task_create which makes the new task with a logical copy of both
+the users program and the emulation system.  That task is not yet running.
+
+The cthreads is told that the task create is over, fixup for the parent.
+
+Make the initial thread in the child, and set its registers to startup
+in the right way/place.
+
+PreRegister the new child with the process_manager.  Getting a task_obj for
+the child to be used by the parent.
+
+Insert some special ID tokens(ports) into the child and
+Call all of the clone_inits methods,  These primarily insert needed
+ports (like the remote server port for a proxy) into the child.
+Since each process has its own port space, then all of the ports
+can be inserted as the same port_name (number)
+into the child space hence, all references
+to those ports in the inherited memory of the child will work when the
+child starts up.
+Note:  these inserts should be done in mass, but there is no way to do
+that in Mach3.0 at this time.
+
+If any of the above fails, kill the child, call all the appropriate
+clone_abort methods and return failure.
+
+Actually start the child (task_resume).
+
+Return the pid from the child's task obj.
+@end(itemize)
+
+@subsection(Forking in the Child)
+@begin(itemize)
+The child task starts running.
+
+Cthreads is told that we are running in the child.  This will cleanup cthread
+internal structures and logically was away all threads that are not the
+primary running thread.
+
+Emulation lib stacks are cleaned up.  (emulated syscalls are run on
+emul_lib stacks).
+
+The "clone_complete" methods are executed for the various registered objects.
+Note:  The protection "agents" in the servers representing the active OS
+item proxies held by the parent, are now also representing those OS items
+for the child.
+Note: As a general rule, the "clone_{init,abort,complete}" do not need to
+contact the server associated with a proxy obj.  I can think of none that
+do at this time.
+
+There is a special object called the notify_obj.  It is used by an emulation
+lib to receive upcalls of various events.  When it is clone_completed,
+it starts a thread to receive these events.  Most notably interrupts which
+the emulation lib translates into unix signals.  The notify_obj is the
+only emulation side object which has proxies in remote processes.
+
+The "task_obj" is translated to be its parent_task_obj, and we register
+with the process_manager
+to get our own object task_obj and tell it about our reconstituted
+notify object.
+The process_manager puts it into the process name space/job group/ 
+process/group directories.
+
+Return through the appropriate place in the users call stack.
+@end(itemize)
+
+@subsection(Forking Methodology: Notes, Strengths and Weaknesses)
+
+Strengths:
+@begin(itemize)
+The emulation lib driven nature of forking implementation
+assure data locality.
+
+Since none of the servers, except the process_manager, even need to be notified
+that the fork has occurred, there is fire storm of messages to do said
+fork, no context switches to the servers, and no need to page in
+inactive server parts.
+@end(itemize)
+
+Weaknesses:
+@begin(itemize)
+The inability to install/inherit a set of ports instead of one at a time
+makes for a lot of unnecessary kernel interaction.  Such a feature should
+be in the mach kernel but has not been added to date because of various
+religious conflicts.
+
+The possibility of shared "agents" makes interrupting active server
+requests a bit more challenging.
+
+Problems and violations of the emulation-lib space get continued to the new
+process.  The sins of the parent are meted upon the child.
+
+Since the user controls his/her own cthreads lib, it is up to said user to
+manipulate those threads for forking.  All threads other than the forking
+thread will not exist after the fork.
+@end(itemize)
+
+@subsection(Exec)
+@begin(itemize)
+Exec is called
+
+We resolve the file name
+
+Check if it is a script or a real executable.  If it is a script, get
+the name and the args, and iterate.
+
+Copy the args and env into contiguous mem.
+
+Clean the address space of the users text/data.
+
+Load the new program.
+
+Setup the new argv, user stack, etc.
+
+Reset some some stuff in the emul_lib (signal vector, primary thread, ...)
+
+Notify the process_mgr of program about to be executed (for "ps" uses).
+No reply needed. (TBD)
+
+Return to the start address of the new program.
+@end(itemize)
+The strength of this methodology:
+@begin(itemize)
+Fairly straight forward, emul_lib driven with server involvement only to
+get the executable and tell the process_mgr what happened.
+@end(itemize)
+
+There are some weaknesses to this methodology:
+@begin(itemize)
+Again, as with forking, it is the users problem to cope with with
+multiple user space threads.  No action is taken about said threads (the
+emulator may never have seen them) and the user probably doesn't what them
+active in the new executable.
+@end(itemize)
+@comment(-------------------------------------------------------------)
+@section(TCP Connect Tour)
+By the nature of the BSD UNIX socket interface,  there is much pain that must
+be suffered between the time one decides that one wants to read data at
+a well known attachment point, and the time one actually has data.  This
+section will lead us thru that pain and describe the details involved in
+doing so in MACH-US for a TCP connection.
+
+From a high level perspective, there are three layers of interface involved:
+BSD sockets, XTI-OSI transport layer interface, and the University of AZ
+xkernel network protocol system (not related to X windows in anyway).
+@begin(itemize)
+BSD sockets are what we are emulating to enable the classic BSD applications
+to run (inetd, telnet(d), ftp(d),...).  
+
+The XTI-OSI interface is supported
+by the network server as a more "generic" transport layer interface so that it
+can be reasonably used to support emulations other than BSD sockets or possibly
+other variants on the socket logic.  XTI is the "X/Open" standards group
+definition for a OSI compliant transport layer interface.
+This interface is not completely  XTI compliant, but is based upon
+that spec.  There is a part of the XTI layer of code which supplies an
+xkernel "anchor" or "up" protocol for the xkernel to call into.
+These protocols
+are currently supplied for both UDP and TCP and are called by
+the corresponding xkernel protocols to handle udp/tcp protocol upcalls.
+These protocols are referred to as "ustcp" and "usudp".  They
+act as an xkernel
+data/request sink instead of a pass through layer, hence
+they only need
+to support the appropriate half of the xkernel protocol semantics.  They
+then support the Mach-US/XTI interfaces.
+
+Finally, the AZ "xkernel" is used as a protocol engine.
+This choice was made to both supply
+us with the protocols we need and to leverage their current/research.
+most notably their netIPC protocol for the Mach3.0 IPC netmsgsvr.
+This netmsgsvr is implemented as yet another xkernel protocol.
+@end(itemize)
+
+Lets now go thru a "server side" TCP connection and initial data receive.
+
+@subsection(socket)
+@begin(itemize)
+The "socket" syscall occurs, and the corresponding emul_lib routine is called.
+This syscall just returns a file descriptor (FD) to be acted
+upon later, some initialization is also done as well as description of what
+the socket will be used for.
+
+Determine if we to be a UNIX local socket or an internet (INET) socket.
+no other families of sockets are supported at this time.  
+
+Then we the determine if we are "STREAM" (TCP) or "DGRAM" (UDP) oriented.
+From this we know that path to the Mach-US directory which represents this
+kind of communication.  In this case "/servers/net/tcp"
+
+Call "ns_resolve_fully" to invoke the name resolution software described
+above in the "File Open" section above to get a directory object for that
+path.  This directory will be represented in the emul_lib by a proxy for the
+directory object that resides in the net server.
+This is where we die if there is no net server running, or it is
+brain dead.
+
+Create a nameless uxio_socket object containing
+the information we have learned.
+This object is a emul_lib only object and is associated with a FD
+number which is returned to the user for future use.
+
+At this point, a "setsockopt" syscall may be made to do further initialization.
+The sockopts often are for tweaking things specific to the implementation
+of BSD sockets.  There is some support for the more meaningful opts in the
+xkernel, but at this time,the emulation lib merely returns success for any
+sockopt request, and takes no action.  This appears sufficient for the
+for the time being.
+@end(itemize)
+
+@subsection(bind)
+The syscall "bind" is then called by the user to associate an IP address
+with the socket in question.
+
+Convert the address to Mach-US XTI format.
+
+Call the "net_create" method of the TCP directory object to get a
+"usNetConnector" class transport level end point for the address in
+question.  This may fail because of protection or namespace conflicts.
+
+The net server creates the connector object, sets up queues for pending
+connections and creates a xkernel "participants list" for
+the address of the endpt.
+
+The object is placed in the tcp directory with a name that corresponds to
+the bind address.  The object is a "tmp_object" this means that when all
+other references to it disappear, the object automatically disappears
+from the directory.
+
+The xkernel is then informed of the existence of the end point thru
+its "xOpenEnable" routine for the TCP protocol.  It is now ready to receive
+connection requests.
+@comment(bug here? should this wait until the listen?)
+
+An agent is created for the connector object and that agent is returned
+to the emul_lib for future reference via the uxio object for the socket.
+
+@subsection(listen)
+The listen syscall does nothing useful accept set max number pending
+connections that can wait on the connector without being rejected.
+
+This corresponds to a server call to do the same, within the XTI
+implementation, but has no xkernel level effect.  The xkernel does not
+appear to do this kind of service restriction itself.  Extra connections
+made by the xkernel are explicitly killed if there is no room for them in
+the queue.
+
+@subsection(select)
+At this point, the "inetd" application does a "select" on the file descriptor
+which represents the connector (as well as other descriptors).
+Other applications would go directly to the "accept" phase in the next
+subsection.
+
+In the emulation lib, the select implementation works as follows:
+@begin(itemize)
+Translate the descriptors into the uxio objects (emulation side) they
+represent.
+
+Ask each one if it locally already knows if it ready for the 
+read/write/except requested.  If any are, return them in the select.
+
+If not, get a cthread for each read/write query and have them call
+a io_read/io_write with the special "probe" mode flag set.
+(unless there is currently such a probe pending from a previous request)
+
+The io_read/io_write probe methods are executed in the server and wait there
+until the given object is is ready to be read or written.
+
+Upon probe completion of a probe, a probing thread marks that it has succeeded,
+and causes the main thread to stop waiting.  It then returns itself to be
+recycled for later use.
+
+The main thread then checks to see who has finished since it went to
+sleep (may actually be more than one descriptor is ready by this point) and
+returns this info to the reader.
+
+The remaining probe threads are left to try and get lucky.  This is an
+optimization noting that selects are generally found in loops.  It is
+also cheaper to leave them go than to try and kill them off.
+
+Other actions upon the uxio objects associated with the free probes may
+cause the data to be invalidated or the probe canceled.
+@end(itemize)
+
+The io_read "probe" on a TCP connector does the following:
+@begin(itemize)
+The uxio object for a connector invokes the  "net_listen" method
+for a read probe instead of the default io_read probe.
+
+The XTI "listen" semantics are unrelated to those of the BSD semantics.
+Its semantics are to wait for a connection request on the connector in
+question, and then to return info about that connection request and
+an identifier for it.  That identifier may later be used to either XTI "accept"
+or "reject" the connection.
+
+Executing the net_listen in the server, just checks to see if there are any
+pending connections, and then waits for one to arrive from the xkernel.
+
+When the xkernel receives a request for a TCP connection (lets save ourselves
+the gory details of that)  it calls the "OpenDone" routine in the "ustcp"
+protocol.  Note: the xkernel automatically accepts connection requests, even
+before telling us it has one.  There is no way to actually reject a connection
+for an enabled address.  
+
+A new object is created to represent the connection. It is a "ustcp_cots"
+object which supports the "usNetCOTS" interface.  COTS stands for Connection
+Oriented Transport Service.
+
+We then queue the request on the request queue of the
+appropriate connector and wake any waiting listeners.
+
+At this point, our earlier friend, net_listen returns to the emulation
+lib, and the io_read probe succeeds.
+@end(itemize)
+
+@subsection(accept)
+The "accept" syscall is made:
+@begin(itemize)
+The emul_lib first does a "net_listen" as described above for select.
+
+It invokes the "net_accept" method on the connector for the connection
+described by that listen.
+
+In the server, we dequeue that connection, and place it
+in the tcp directory with
+a name which describes the two ends of the connection.
+
+An agent is created for it, and the agent is returned to the emul_lib
+to be associated with a new FD and returned to the user.
+@end(itemize)
+
+@subsection(recv)
+The "recv" syscall is used to receive data from a socket.
+@begin(itemize)
+The uxio_socket object translates this into a normal ux_read, just like a
+read on any other uxio object.
+
+Since a usNetCOTS is a sequential IO object (can't seek on it), an
+io_read_seq method is invoked against it, and brings us to the server.
+
+In the server, the ustcp_cots object being invoked against is
+uses the Mach-US bytestream object to implement its data enqueuing.  Hence
+a read is done on the bytestream.  This may wait as appropriate until
+there is data available.
+
+When the xkernel receives data on the connection in question it calls
+"Demux" routine on the "ustcp" protocol.
+
+The ustcp_demux routine does the following:
+@begin(itemize)
+Determine the target usNetCOTS object for the data.
+
+Translate the data from xkernel message format to MachUS IO block list format.
+(This currently requires a copy may be possibly to eliminate this copy.
+Outgoing data does not require a copy for this translation.)
+
+Append the list to the bytestream associated with the usNetCOTS object.
+This will cause waiting reads to be awakened.  The amount of data that can
+be held by a bytestream can be bounded, and this bounding can be reflected
+back into the xkernel TCP causing the standard TCP halt of service for
+lack of space ion the current TCP window.
+@end(itemize)
+
+Back to the waiting io_read_seq, it dequeues data min(requested,available)
+amount, and returns is to the caller in the emulation lib.
+
+This data then get placed into the user buffer and the recv returns.
+@end(itemize)

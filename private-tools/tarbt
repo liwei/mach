@@ -1,0 +1,8 @@
+#!/bin/csh
+mv ../buildtools/buildtools.tar.Z ../buildtools/buildtools.old.tar.Z
+(cd ../buildtools/src; tar cvf - -e ./gnu . | compress > ../buildtools.tar.Z)
+
+mv ../buildtools/gcc.tar.Z ../buildtools/gcc.old.tar.Z
+(cd ../buildtools/src; tar cvf - gnu  | compress > ../gcc.tar.Z)
+
+(cd ../buildtools; zcat buildtools.tar.Z | tar tf - > buildtools.tc; zcat gcc.tar.Z | tar tf - > gcc.tc; cp -p src/Makefile-version VERSION)

@@ -1,0 +1,2 @@
+mach3.buildtools release=default host=x29.mach.cs.cmu.edu hostbase=/usr2 base=/afs/cs/project/mach/public/src prefix=buildtools/src use-rel-suffix crypt=testing
+

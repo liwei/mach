@@ -1,0 +1,1 @@
+(cd ../buildtools; zcat buildtools.tar.Z | tar tf - > buildtools.tc; zcat gcc.tar.Z | tar tf - > gnu.tc; xp -p src/Makefile-version VERSION)

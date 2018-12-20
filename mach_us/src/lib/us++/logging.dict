@@ -1,0 +1,46 @@
+# HISTORY:
+# $Log:	logging.dict,v $
+# Revision 2.2  93/01/20  17:37:52  jms
+# 	Dictionary for multi-server logging facility.  First revision
+# 	[93/01/18  16:31:01  jms]
+# 
+1000 remote.cc: first remote.cc message.
+1001 remote: Constructor this=0x%x
+1002 remote: Destructor, this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+1003 remote: get_transfer_port this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+1004 remote: get_transfer_port.mscount_incr this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+1005 remote: get_transfer_port.mscount_reset this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+1006 remote: get_transfer_port.mscount_one this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+1007 remote: register_incoming_invoke this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+1008 remote: deregister_incoming_invoke this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+1009 remote: interupt_incoming_invoke this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+1010 remote: _no_remote_senders.called this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+1011 remote: _no_remote_senders.accepted this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+1012 remote:  destructor.extport_NULL this=0x%x, refcount=0x%x, no_senders=0x%x, mscount=0x%x, ext_port 0x%x
+
+2000 rpcmgr: first rpcmgr.cc message.
+2001 rpcmgr: _incoming_invoke.rpc obj=0x%x, id=%d
+2002 rpcmgr: _incoming_invoke.ipc obj=0x%x, id=%d
+2003 rpcmgr: allocate_external_port 0x%x
+2004 rpcmgr: deallocate_external_port 0x%x
+2005 rpcmgr: register_external_port port=0x%x obj=0x%x
+2006 rpcmgr: deregister_external_port port=0x%x obj=0x%x
+
+3000 top: first top.cc message
+3001 top: dereference_proc: free OBJ mem, this=0x%x, mem_addr=0x%x
+3002 top: reference_proc incr ref_cnt=0x%x, this=0x%x, mem_addr=0x%x
+3003 top: dereference_proc decr-ref ref_cnt=0x%x, this=0x%x, is_where=0x%x
+3004 top: dereference_proc enter id=0x%x, lastone=0x%x, ref=0x%x, this=0x%x, mem_addr=0x%x
+3005 top: dereference_proc exit id=0x%x, lastone=0x%x, this=0x%x, mem_addr=0x%x
+
+4000 gnulib3: first gnulib.c message
+4001 gnulib3: builtin_new enter id=0x%x last_addr=0x%x
+4002 gnulib3: builtin_new alloc id= 0x%x addr=0x%x
+4003 gnulib3: builtin_new exit id=0x%x addr=0x%x
+4004 gnulib3: buildin_delete addr=0x%x
+4005 gnulib3: default_new_handler id=0x%x
+
+5000 malloc: first lib/threads/malloc.c message
+5001 malloc: free 0x%x
+5002 malloc: malloc 0x%x, size=0x%x
+5003 malloc: malloc old_addr=0x%x, size=0x%x

@@ -1,0 +1,68 @@
+# 
+# Mach Operating System
+# Copyright (c) 1994 Carnegie Mellon University
+# All Rights Reserved.
+# 
+# Permission to use, copy, modify and distribute this software and its
+# documentation is hereby granted, provided that both the copyright
+# notice and this permission notice appear in all copies of the
+# software, derivative works or modified versions, and any portions
+# thereof, and that both notices appear in supporting documentation.
+# 
+# CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
+# CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
+# ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
+# 
+# Carnegie Mellon requests users of this software to return to
+# 
+#  Software Distribution Coordinator  or  Software.Distribution@CS.CMU.EDU
+#  School of Computer Science
+#  Carnegie Mellon University
+#  Pittsburgh PA 15213-3890
+# 
+# any improvements or extensions that they make and grant Carnegie Mellon 
+# the rights to redistribute these changes.
+#  
+#
+#
+# HISTORY
+# $Log:	prefix.config.template,v $
+# Revision 2.3  94/07/07  16:37:55  mrt
+# 	Updated copyright
+# 
+# Revision 2.2  94/06/16  17:41:06  mrt
+# 	Corrected spelling of supperroot and change root_server
+# 	to pathname_server. Renamed to prefix.config.template
+# 	[94/06/03            mrt]
+# 
+# Revision 2.6  94/06/01  18:19:57  mrt
+# 	Added comments.
+# 	[94/04/21            mrt]
+# 
+# Revision 2.2  91/10/07  00:12:43  jjc
+# 	Created.
+# 	[91/10/02  17:56:45  jjc]
+# 
+#  This file is read by the configration server to initialize
+#  the emulation prefix table. The format of each line is:
+#      <prefix-name>   =>   <server-name>
+#   where <prefix-name> is the start of the name of all objects
+#   that are managed by a server. The server names
+#   correspond to the names by which the servers are started by
+#   the configuation server, i.e. the names given in STARTUP.fsadmin
+#   usually as the final argument to the server.
+#
+# The root nameserver
+/server => pathname_server
+#
+# The ufs server handling the multi-server's root partition
+/ => ufs_server
+#
+# The ufs server handling the single-server's root partition
+/slash_superroot => ufs_slash
+#
+# The ufs server handling the single-server's /usr partition
+/slash_usr => ufs_usr
+#
+# The ufs server handling the single-server's /usr1 partition 
+/usr1 => ufs_usr1

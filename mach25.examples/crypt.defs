@@ -1,0 +1,23 @@
+/*
+ *      MIG Definitionsdatei fuer Verschluesselungs-RPC  'crypt.defs'
+ *      MIG definition file for crypt RPC
+ */
+
+subsystem crypt 1024;
+
+#include <mach/std_types.defs>
+
+type string256 = (MSG_TYPE_STRING_C, 8 * 256);
+
+import "crypt_def.h";
+
+waittime  512;
+msgtype MSG_TYPE_ENCRYPTED;
+
+routine encode(service : port_t;
+                inout string : string256);
+
+routine compare(service : port_t;
+                in              in1 : string256;
+                in              in2 : string256;
+                out             result : int);

@@ -1,0 +1,160 @@
+subsystem c_auth 3700;
+/*
+ * c_auth.defs
+ *
+ *	MIG definitions for Central Authentication Service.
+ *
+ */
+
+/*
+ * HISTORY:
+ * $Log:	c_auth.defs,v $
+ * Revision 1.4  92/03/05  15:11:07  jms
+ * 	Upgrade to use no MACH_IPC_COMPAT features.  New IPC only!
+ * 	[92/02/26  19:10:59  jms]
+ * 
+ * Revision 1.3  90/12/19  11:06:17  jjc
+ * 	Added cas_login_create() to login a user and create the user
+ * 	if the user does not exist yet.
+ * 	[90/10/09            jjc]
+ * 
+ * Revision 1.2  89/05/17  16:52:33  dorr
+ * 	add cas_login_priv()
+ * 	[89/05/15  12:22:58  dorr]
+ * 
+ * 21-Oct-87  Robert Sansom (rds) at Carnegie Mellon University
+ *	Added cas_change_owner.  Added owner_id to translate routines.
+ *
+ *  1-Oct-87  Robert Sansom (rds) at Carnegie Mellon University
+ *	Set msgtype to be MACH_MSG_TYPE_ENCRYPTED.
+ *
+ * 30-May-87  Robert Sansom (rds) at Carnegie Mellon University
+ *	Changes for the new mig.
+ *
+ *  9-Apr-87  Robert Sansom (rds) at Carnegie Mellon University
+ *	Replaced cas_verify_token by cas_verify_token_ids and cas_verify_token_names.
+ *
+ * 17-Feb-87  Robert Sansom (rds) at Carnegie Mellon University
+ *	Started.
+ *
+ */
+
+waittime 600000;
+
+#include "auth_types.defs"
+
+/*
+ * It is believed that that the following line was for 2.5 mig to tell the
+ * netmsg_server to do magic stuff with the message.  This feature dos not
+ * seem to hav made it into 3.0 mig.
+msgtype MACH_MSG_TYPE_ENCRYPTED;
+ */
+import "auth_defs.h";
+
+routine cas_login(	server_port		: mach_port_t;
+			user_name		: group_name_t;
+			pass_word		: pass_word_t;
+			private_port		: mach_port_t);
+
+routine cas_login_priv(	server_port		: mach_port_t;
+			private_port		: mach_port_t;
+			user_id			: group_id_t;
+			new_private_port	: mach_port_make_send_t);
+
+
+routine cas_logout(	server_port		: mach_port_t;
+			private_port		: mach_port_t);
+
+
+routine cas_register_token(server_port		: mach_port_t;
+			private_port		: mach_port_t;
+			group_ids		: group_id_list_t =
+							^ array [ ] of (MACH_MSG_TYPE_INTEGER_32, 32, dealloc);
+			token			: mach_port_make_send_t);
+
+routine cas_delete_token(server_port		: mach_port_t;
+			private_port		: mach_port_t;
+			token			: mach_port_make_send_t);
+
+routine cas_verify_token_ids(server_port	: mach_port_t;
+			token			: mach_port_make_send_t;
+		out	user_id			: group_id_t;
+		out	group_ids		: group_id_list_t);
+
+
+routine cas_verify_token_names(server_port	: mach_port_t;
+			token			: mach_port_make_send_t;
+		out	user_name		: group_name_t;
+		out	group_names		: group_name_list_t =
+							^ array [ ] of (MACH_MSG_TYPE_STRING, 64, dealloc));
+
+routine cas_create_group(server_port		: mach_port_t;
+			private_port		: mach_port_t;
+			group_name		: group_name_t;
+			group_type		: group_type_t;
+			full_name		: full_name_t;
+			pass_word		: pass_word_t;
+			owner_group		: group_name_t;
+		inout	group_id		: group_id_t);
+
+routine cas_delete_group(server_port		: mach_port_t;
+			private_port		: mach_port_t;
+			group_name		: group_name_t);
+
+routine cas_change_password(server_port		: mach_port_t;
+			private_port		: mach_port_t;
+			group_name		: group_name_t;
+			old_pass_word		: pass_word_t;
+			new_pass_word		: pass_word_t);
+
+routine cas_change_owner(server_port		: mach_port_t;
+			private_port		: mach_port_t;
+			group_name		: group_name_t;
+			new_owner		: group_name_t);
+
+routine cas_add_to_group(server_port		: mach_port_t;
+			private_port		: mach_port_t;
+			group_name		: group_name_t;
+			add_group_name		: group_name_t);
+
+routine cas_remove_from_group(server_port	: mach_port_t;
+			private_port		: mach_port_t;
+			group_name		: group_name_t;
+			remove_group_name	: group_name_t);
+
+routine cas_translate_group_id(server_port	: mach_port_t;
+			group_id		: group_id_t;
+		out	owner_id		: group_id_t;
+		out	group_name		: group_name_t;
+		out	group_type		: group_type_t;
+		out	full_name		: full_name_t);
+
+routine cas_translate_group_name(server_port	: mach_port_t;
+			group_name		: group_name_t;
+		out	owner_id		: group_id_t;
+		out	group_id		: group_id_t;
+		out	group_type		: group_type_t;
+		out	full_name		: full_name_t);
+
+routine cas_list_members(server_port		: mach_port_t;
+			group_name		: group_name_t;
+			trans_closure		: boolean_t;
+		out	group_ids		: group_id_list_t =
+							^ array [ ] of (MACH_MSG_TYPE_INTEGER_32, 32, dealloc));
+
+routine cas_list_memberships(server_port	: mach_port_t;
+			group_name		: group_name_t;
+			trans_closure		: boolean_t;
+		out	group_ids		: group_id_list_t =
+							^ array [ ] of (MACH_MSG_TYPE_INTEGER_32, 32, dealloc));
+
+routine cas_list_all_groups(server_port		: mach_port_t;
+		out	group_ids		: group_id_list_t =
+							^ array [ ] of (MACH_MSG_TYPE_INTEGER_32, 32, dealloc));
+
+
+routine cas_login_create(server_port		: mach_port_t;
+			private_port		: mach_port_t;
+			id			: group_id_list_t =
+							^ array [ ] of (MACH_MSG_TYPE_INTEGER_32, 32, dealloc);
+			new_private_port	: mach_port_make_send_t);

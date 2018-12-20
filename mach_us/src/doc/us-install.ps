@@ -1,0 +1,1568 @@
+%!PS-Adobe-2.0
+%%Title: us-install.mss
+%%DocumentFonts: (atend)
+%%Creator: J Mark Stevenson and Scribe 7(1700)
+%%CreationDate: 27 October 1994 17:19
+%%Pages: (atend)
+%%EndComments
+% PostScript Prelude for Scribe.
+/BS {/SV save def 0.0 792.0 translate .01 -.01 scale} bind def
+/ES {showpage SV restore} bind def
+/SC {setrgbcolor} bind def
+/FMTX matrix def
+/RDF {WFT SLT 0.0 eq 
+  {SSZ 0.0 0.0 SSZ neg 0.0 0.0 FMTX astore}
+  {SSZ 0.0 SLT neg sin SLT cos div SSZ mul SSZ neg 0.0 0.0 FMTX astore}
+  ifelse makefont setfont} bind def
+/SLT 0.0 def
+/SI { /SLT exch cvr def RDF} bind def
+/WFT /Courier findfont def
+/SF { /WFT exch findfont def RDF} bind def
+/SSZ 1000.0 def
+/SS { /SSZ exch 100.0 mul def RDF} bind def
+/AF { /WFT exch findfont def /SSZ exch 100.0 mul def RDF} bind def
+/MT /moveto load def
+/XM {currentpoint exch pop moveto} bind def
+/UL {gsave newpath moveto dup 2.0 div 0.0 exch rmoveto
+   setlinewidth 0.0 rlineto stroke grestore} bind def
+/LH {gsave newpath moveto setlinewidth
+   0.0 rlineto
+   gsave stroke grestore} bind def
+/LV {gsave newpath moveto setlinewidth
+   0.0 exch rlineto
+   gsave stroke grestore} bind def
+/BX {gsave newpath moveto setlinewidth
+   exch
+   dup 0.0 rlineto
+   exch 0.0 exch neg rlineto
+   neg 0.0 rlineto
+   closepath
+   gsave stroke grestore} bind def
+/BX1 {grestore} bind def
+/BX2 {setlinewidth 1 setgray stroke grestore} bind def
+/PB {/PV save def newpath translate
+    100.0 -100.0 scale pop /showpage {} def} bind def
+/PE {PV restore} bind def
+/GB {/PV save def newpath translate rotate
+    div dup scale 100.0 -100.0 scale
+    /showpage {} def
+    /letter {} def
+    /lettersmall {} def
+    /note {} def
+    } bind def
+/GE {PV restore} bind def
+/FB {dict dup /FontMapDict exch def begin} bind def
+/FM {cvn exch cvn exch def} bind def
+/FE {end /original-findfont /findfont load def  /findfont
+   {dup FontMapDict exch known{FontMapDict exch get} if
+   original-findfont} def} bind def
+/BC {gsave moveto dup 0 exch rlineto exch 0 rlineto neg 0 exch rlineto closepath clip} bind def
+/EC /grestore load def
+/SH /show load def
+/MX {exch show 0.0 rmoveto} bind def
+/W {0 32 4 -1 roll widthshow} bind def
+/WX {0 32 5 -1 roll widthshow 0.0 rmoveto} bind def
+/RC {100.0 -100.0 scale
+612.0 0.0 translate
+-90.0 rotate
+.01 -.01 scale} bind def
+/URC {100.0 -100.0 scale
+90.0 rotate
+-612.0 0.0 translate
+.01 -.01 scale} bind def
+/RCC {100.0 -100.0 scale
+0.0 -792.0 translate 90.0 rotate
+.01 -.01 scale} bind def
+/URCC {100.0 -100.0 scale
+-90.0 rotate 0.0 792.0 translate
+.01 -.01 scale} bind def
+%%EndProlog
+%%Page: 0 1
+BS
+0 SI
+15 /Helvetica-Bold AF
+19095 8294 MT
+(Installing and Running Mach-US)SH
+10 /Helvetica AF
+26349 10647 MT
+(Mary R. Thompson)SH
+26875 12330 MT
+(27 October 1994)SH
+12 /Helvetica-Bold AF
+7200 16085 MT
+(1. Introduction)SH
+10 /Helvetica AF
+8312 17511 MT
+(The Mach-US multi-server system is comprised of a set)
+1 W( separate servers supplying generalized system)SH
+7200 18937 MT
+(services\050file systems, network server, process management, tty server ...\051 and)
+269 W( an emulation library)270 W
+7200 20363 MT
+(loaded into each user process.)
+5 W( The currently distributed emulation library \050bsd_all.lib\051 uses the services to)4 W
+7200 21789 MT
+(generate the semantics of BSD 4.3 Unix.)
+10 W( The servers themselves are written to use the services provided)11 W
+7200 23215 MT
+(by the Mach micro-kernel and the other servers.)SH
+8312 25782 MT
+(This document will describe two ways to start up the multi servers. It will also explain the file system)93 W
+7200 27208 MT
+(layout and scripts that we use.)SH
+12 /Helvetica-Bold AF
+7200 30963 MT
+(2. Overview)SH
+10 /Helvetica AF
+8312 32389 MT
+(In addition to the servers that provide OS)
+180 W( services, there are three support servers needed to get)181 W
+7200 33815 MT
+(things started: a bootstrap server, the configuration server and the diagnostic server.)
+231 W( The bootstrap)230 W
+7200 35241 MT
+(server is the user-level program that the Mach micro-kernel started. It must provide enough)
+306 W( Unix)307 W
+7200 36667 MT
+(functionality to support a shell script)296 W
+/Helvetica-Oblique SF
+25094 XM
+(exec'ing)SH
+/Helvetica SF
+29336 XM
+(Unix load format files)
+296 W( from a Unix file system. The)295 W
+7200 38093 MT
+(configuration server starts the rest of the)
+181 W( servers and sets up some connections between them. The)182 W
+7200 39519 MT
+(diagnostic server is used by the servers to write out error messages. Depending on its configuration)
+20 W( it will)19 W
+7200 40945 MT
+(use Unix style write calls or call the micro-kernel device_write interface on the console device.)SH
+8312 43512 MT
+(Either the UX server or the POE server can be used)
+120 W( as the bootstrap server. The only function this)121 W
+7200 44938 MT
+(server needs to provide is the exec'ing of the various programs that)
+145 W( comprise the multi-server, output)144 W
+7200 46364 MT
+(onto stderr and input from files or stdin. Once the servers have been started and if)
+97 W( they were built in a)98 W
+7200 47790 MT
+(stand-alone configuration, they should not make any further use of the bootstrap server.)SH
+8312 50357 MT
+(Starting the multi-servers from the UX server has the advantage of having a complete stable Unix)178 W
+7200 51783 MT
+(system running on the)
+298 W( machine which can be used to debug the multi-server servers. It has the)299 W
+7200 53209 MT
+(disadvantage of having to partition the disks so)
+76 W( that only the Unix server or the multi-server UFS server)75 W
+7200 54635 MT
+(can write on any given file-system. Normally this is)
+52 W( accomplished by setting aside one or more partitions)53 W
+7200 56061 MT
+(that are not mounted by the UX server and are mounted read-write by the multi-server, and then)271 W
+7200 57487 MT
+(mounting UX system partitions read-only by the multi-server.)
+22 W( \050Note:)
+324 W( there is no coordination between US)23 W
+7200 58913 MT
+(and UX file systems, when a partition is mounted in both systems, writing it in one system and)
+50 W( reading it)49 W
+7200 60339 MT
+(from the other can lead to unexpected results, writing from both can cause filesystem corruption.\051)SH
+8312 62906 MT
+(The setup procedure described here)
+27 W( assumes that you have been running Mach 3.0 with a Unix single)28 W
+7200 64332 MT
+(server and want to continue to run a single server system either in)
+92 W( alternation with a stand-alone multi-)91 W
+7200 65758 MT
+(server system or alongside the multi-server. We have chosen to have)
+104 W( a different root partition for each)105 W
+7200 67184 MT
+(system, in order to allow the systems to each)
+30 W( write on their own root partition. Most of the directories and)29 W
+7200 68610 MT
+(files on the root partitions can be shared via symbolic links but a few must be different.)SH
+ES
+%%Page: 1 2
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(1)SH
+12 SS 
+7200 8075 MT
+(3. Hardware and System Prerequisites)SH
+10 /Helvetica AF
+8312 9501 MT
+(Mach-US runs on a Mach)
+303 W( 3.0 kernel and supports the I386Mach-BSD4.3-Tahoe API that CMU)304 W
+7200 10927 MT
+(distributes to licensed sites. All of our developement and testing)
+204 W( has been done on i386/483 ATbus)203 W
+7200 12353 MT
+(machines. While there is not much machine specific code in Mach-US, there is some assembly language)30 W
+7200 13779 MT
+(code that would need to be added before it could be run on a different architecture.)SH
+8312 16346 MT
+(Most of our recent testing has been done on the MK83 release of)
+118 W( the micro-kernel. Mach-US has a)117 W
+7200 17772 MT
+(rather different pattern of kernel use than the UX server and)
+92 W( has often found kernel bugs that UX does)93 W
+7200 19198 MT
+(not. Therefore, we recommend caution in using it with other kernel releases.)SH
+8312 21765 MT
+(Running the multi-server on a machine)
+12 W( with less than 16Megabytes of memory is not recommended. In)11 W
+7200 23191 MT
+(our most recent experience of running the stripped servers, standalone on a machine with 12M of)252 W
+7200 24617 MT
+(memory, too much time was spent paging.)SH
+8312 27184 MT
+(I386 machines do not always gracefully handle more than 16M of memory. The)
+156 W( more recent Mach)155 W
+7200 28610 MT
+(kernels can be patched to use all the available)
+96 W( memory if they do not have SCSI disk controllers.  The)97 W
+7200 30036 MT
+(kernel variable use_all_mem needs to be set to 1.)SH
+12 /Helvetica-Bold AF
+7200 33791 MT
+(4. Initial Setup Procedure)SH
+11 SS 
+7200 37473 MT
+(4.1. SUP'ing Mach_US sources and executables)SH
+10 /Helvetica AF
+8312 38899 MT
+(If your host)
+99 W( has been enabled to SUP any of the licensed mach3 collections from CMU, the sources)98 W
+7200 40325 MT
+(and executables for Mach_US also can be SUP'ed using the following SUP command line.)SH
+/Courier-Bold SF
+8400 42130 MT
+(mach3.us release=default host=x29.mach.cs.cmu.edu hostbase=/usr2)SH
+12000 43261 MT
+(base=<your-base-directory>/us crypt=<your_crypt>)SH
+/Helvetica SF
+7200 45121 MT
+(See the note in ../public/FAQ/mach3_supinfo if you need more information about SUP'ing)
+338 W( Mach3)339 W
+7200 46547 MT
+(collections.)SH
+11 /Helvetica-Bold AF
+7200 50229 MT
+(4.2. Install the multi-server executables)SH
+10 /Helvetica AF
+8312 51655 MT
+(You can get a)
+63 W( copy of the multi-server executables either by building them from the sources or taking)62 W
+7200 53081 MT
+(them from the release directory \050.../src/us\051 SUP'ed as part of the mach3.us collection.)SH
+8312 55648 MT
+(If you are building)
+273 W( from the sources, after the)274 W
+/Courier SF
+30896 XM
+(build_all)SH
+/Helvetica SF
+36848 XM
+(pass is completed, you need to run)274 W
+/Courier SF
+7200 57074 MT
+(odemake)SH
+/Helvetica SF
+11682 XM
+(again with)4 W
+/Courier SF
+16469 XM
+(install_all)SH
+/Helvetica SF
+23350 XM
+(target. This pass will copy the libraries, servers, programs and scripts)3 W
+7200 58500 MT
+(that were built into a release directory specified by the make variable)106 W
+/Courier SF
+39097 XM
+(TOSTAGE)SH
+/Helvetica SF
+(. In)
+492 W( order to match the)107 W
+7200 59926 MT
+(default names coded into the configuration server this release directory should be either)
+41 W( named or linked)40 W
+7200 61352 MT
+(to by the name)46 W
+/Courier SF
+14277 XM
+(/mach_servers/us)SH
+/Helvetica SF
+(. There is no)
+46 W( easy way to change this name. Even though you may)47 W
+7200 62778 MT
+(have specified an alternative directory name for the startup program during the)
+15 W( boot sequence, that name)14 W
+7200 64204 MT
+(is not passed through to the multi-server.)
+123 W( This)
+525 W( directory must be readable by the bootstrap server.  It)124 W
+7200 65630 MT
+(should not be on the multi-server root partition.)SH
+8312 68197 MT
+(There are two different configurations for the tty_server. One)
+25 W( is built with the MACH_US flag, is named)24 W
+7200 69623 MT
+(tty_server.us and is used when the system is started with POE. The other is built with the)
+95 W( MACH_VUS)96 W
+7200 71049 MT
+(flag, is named tty_server.vus and)
+36 W( is used when the system is started by UX.  Whichever one you want to)35 W
+ES
+%%Page: 2 3
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(2)SH
+/Helvetica SF
+7200 7929 MT
+(use must be linked to by the name)SH
+/Courier SF
+22708 XM
+(/mach_servers/us/bin/tty_server)SH
+/Helvetica SF
+(.)SH
+8312 10496 MT
+(The emulation library)145 W
+/Courier SF
+18361 XM
+(lib/bsd_all.lib)SH
+/Helvetica SF
+27784 XM
+(must be copied to the directory)145 W
+/Courier SF
+42605 XM
+(/lib)SH
+/Helvetica SF
+45428 XM
+(on the multi-server)146 W
+7200 11922 MT
+(root partition. The script described in the next section does this for you, but if you subsequently install a)71 W
+7200 13348 MT
+(new version of this file you must remember to copy it to multi-server)SH
+/Courier SF
+37376 XM
+(/lib)SH
+/Helvetica SF
+40054 XM
+(directory.)SH
+11 /Helvetica-Bold AF
+7200 17030 MT
+(4.3. Create a root partition for the multi-server)SH
+10 /Helvetica AF
+8312 18456 MT
+(You need a partition with an empty file system that is not flagged for mounting by /etc/fstab. There)
+32 W( is a)33 W
+7200 19882 MT
+(C-shell script)60 W
+/Helvetica-Bold SF
+13376 XM
+(us-setup)SH
+/Helvetica SF
+17881 XM
+(that will setup this empty partition to)
+60 W( be the multi-server root partition. This script)59 W
+7200 21308 MT
+(mostly creates symbolic links from the multi-server)
+135 W( root partition to the directories on the single-server)136 W
+7200 22734 MT
+(root. It creates new directories for)78 W
+/Courier SF
+22785 XM
+(/dev)SH
+/Helvetica SF
+25540 XM
+(since devices are handled rather differently by the multi-server,)77 W
+7200 24160 MT
+(and for)20 W
+/Courier SF
+10631 XM
+(/tmp)SH
+/Helvetica SF
+13329 XM
+(and)SH
+/Courier SF
+15295 XM
+(/usr)SH
+/Helvetica SF
+17993 XM
+(so that the)
+20 W( multi-server can write in those directories when it is running alongside)21 W
+7200 25586 MT
+(the single-server.  The)96 W
+/Courier SF
+17810 XM
+(/etc)SH
+/Helvetica SF
+20583 XM
+(and)SH
+/Courier SF
+22624 XM
+(/lib)SH
+/Helvetica SF
+25397 XM
+(directories are new directories that are populated with symlinks)95 W
+7200 27012 MT
+(back to the single server)
+120 W( disk partitions for most files. The file)121 W
+/Courier SF
+35936 XM
+(bsd_all.lib)SH
+/Helvetica SF
+42935 XM
+(is copied in to the)121 W
+/Courier SF
+51600 XM
+(/lib)SH
+/Helvetica SF
+7200 28438 MT
+(directory and the file)74 W
+/Courier SF
+16778 XM
+(inetd.conf)SH
+/Helvetica SF
+23130 XM
+(in the)74 W
+/Courier SF
+26002 XM
+(/etc)SH
+/Helvetica SF
+28754 XM
+(directory is considerably simplified from a standard)
+74 W( Unix)73 W
+7200 29864 MT
+(one.)SH
+8312 32431 MT
+(Some of the links to file)
+171 W( system partitions are special "TRANSPARENT" links. These links point to)172 W
+7200 33857 MT
+("prefix names".  References)
+92 W( to these names will be mapped through the prefix_table to the UFS server)91 W
+7200 35283 MT
+(that is handling access for that partition. So the)
+56 W( names used in the us-setup script for "TRANSPARANT")57 W
+7200 36709 MT
+(links must agree with the names set in)
+57 W( the)56 W
+/Courier SF
+26608 XM
+(prefix.config)SH
+/Helvetica SF
+34742 XM
+(table. See the section "A note about Name)56 W
+7200 38135 MT
+(Spaces" for more explanation of the prefix table.)SH
+8312 40702 MT
+(A template)
+306 W( for this script is released as)307 W
+/Courier SF
+28218 XM
+(etc/us_setup.template)SH
+/Helvetica SF
+(. It)
+892 W( should be renamed to)307 W
+7200 42128 MT
+(us_setup and edited to reflect the actual names of the disk partitions on your machine.  When running this)3 W
+7200 43554 MT
+(script, you should be)SH
+/Helvetica-Oblique SF
+16649 XM
+(cd'ed)SH
+/Helvetica SF
+19317 XM
+(to the empty partition that you wish to initialize.)SH
+8312 46121 MT
+(At this point the "/usr" links)
+10 W( created to user home directories of Mach-US users should be replaced with)11 W
+7200 47547 MT
+(actual directories in the /usr directory on the multi-server root partition.)SH
+11 /Helvetica-Bold AF
+7200 51229 MT
+(4.4. Edit the host specific configuration files)SH
+10 /Helvetica AF
+8312 52655 MT
+(There are four files)
+10 W( in addition to the us_script that are used to provide information about the local host.)9 W
+7200 54081 MT
+(Templates for these files are released into the directory)63 W
+/Helvetica-Bold SF
+32444 XM
+(etc)SH
+/Helvetica SF
+(. They should be copied from)
+63 W( <file>.template)64 W
+7200 55507 MT
+(to <file> and then edited to)
+66 W( reflect your local environment. The template files assume the host has three)65 W
+7200 56933 MT
+(partitions)SH
+/Courier SF
+11572 XM
+(/, /usr,)
+37 W( /usr1)38 W
+/Helvetica SF
+20363 XM
+(that are normally mounted when running the Unix server and that the multi-)38 W
+7200 58359 MT
+(server is to have read-only access to these partitions.)SH
+/Helvetica-Bold SF
+7200 60231 MT
+(prefix.config)SH
+/Helvetica SF
+16096 XM
+(Used by the configuration server to initialize the)
+79 W( emulation prefix table. Contains the)78 W
+16096 61374 MT
+(mapping of name prefixes to the server that)
+166 W( handles the objects starting with that)167 W
+16096 62517 MT
+(prefix. It)
+278 W( needs to be edited to reflect the UFS partitions that you have on your host.)SH
+/Helvetica-Bold SF
+7200 64143 MT
+(rc.us)SH
+/Helvetica SF
+16096 XM
+(A shell script run by the configuration server to start all the other)
+42 W( servers.  This script)41 W
+16096 65286 MT
+(needs to be edited to start a UFS server for)
+114 W( each partition that you want the multi-)115 W
+16096 66429 MT
+(server to access)SH
+/Helvetica-Bold SF
+7200 68055 MT
+(STARTUP.fsadmin)SH
+/Helvetica SF
+16096 69198 MT
+(Mounts the servers in the pathname)
+150 W( server's name space.  Needs to be edited to)151 W
+16096 70341 MT
+(mount the UFS servers that have been started by)SH
+/Courier SF
+38218 XM
+(rc.us)SH
+/Helvetica SF
+(.)SH
+/Helvetica-Bold SF
+7200 71967 MT
+(start_net)SH
+/Helvetica SF
+16096 XM
+(Run to start the network)
+68 W( server. Needs to have the local host's IP address, Ethernet)67 W
+ES
+%%Page: 3 4
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(3)SH
+/Helvetica SF
+16096 7929 MT
+(net device and gateway address.)SH
+/Helvetica-Bold SF
+7200 9555 MT
+(init_env.template)SH
+/Helvetica SF
+16096 XM
+(Can be "sourced" by the first multi-server)
+69 W( process to initialize its environment. Edit it)70 W
+16096 10698 MT
+(to set whatever PATH's and aliases you feel comfortable with. It can)
+26 W( be copied to the)25 W
+16096 11841 MT
+(multi-server root partition since that is where the first process starts up.)SH
+12 /Helvetica-Bold AF
+7200 15596 MT
+(5. The Bootstrap Process)SH
+10 /Helvetica AF
+8312 17022 MT
+(When the Mach micro-kernel is booted it will start one user level server. By default this)
+3 W( is the program it)4 W
+7200 18448 MT
+(finds in)169 W
+/Courier SF
+10984 XM
+(/mach_servers/startup)SH
+/Helvetica SF
+(. This)
+615 W( document describes the cases where the startup server is)168 W
+7200 19874 MT
+(either the UX server or the POE server.  See)1351 W
+/Helvetica-Bold SF
+40775 XM
+(Setup for Mach 3.0)1352 W
+/Helvetica SF
+(,)SH
+7200 21300 MT
+(\050.../public/doc/unpublished/mach3_setup.{ps,doc}\051, for details of)
+384 W( how to use a directory other than)383 W
+/Courier SF
+7200 22726 MT
+(/mach_servers)SH
+/Helvetica SF
+15370 XM
+(so that you can choose the startup program during the)
+92 W( boot sequence.  Both of POE)93 W
+7200 24152 MT
+(and UX will look for a script /<mach_servers_dir>/)SH
+/Courier SF
+(rc)SH
+/Helvetica SF
+30685 XM
+(to execute before starting up a user shell.)SH
+11 /Helvetica-Bold AF
+7200 27834 MT
+(5.1. Starting the multi-server from POE)SH
+10 /Helvetica AF
+9424 29235 MT
+(1.)SH
+10536 XM
+(Choose)SH
+/Courier SF
+14355 XM
+(/poe_servers)SH
+/Helvetica SF
+21928 XM
+(as the name of your alternative)95 W
+/Helvetica-BoldOblique SF
+36876 XM
+(mach_servers_dir)SH
+/Helvetica SF
+(. Make)
+466 W( sure)94 W
+10536 30378 MT
+(the)SH
+/Courier SF
+12487 XM
+(startup)SH
+/Helvetica SF
+17248 XM
+(program is POE rather than the UX server and that poe_emulator and)284 W
+10536 31521 MT
+(poe_init are in place. See the document)368 W
+/Helvetica-Bold SF
+31011 XM
+(A Brief Description)
+368 W( of the POE server)367 W
+/Helvetica SF
+(,)SH
+10536 32664 MT
+(\050.../public/doc/unpublished/poe_notes.{ps,doc}, for all the details)
+121 W( on how to boot POE and)122 W
+10536 33807 MT
+(how to have alternative mach_servers directories.)SH
+9424 35622 MT
+(2.)SH
+10536 XM
+(Place the following script in)SH
+/Courier SF
+22874 XM
+(/poe_servers/rc)SH
+12936 37028 MT
+(echo Starting POE rc)SH
+12936 38059 MT
+(/etc/fsck -p)SH
+12936 39090 MT
+(echo About to mount)SH
+12936 40121 MT
+(/etc/mount -a)SH
+12936 41152 MT
+(echo starting US)SH
+12936 42183 MT
+(/mach_servers/us/bin/config_server \134)SH
+17136 43214 MT
+(/mach_servers/us/bin/emul_init \134)SH
+17136 44245 MT
+(-t /dev/console /bin/csh)SH
+12936 45276 MT
+(echo POE.rc complete)SH
+/Helvetica SF
+10536 47091 MT
+(Note that the)272 W
+/Courier SF
+17356 XM
+(/etc/mount -a)272 W
+/Helvetica SF
+25978 XM
+(should not cause the multi-server root partition to be)272 W
+10536 48234 MT
+(mounted.)SH
+9424 50049 MT
+(3.)SH
+10536 XM
+(Be sure that you have the MACH_US configuration of the tty_server)
+449 W( installed as)450 W
+/Courier SF
+10536 51192 MT
+(/mach_servers/us/bin/tty_server)SH
+/Helvetica SF
+(.)SH
+9424 53007 MT
+(4.)SH
+10536 XM
+(Reboot the system.)SH
+9424 54822 MT
+(5.)SH
+10536 XM
+(When it gives)
+38 W( you a prompt, you will be talking to a)37 W
+/Helvetica-Oblique SF
+33714 XM
+(/bin/csh)SH
+/Helvetica SF
+37475 XM
+(that is a multi-server client and)37 W
+10536 55965 MT
+(thus any program you start will be a multi-server client.)SH
+9424 57780 MT
+(6.)SH
+10536 XM
+(At this point you are running as the super-root and can source the)65 W
+/Helvetica-Oblique SF
+40730 XM
+(init_env)SH
+/Helvetica SF
+44519 XM
+(script to set up)66 W
+10536 58923 MT
+(the environment or you can run)38 W
+/Helvetica-Oblique SF
+24882 XM
+(/bin/login)SH
+/Helvetica SF
+29200 XM
+(and become any user that has an account)
+38 W( on the)37 W
+10536 60066 MT
+(machine.)SH
+11 /Helvetica-Bold AF
+7200 63748 MT
+(5.2. Starting the multi-server from UX)SH
+10 /Helvetica AF
+9424 65149 MT
+(1.)SH
+10536 XM
+(Be sure that you have the)
+393 W( MACH_VUS configuration of the tty_server installed as)394 W
+/Courier SF
+10536 66292 MT
+(/mach_servers/us/bin/tty_server)SH
+/Helvetica SF
+(.)SH
+9424 68107 MT
+(2.)SH
+10536 XM
+(Create a window to run the multi-server process in.  In that window type)SH
+/Courier SF
+12936 69513 MT
+(tty)SH
+/Helvetica SF
+9424 71328 MT
+(3.)SH
+10536 XM
+(remember the tty device that was returned and type)SH
+ES
+%%Page: 4 5
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(4)SH
+/Courier SF
+12936 7824 MT
+(sleep 90000)SH
+/Helvetica SF
+10536 9335 MT
+(This reserves this window/tty for use by the multi-server processes.)SH
+9424 11150 MT
+(4.)SH
+10536 XM
+(In another window type)SH
+/Courier SF
+12936 12556 MT
+(/mach_servers/us/bin/multi <tty> &)SH
+/Helvetica SF
+10536 14067 MT
+(Where <tty> is the value was returned by)
+43 W( the "tty" command. This tells emul_init to use the)42 W
+10536 15210 MT
+(other window as the tty for the multi-server process.)26 W
+/Helvetica-Bold SF
+33945 XM
+(multi)SH
+/Helvetica SF
+36638 XM
+(is a script)
+26 W( that arranges to log its)27 W
+10536 16353 MT
+(output, kills off any previous multi-server incarnation \050via the)103 W
+/Helvetica-Bold SF
+38306 XM
+(kemul)SH
+/Helvetica SF
+41577 XM
+(script\051, and starts the)102 W
+10536 17496 MT
+(configuration_server with an emulation command line)
+106 W( to run emul_init. The user that runs)107 W
+10536 18639 MT
+(the multi script must be able to)52 W
+/Helvetica-Oblique SF
+24739 XM
+(fsck)SH
+/Helvetica SF
+26847 XM
+(the multi-server's partition. e.g)52 W
+/Courier SF
+40726 XM
+(/dev/rhd0f)SH
+/Helvetica SF
+47056 XM
+(and must)51 W
+10536 19782 MT
+(also be able to get the device port from the mach kernel.  e.g. either uid=root\0500\051 or)276 W
+10536 20925 MT
+(gid=kmem\0502\051. The output from this command will be logged in)59 W
+/Courier SF
+38775 XM
+(~/multi.log)SH
+/Helvetica SF
+45712 XM
+(unless the)
+59 W( -l)58 W
+10536 22068 MT
+(<logfile> option is used to chose a different name.)SH
+9424 23883 MT
+(5.)SH
+10536 XM
+(As the result of the multi command a prompt will appear in the first window. This is)
+68 W( from a)69 W
+10536 25026 MT
+(multi-server)SH
+/Helvetica-Oblique SF
+16148 XM
+(csh)SH
+/Helvetica SF
+(. Any)
+502 W( processes started up in)
+112 W( this new)111 W
+/Helvetica-Oblique SF
+36106 XM
+(csh)SH
+/Helvetica SF
+38051 XM
+(will be running a multi-server)111 W
+10536 26169 MT
+(client as root.)SH
+9424 27984 MT
+(6.)SH
+10536 XM
+(At this point you are running as the super-root and can source the)65 W
+/Helvetica-Oblique SF
+40730 XM
+(init_env)SH
+/Helvetica SF
+44519 XM
+(script to set up)66 W
+10536 29127 MT
+(the environment or you can run)38 W
+/Helvetica-Oblique SF
+24882 XM
+(/bin/login)SH
+/Helvetica SF
+29200 XM
+(and become any user that has an account)
+38 W( on the)37 W
+10536 30270 MT
+(machine.)SH
+11 /Helvetica-Bold AF
+7200 33952 MT
+(5.3. Bootstrapping details)SH
+10 /Helvetica AF
+8312 35378 MT
+(The POE)630 W
+/Courier SF
+13963 XM
+(rc)SH
+/Helvetica SF
+16071 XM
+(script or the)
+630 W( UX servers)631 W
+/Courier SF
+29949 XM
+(multi)SH
+/Helvetica SF
+33858 XM
+(command runs the configuration server,)631 W
+/Courier SF
+7200 36804 MT
+(bin/config_server)SH
+/Helvetica SF
+18051 XM
+(to start the rest of the multi)
+373 W( servers.  The command line syntax for the)372 W
+7200 38230 MT
+(configuration is of the form:)SH
+/Courier SF
+9600 39636 MT
+(config_server [-d<debug level>] [-p<prefix file>])SH
+18000 40667 MT
+([-s<startup script>] [emulation command line])SH
+/Helvetica SF
+7200 42178 MT
+(With no arguments the configuration server will start the servers)
+401 W( by running the C-shell script,)402 W
+/Courier SF
+7200 43604 MT
+(/mach_servers/us/etc/rc.us)SH
+/Helvetica SF
+(, fork a C thread to do port)
+125 W( name service, initialize a prefix table for)124 W
+7200 45030 MT
+(names used by the emulation)
+197 W( library from)198 W
+/Courier SF
+27200 XM
+(/mach_servers/us/etc/prefix.config)SH
+/Helvetica SF
+(, and execute)198 W
+/Courier SF
+7200 46456 MT
+(/mach_servers/us/bin/emul_init)SH
+/Helvetica SF
+25636 XM
+(which starts the first multi-user process on the)
+158 W( console.  This)157 W
+7200 47882 MT
+(default behavior assumes)
+119 W( you are bringing up the multi-server environment stand-alone, i.e. started by)120 W
+7200 49308 MT
+(POE.)SH
+8312 51875 MT
+(You can)
+190 W( specify a prefix file other than /mach_servers/us/etc/prefix.config by using the "-p" option.)189 W
+7200 53301 MT
+(Using the "-s" option, you can specify a server startup script other than /mach_servers/us/etc/rc.us.)SH
+8312 55868 MT
+(If you just want to start the servers and not)
+18 W( the emulation, you can specify the emulation command line)19 W
+7200 57294 MT
+(to be something innocuous like)
+8 W( "/bin/csh".  You can then run the emulation command separately in a shell)7 W
+7200 58720 MT
+(where the configuration server is providing port name service.)SH
+8312 61287 MT
+(In order to satisfy the default names,)45 W
+/Courier SF
+25080 XM
+(/mach_servers/us)SH
+/Helvetica SF
+35003 XM
+(should be)
+45 W( a link to the directory containing)46 W
+7200 62713 MT
+(the multi-server executables. The directory must be on a partition readable by the bootstrap server.)SH
+8312 65280 MT
+(Once all the servers have been started, the)1061 W
+/Courier SF
+36199 XM
+(rc.us)SH
+/Helvetica SF
+40538 XM
+(script runs)
+1061 W( the program)1060 W
+/Courier SF
+7200 66706 MT
+(/mach_servers/us/bin/fsadmin)SH
+/Helvetica SF
+24401 XM
+(with)SH
+/Courier SF
+26580 XM
+(/mach_servers/us/etc/STARTUP.fsadmin)SH
+/Helvetica SF
+48582 XM
+(as the input)124 W
+7200 68132 MT
+(script. This program mounts the various servers with the)
+201 W( pathname server.)200 W
+/Helvetica-Bold SF
+43064 XM
+(fsadmin)SH
+/Helvetica SF
+47376 XM
+(is a command)200 W
+7200 69558 MT
+(interpreter which makes calls directly on the multi-servers. It)
+119 W( understands about 2 dozen commands in)120 W
+7200 70984 MT
+(addition to)SH
+/Courier SF
+12092 XM
+(mount)SH
+/Helvetica SF
+15370 XM
+(and can be used for testing and debugging the servers.)SH
+ES
+%%Page: 5 6
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(5)SH
+/Helvetica SF
+8312 7929 MT
+(After the)207 W
+/Courier SF
+12784 XM
+(rc.us)SH
+/Helvetica SF
+16269 XM
+(script has been completed, the configuration server)
+207 W( will fork. The parent process)206 W
+7200 9355 MT
+(remains to provide port name service via the snames/netname interface and the child)
+37 W( process)38 W
+/Helvetica-Oblique SF
+49460 XM
+(exec's)SH
+/Helvetica SF
+52610 XM
+(the)SH
+7200 10781 MT
+(emulation command.  If this command is)324 W
+/Courier SF
+27640 XM
+(/mach_servers/us/bin/emul_init)SH
+/Helvetica SF
+(, the process will)323 W
+7200 12207 MT
+(replace the bootstrap server's)
+74 W( emulation library with the multi-server emulation library, thus transforming)75 W
+7200 13633 MT
+(the task)
+4 W( into a multi-server task. It then)3 W
+/Helvetica-Oblique SF
+24677 XM
+(exec's)SH
+/Helvetica SF
+27792 XM
+(whatever is left on the emul command line that was passed)3 W
+7200 15059 MT
+(to the configuration server. Normally this is)24 W
+/Helvetica-Oblique SF
+26541 XM
+(/bin/sh, /bin/csh)25 W
+/Helvetica SF
+33817 XM
+(or)SH
+/Helvetica-Oblique SF
+35009 XM
+(/bin/login)SH
+/Helvetica SF
+(. This instantiation of the shell will)25 W
+7200 16485 MT
+(be a multi-server client and thus any programs that it runs will be also be)
+53 W( multi-server clients, i.e. loaded)52 W
+7200 17911 MT
+(with the multi-server emulation library.)SH
+12 /Helvetica-Bold AF
+7200 21666 MT
+(6. A note about Name Spaces)SH
+10 /Helvetica AF
+8312 23092 MT
+(There are several disjoint name spaces maintained in the multi-server environment.  The)
+SH( first one is the)1 W
+/Helvetica-Bold SF
+7200 24518 MT
+(port name space)91 W
+/Helvetica SF
+15698 XM
+(maintained by the configuration server. This)
+91 W( consists of a mapping of ports to server)90 W
+7200 25944 MT
+(names. These names are known by convention to)
+208 W( other servers or programs.  The interface to this)209 W
+7200 27370 MT
+(service is defined by the calls)255 W
+/Helvetica-Oblique SF
+22013 XM
+(netname_check_in)SH
+/Helvetica SF
+30939 XM
+(and)SH
+/Helvetica-Oblique SF
+33140 XM
+(netname_look_up)SH
+/Helvetica SF
+41621 XM
+(as specified in)254 W
+/Helvetica-Oblique SF
+48997 XM
+(netname.h)SH
+/Helvetica SF
+(.)SH
+7200 28796 MT
+(These calls are made on the predefined port)SH
+/Helvetica-Oblique SF
+27099 XM
+(name_server_port)SH
+/Helvetica SF
+(.)SH
+8312 31363 MT
+(The second name space is the)83 W
+/Helvetica-Bold SF
+23067 XM
+(pathname space)83 W
+/Helvetica SF
+(. This)
+83 W( space is maintained by the pathname server)84 W
+7200 32789 MT
+(with the ns_resolve interface that maps a pathname to a proxy for the object.)SH
+8312 35356 MT
+(There is a third name space defined by a)16 W
+/Helvetica-Bold SF
+26854 XM
+(prefix table)16 W
+/Helvetica SF
+32498 XM
+(maintained by the emulation library. This table is)15 W
+7200 36782 MT
+(initialized by the configuration server with)
+15 W( some "system" entries defined in the)16 W
+/Courier SF
+42333 XM
+(prefix.config)SH
+/Helvetica SF
+50427 XM
+(file. The)16 W
+7200 38208 MT
+(prefix table maps the beginning)
+53 W( of path names to the server that handles names starting with that prefix.)52 W
+7200 39634 MT
+(Unix-style references to pathnames are handled by)
+7 W( the emulation library which strips off the longest prefix)8 W
+7200 41060 MT
+(it knows about and hands the rest of the name to the appropriate server for an ns_resolve.)SH
+8312 43627 MT
+(Most servers maintain a name space for the objects they manage. There is a UFS server for every)131 W
+7200 45053 MT
+(mounted partition, the tty server has a name entry)
+126 W( for each potential tty or pty, the task_master has a)127 W
+7200 46479 MT
+(name space for all active tasks, and the pipenet server has a name space for)
+88 W( any active pipes.  These)87 W
+7200 47905 MT
+(name spaces can be accessed through the)SH
+/Helvetica-Bold SF
+26544 XM
+(/servers)SH
+/Helvetica SF
+30658 XM
+(directory.)SH
+8312 50472 MT
+(In the current configuration setup, all the servers)
+48 W( that the configuration server starts are entered in the)49 W
+7200 51898 MT
+(port name space, \050see)199 W
+/Courier SF
+18222 XM
+(rc.us)SH
+/Helvetica SF
+21698 XM
+(for the servers and their names\051. The pathname server and the UFS)198 W
+7200 53324 MT
+(servers are given initial entries in the prefix table \050see)102 W
+/Courier SF
+32118 XM
+(prefix.config)SH
+/Helvetica SF
+(\051. The UFS servers, tty_server,)103 W
+7200 54750 MT
+(task_master, pipenet_server and net_server are all given entries)
+76 W( in the pathname space in the directory)75 W
+/Courier SF
+7200 56176 MT
+(/servers)SH
+/Helvetica SF
+(. \050see)170 W
+/Courier SF
+15119 XM
+(STARTUP.fsadmin)SH
+/Helvetica SF
+(\051. The)
+618 W( UFS servers and pathname server)
+170 W( are given)171 W
+/Helvetica-Oblique SF
+48942 XM
+(transparent)SH
+7200 57602 MT
+(symlinks)SH
+/Helvetica SF
+11311 XM
+(in the)SH
+/Helvetica-Bold SF
+14035 XM
+(/)SH
+/Helvetica SF
+14591 XM
+(directory in order to make this directory look more like a traditional Unix root directory.)SH
+12 /Helvetica-Bold AF
+7200 61357 MT
+(7. A Note about Building the Mach_US tree)SH
+10 /Helvetica AF
+8312 62783 MT
+(The programs in the Mach_US tree are built)
+47 W( with the same tools and procedures as the rest the Mach)46 W
+7200 64209 MT
+(3.0 system. The tools)
+93 W( are available in the mach3.release collection. A description of the tools and build)94 W
+7200 65635 MT
+(procedure is given in the document)SH
+/Helvetica-Bold SF
+23041 XM
+(Building Mach 3.0)SH
+/Helvetica SF
+31821 XM
+(\050.../public/doc/unpublished/mach3_build.{ps,doc}\051.)SH
+8312 68202 MT
+(There are a)
+328 W( few variations specific to this tree.  There is an additional make rules file called)327 W
+7200 69628 MT
+(osf.cmu_machus.std which defines the compile variables for c++ files)
+250 W( as well as a few compilation)251 W
+7200 71054 MT
+(constants that are unique to the multi-server. This file is)
+135 W( distributed in the directory)134 W
+/Courier SF
+45600 XM
+(src/mach_us/mk)SH
+ES
+%%Page: 6 7
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(6)SH
+/Helvetica SF
+7200 7929 MT
+(and is exported to the standard place:)SH
+/Courier SF
+24488 XM
+(export/@sys/lib/mk)SH
+/Helvetica SF
+8312 10496 MT
+(In order to provide stability and independence from the other source)
+133 W( trees, the mach_us tree builds)134 W
+7200 11922 MT
+(with its own copy)
+36 W( of the kernel and unix include files. These include files and the libraries are exported to)35 W
+7200 13348 MT
+(the directories)217 W
+/Courier SF
+14192 XM
+(export/@sys/us/{include,unix_include,lib})SH
+/Helvetica SF
+(. These directories are)
+217 W( searched)218 W
+7200 14774 MT
+(during the build before)
+146 W( the standard export directories,)145 W
+/Courier SF
+32653 XM
+(export/@sys/{include,lib})SH
+/Helvetica SF
+(. The libraries)145 W
+7200 16200 MT
+(are distributed in the)66 W
+/Courier SF
+16802 XM
+(release/@sys/us/lib)SH
+/Helvetica SF
+28546 XM
+(directory. If you are doing a shadow)
+66 W( build you can either)67 W
+7200 17626 MT
+(add this directory to your LPATH after)
+367 W( you run the setvar script or move these libraries up to)366 W
+/Courier SF
+7200 19052 MT
+(release/@sys/lib)SH
+/Helvetica SF
+(.)SH
+8312 21619 MT
+(When doing a shadow build, you have to go though the)
+8 W( include part of the export pass to populate your)9 W
+7200 23045 MT
+(local)SH
+/Courier SF
+10095 XM
+(export/@sys/us/{include,unix_include})SH
+/Helvetica SF
+33134 XM
+(directories before attempting)
+561 W( to build any)560 W
+7200 24471 MT
+(programs. To do this run)SH
+/Courier SF
+18371 XM
+(odemake export_all)SH
+/Helvetica SF
+29449 XM
+(and kill it when it starts building libraries.)SH
+8312 27038 MT
+(In looking at the Makefiles or code, you may notice a CONFIGURATION build variable which is used)
+10 W( to)11 W
+7200 28464 MT
+(select the version of LIBMACH3 to use and is passed as a -D flag to cc. Currently there are two different)39 W
+7200 29890 MT
+(configurations for servers:)SH
+7200 31762 MT
+(MACH3_US)SH
+16096 XM
+(for components that)
+3 W( must operate directly on top of the Mach 3.0 micro-kernel with no)4 W
+16096 32905 MT
+(access to Unix system calls but with)
+243 W( access to all normal services of the multi-)242 W
+16096 34048 MT
+(servers.)SH
+7200 35674 MT
+(MACH3_VUS)SH
+16096 XM
+(for components that normally operate on top of)
+23 W( the Mach 3.0 kernel, but have access)24 W
+16096 36817 MT
+(to Unix system calls as well as the multi-servers.)SH
+8312 39384 MT
+(The effective difference between MACH3_US and MACH3_VUS is in)
+69 W( the handling of I/0. MACH3_US)68 W
+7200 40810 MT
+(programs use the diag_server to handle output)
+55 W( \050normally for logging error messages\051 and do not do any)56 W
+7200 42236 MT
+(input. MACH3_VUS load with the stdio routines from libc and thus end up)
+56 W( doing read and write syscalls.)55 W
+7200 43662 MT
+(These traps are handled by the bootstrap server that was used to load the multi-server.)SH
+8312 46229 MT
+(The version of the stdio routines that are used is a function)
+120 W( of the LIBMACH3 library that is loaded.)121 W
+7200 47655 MT
+(LIBMACH3 defined as "libmach3_sa.a" for the MACH3_US configuration.)
+76 W( This library includes a version)75 W
+7200 49081 MT
+(of)SH
+/Helvetica-Oblique SF
+8440 XM
+(_filbuf)SH
+/Helvetica SF
+11514 XM
+(that returns EOF and)128 W
+/Helvetica-Oblique SF
+21642 XM
+(_flsbuf)SH
+/Helvetica SF
+24995 XM
+(that calls the diag server.  It also provides versions of the non-)129 W
+7200 50507 MT
+(syscall parts of libc.a.)SH
+8312 53074 MT
+(LIBMACH3 is defined as "libmach3_vus.a -lc" for the)
+12 W( MACH3_VUS configurations. libmach3_vus.a has)11 W
+7200 54500 MT
+(no version of)22 W
+/Helvetica-Oblique SF
+13269 XM
+(_filbuf)SH
+/Helvetica SF
+16237 XM
+(and a version of)22 W
+/Helvetica-Oblique SF
+23718 XM
+(_flsbuf)SH
+/Helvetica SF
+26964 XM
+(that makes a write syscall.)
+22 W( Since it is loading with the normal)23 W
+7200 55926 MT
+(libc.a, the)
+1 W( syscalls are handled via the emulation library by the bootstrap server, i.e. the server that loaded)SH
+7200 57352 MT
+(the program.)SH
+8312 59919 MT
+(Applications written to run)
+10 W( on a multi-server system should either link with libmach3_vus -lc if they want)11 W
+7200 61345 MT
+(to use Unix,)
+83 W( multi-server and Mach 3 features, or just -lc if they only want to use generic Unix features.)82 W
+7200 62771 MT
+(These programs when run by)
+111 W( a multi-server shell will be loaded with the multi-server emulation library.)112 W
+7200 64197 MT
+(This library directs Unix syscalls to the appropriate multi-server function.)SH
+ES
+%%Page: 7 8
+BS
+0 SI
+10 /Helvetica-Bold AF
+30322 4329 MT
+(7)SH
+12 SS 
+7200 8075 MT
+(8. Useful Programs)SH
+10 /Helvetica AF
+8312 9501 MT
+(There are some useful programs \050other than the system servers\051 in the .../release/us/bin directory:)SH
+/Symbol SF
+9242 10973 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(Fsadmin)SH
+/Helvetica SF
+14383 XM
+(can be run within Mach-US as well)
+13 W( as at setup.  It can be used for directly querying)12 W
+9980 12116 MT
+(the various servers)
+40 W( directly \050without the interposition of the emulation lib\051.  It is an interactive)41 W
+9980 13259 MT
+(program and help is included.)SH
+/Symbol SF
+9242 15074 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(Us_ps)SH
+/Helvetica SF
+13263 XM
+(is run within Mach-US to list the process)
+4 W( ids and their exec strings.  More process info)3 W
+9980 16217 MT
+(can be found by running "ls" in the)SH
+/Courier SF
+25421 XM
+(/servers/tm/*)SH
+/Helvetica SF
+33499 XM
+(directories.)SH
+/Symbol SF
+9242 18032 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(Gdb)SH
+/Helvetica SF
+(: A version that works better for attaching to processes and continuing)
+24 W( them.  This is run)25 W
+9980 19175 MT
+(under the UX server, one may attach to a process by machid)
+7 W( \050from the ms program\051 by using)6 W
+9980 20318 MT
+(the negative of the id value.)SH
+/Symbol SF
+9242 22133 MT
+(\267)SH
+/Helvetica-Bold SF
+9980 XM
+(Fsck)SH
+/Helvetica SF
+(: The default version supplied with the CMU TahoeBSD release prints out messages)139 W
+9980 23276 MT
+(warning about fast symlinks.  This version does not.)SH
+ES
+%%Page: i 9
+BS
+0 SI
+10 /Helvetica-Bold AF
+30461 4329 MT
+(i)SH
+12 SS 
+25533 8075 MT
+(Table of Contents)SH
+11 SS 
+9036 9319 MT
+(1. Introduction)SH
+53388 XM
+(0)SH
+9036 10563 MT
+(2. Overview)SH
+53388 XM
+(0)SH
+9036 11807 MT
+(3. Hardware and System Prerequisites)SH
+53388 XM
+(1)SH
+9036 13051 MT
+(4. Initial Setup Procedure)SH
+53388 XM
+(1)SH
+10 SS 
+11092 14200 MT
+(4.1. SUP'ing Mach_US sources and executables)SH
+53444 XM
+(1)SH
+11092 15349 MT
+(4.2. Install the multi-server executables)SH
+53444 XM
+(1)SH
+11092 16498 MT
+(4.3. Create a root partition for the multi-server)SH
+53444 XM
+(2)SH
+11092 17647 MT
+(4.4. Edit the host specific configuration files)SH
+53444 XM
+(2)SH
+11 SS 
+9036 18891 MT
+(5. The Bootstrap Process)SH
+53388 XM
+(3)SH
+10 SS 
+11092 20040 MT
+(5.1. Starting the multi-server from POE)SH
+53444 XM
+(3)SH
+11092 21189 MT
+(5.2. Starting the multi-server from UX)SH
+53444 XM
+(3)SH
+11092 22338 MT
+(5.3. Bootstrapping details)SH
+53444 XM
+(4)SH
+11 SS 
+9036 23582 MT
+(6. A note about Name Spaces)SH
+53388 XM
+(5)SH
+9036 24826 MT
+(7. A Note about Building the Mach_US tree)SH
+53388 XM
+(5)SH
+9036 26070 MT
+(8. Useful Programs)SH
+53388 XM
+(7)SH
+ES
+%%Trailer
+%%Pages: 9
+%%DocumentFonts: Helvetica Helvetica-Bold Helvetica-Oblique Courier-Bold Courier Helvetica-BoldOblique Symbol

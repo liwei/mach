@@ -1,0 +1,81 @@
+#!/bin/sh 
+
+MIGCOM=`wh -Lq migcom`
+
+usecc=false
+cppflags=
+migflags=
+files=
+
+
+until [ $# -eq 0 ]
+do
+    case "$1" in
+	-[qQvVtTrRsS] ) migflags="$migflags $1"; shift;;
+	-i	) sawI=1; migflags="$migflags $1 $2"; shift; shift;;
+	-user   ) user="$2"; if [ ! "${sawI-}" ]; then migflags="$migflags $1 $2"; fi; shift; shift;;
+	-server ) server="$2"; migflags="$migflags $1 $2"; shift; shift;;
+	-header ) header="$2"; migflags="$migflags $1 $2"; shift; shift;;
+	-sheader ) sheader="$2"; migflags="$migflags $1 $2"; shift; shift;;
+	-iheader ) iheader="$2"; migflags="$migflags $1 $2"; shift; shift;;
+
+	-MD ) sawMD=1; cppflags="$cppflags $1"; shift;;
+	-cc) usecc=true; CPP="$2"; shift; shift;;
+	-* ) cppflags="$cppflags $1"; shift;;
+	* ) files="$files $1"; shift;;
+    esac
+done
+
+CPP="${CPP-`wh -Lq cpp`}"
+
+for file in $files
+do
+    base="`/usr/bin/basename "$file" .defs`"
+	if $usecc; then
+		$CPP $cppflags "$file" | $MIGCOM $migflags || exit
+		rawdefs="${base}.d"
+	else
+	    	$CPP $cppflags "$file" - ${sawMD+"$base".defs.d~} |
+					$MIGCOM $migflags || exit
+		rawdefs="${base}.defs.d~"
+	fi
+    if [ $sawMD ]
+    then
+	rheader="${header-${base}.h}"
+	if [ "$rheader" != /dev/null ]; then
+		sed 's;^'"$base"'.*\.o;'"${rheader}"';' < "${rawdefs}" \
+		> "${rheader}.defs.d"
+	fi
+	ruser="${user-${base}User.c}"
+	if [ "$ruser" != /dev/null ]; then
+		if [ $sawI ]; then
+		    for un in $ruser 
+		    do
+			sed 's;^'"$base"'.*\.o;'"${un}"';' < "${rawdefs}" \
+			> "${un}.defs.d"
+		    done
+		else
+		    sed 's;^'"$base"'.*\.o;'"${ruser}"';' < "${rawdefs}" \
+		    > "${ruser}.defs.d"
+		fi
+	fi
+	rserver="${server-${base}Server.c}"
+	if [ "$rserver" != /dev/null ]; then
+		sed 's;^'"$base"'.*\.o;'"${rserver}"';' <  "${rawdefs}" \
+		> "${rserver}.defs.d"
+	fi
+	rsheader="${sheader-/dev/null}"
+	if [ "$rsheader" != /dev/null ]; then
+		sed 's;^'"$base"'.*\.o;'"${rsheader}"';' <  "${rawdefs}" \
+		> "${rsheader}.defs.d"
+	fi
+	riheader="${iheader-/dev/null}"
+	if [ "$riheader" != /dev/null ]; then
+		sed 's;^'"$base"'.*\.o;'"${riheader}"';' <  "${rawdefs}" \
+		> "${riheader}.defs.d"
+	fi
+	rm -r ${rawdefs}
+    fi
+done
+
+exit 0

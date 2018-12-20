@@ -1,0 +1,6 @@
+#!/bin/csh
+mv ../mach_us/mach_us.tar.Z ../mach_us/mach_us.old.tar.Z
+(cd ../mach_us/src; tar cvf - . | compress > ../mach_us.tar.Z)
+(cd ../mach_us; zcat mach_us.tar.Z | tar tf - > mach_us.tc; cp -p src/Makefile-version VERSION)
+
+

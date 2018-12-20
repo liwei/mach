@@ -1,0 +1,61 @@
+A new server, the Configuration Server, was added to the multi-server system.
+This new server is intended to be a configuration/admin/startup server that
+provides for:
+
+		Prefix Table
+			Initialization (global/per user)
+			Dynamic changes (mount/umount)
+		List of All Servers
+			Shutdown
+			Reboot
+			Sync
+		Start All Servers
+			Replace startup script
+			Initial access to servers
+			Name service
+			Shared library
+			Handout device ports
+			Nanny?
+		Global Functions
+			settimeofday
+			hostname, ifconfig, etc.
+		Resource Limits
+			Quotas
+		/dev
+		
+The first version of the configuration server initializes the prefix table for
+emul_init, starts the servers, and provides name service for the servers.  The 
+command line syntax for the configuration server is of the form:
+
+	config_server [-d<debug level>] [-p<prefix file>] [-s<startup file>] 
+[emulation command line]
+
+Because of the configuration server, the name space looks different.  The root,
+/, points at the ufs server now instead of the root name server.  The name
+server is rooted at /server and the tty_server is rooted at /dev.  The prefix
+configuration file determines what is rooted where.  Each line in the prefix
+configuration file is of the form <path name> => <server name>.  Any line
+beginning with "#" is considered a comment and ignored.  The default prefix
+configuration file is /mach_servers/us/lib/prefix.config.
+
+The configuration server startup file is simply a C shell script that is 
+executed by the configuration server to start the servers in the multi-server
+system.  It is similar to the old multi-server startup file, but simpler.  
+Eventually, the configuration server may be changed to start each server 
+individually instead of using a shell script.  The default startup file is
+/mach_servers/rc.us.
+
+The rest of the command line after any switches is considered to be the 
+emulation command line.  It defaults to be "/mach_servers/us/bin/emul_init
+-t/dev/console /bin/csh" if there isn't anything after the configuration server
+name or switches.  If you just want to start the servers and not the emulation,
+then you can just give something innocuous like "/bin/echo done".  Be aware 
+that the configuration server is the name server for the servers, so emul_init
+might not be able to lookup the servers if the emul_init isn't started by the
+config_server and the config_server isn't the official name server.  
+
+The source for the configuration server and its default files are in 
+/afs/cs/project/mach/mach3/us/src/latest/server/config.
+
+
+

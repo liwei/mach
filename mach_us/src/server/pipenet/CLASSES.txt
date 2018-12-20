@@ -1,0 +1,28 @@
+The following is the class hierarchy for the pipenet system:
+
+net_endpt_base --			common base class for network
+					endpoints
+	pipenet_clts_base --		common base class for CLTS endpoints
+					in the pipenet system
+		pipenet_clts_recs --	CLTS endpoint and pseudo-connector,
+					record-level I/O
+	pipenet_cots_base --		common base class for COTS endpoints
+					in the pipenet system
+		pipenet_cots_recs --	COTS endpoint, record-level I/O
+					(not implemented yet)
+		pipenet_cots_bytes --	COTS endpoint, byte-level I/O
+	pipenet_connector --		standard object to establish and
+					accept normal connections
+
+net_dir_base --				common base class for
+					network-service directories
+	pipenet_dir_base --		common base class for directories
+					in the pipenet system
+		pipenet_cldir_recs -- 	directory for connection-less,
+					record-level I/O (SOCK_DGRAM)
+		pipenet_codir_recs --	directory for connection-oriented,
+					record-level I/O (SOCK_SEQPACKET)
+					(not implemented yet)
+		pipenet_codir_bytes --	directory for connection-oriented,
+					byte-level I/O (SOCK_STREAM)
+					

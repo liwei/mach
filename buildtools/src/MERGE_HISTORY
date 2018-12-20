@@ -1,0 +1,961 @@
+    
+    
+    
+==========================================================================
+   ***** BUILDTOOLS Version BUILDTOOLS1  (mrt) *****
+    
+    
+New features:
+--- --------
+This is a  new collection consisting of the OSF/ODE tools that were
+originally in user/ode and the source for gcc 2.3.3 and the gnumake 
+and bison tools it takes to build it.
+
+Organizational changes:
+-------------- -------
+The files in the ode tree supercede the ones in user/ode which
+will be deleted on the next release of the user tree.
+
+Special notes:
+------- -----
+The files in the ode tree can be boot-strapped using the ode/setup/setup.sh
+script. After the first build, they should be built using 
+setvar and the normal odemake procedures.
+The files in the gnu tree are built using the scripts in gnu.
+
+For infomation on how to use the ODE tools look at the man pages
+for make.1, setvar.1, makefiles.5 and the Mach3_build document.
+
+******** CUT HERE ******** summary of log messages ******** CUT HERE ********
+[ ./conf/version.edit ]
+1
+[ ./ode/Makeconf ]
+moved up a level
+[ ./ode/bin/genpath/Makefile ]
+Added defintion to release the program to bin/export.
+Fixed to always make in BLD mode (no rcfiles)
+[93/01/08            mrt]
+[ ./ode/bin/Makefile ]
+Added SETUP_SUBDIRS and EXPBIN_SUBDIRS
+[93/01/10            mrt]
+[ ./ode/bin/make/Makefile ]
+Added definition to get make released to export/bin
+[93/01/08            mrt]
+[ ./ode/bin/make/bootstrap.sh ]
+Added case for luna88k
+[93/01/14            mrt]
+[ ./ode/bin/make/main.c ]
+Fixed it so that VPATH elements could be separated by spaces as
+well as :. 
+[92/08/21            mrt]
+[ ./ode/bin/makepath/Makefile ]
+Added defintion to release the program to bin/export.
+Fixed to always make in BLD mode (no rcfiles)
+[93/01/08            mrt]
+[ ./ode/bin/md/Makefile ]
+Added definition to release program to export/bin
+For now always build with -D_BLD and no libsb.a
+[93/01/08            mrt]
+[ ./ode/bin/md/md.c ]
+Fixed to accept more than one target name in a .d file.
+[92/12/18            mrt]
+[ ./ode/bin/release/Makefile ]
+Added defintion to release the program to bin/export.
+Fixed to always make in BLD mode (no rcfiles)
+[93/01/08            mrt]
+[ ./ode/bin/release/release.c ]
+Added forward static declations of diag, warn, ewarn, efatal and
+fatal.
+[93/01/10            mrt]
+[ ./ode/bin/wh/Makefile ]
+Added definition to get wh exported to export/bin
+Added a definition of NO_DIRENT
+[93/01/08            mrt]
+[ ./ode/bin/wh/wh.c ]
+Removed use of quit to make this more portable.
+[93/01/12            mrt]
+[ ./bin/xstrip/mips/coff.h ]
+Copied from kernel sources for portability
+
+[ ./bin/xstrip/mips/syms.h ]
+Copied from kernel for portability
+[ ./bin/xstrip/Makefile ]
+Updated for ODE make.
+[93/02/03            mrt]
+[ ./bin/xstrip/ccdep.h ]
+Moved from user, added pds's changes for gdb compatibility
+[ ./bin/xstrip/xstrip.c ]
+Moved from user, added pds's changes for gdb compatibility
+[ ./bin/xstrip/xstrip_aout.c ]
+Moved from user, added pds's changes for gdb compatibility
+[ ./bin/xstrip/xstrip_mips.c ]
+Moved from user, added pds's changes for gdb compatibility
+[ ./bin/xstrip/xstrip.man ]
+Moved from user
+[ ./ode/setup/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/setup.sh ]
+Changed to toolsdirs to be export/<context>/bin rather than
+tools/<context>/bin.
+[93/01/08            mrt]
+[ ./ode/setup/setvar.csh ]
+Wrapped optional `(cd $dir; pwd)` checks with 'if -d $dir'.
+Removed superfluous () from inside `( ... )`
+Replaced `unalias cd; cd ...` with `chdir`
+[93/02/02            jfriedl]
+
+Fixed for cross building. Removed setting of CPP, CC and
+ASCPP. They are now set in osf.mach3.mk.
+[92/12/16            mrt]
+[ ./ode/setup/i386_mach/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/i386_mach/setup.sh ]
+Added some comments
+[93/01/10            mrt]
+[ ./ode/setup/i386_mach/setvar.csh ]
+Added some comments and support for cross-building.
+[93/01/10            mrt]
+[ ./ode/setup/pmax_mach/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/pmax_mach/setup.sh ]
+Added some comments
+[93/01/10            mrt]
+[ ./ode/setup/pmax_mach/setvar.csh ]
+Added setenv for HOST_MACHINE
+[92/12/11            mrt]
+
+Fixed assignment of KERN_MACHINE_DIR
+[92/08/17            mrt]
+[ ./ode/setup/vax_mach/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/vax_mach/setup.sh ]
+Added some comments
+[93/01/10            mrt]
+[ ./ode/setup/vax_mach/setvar.csh ]
+Added some comments and support for cross-building.
+[93/01/10            mrt]
+[ ./ode/setup/sun3_mach/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/sun3_mach/setup.sh ]
+Added some comments
+[93/01/10            mrt]
+[ ./ode/setup/sun3_mach/setvar.csh ]
+Added some comments and support for cross-building.
+[93/01/10            mrt]
+[ ./ode/setup/sun4_mach/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/sun4_mach/setup.sh ]
+Created
+[93/01/10            mrt]
+[ ./ode/setup/sun4_mach/setvar.csh ]
+Created
+[93/01/10            mrt]
+[ ./ode/setup/luna88k_mach/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/luna88k_mach/setup.sh ]
+Created
+[93/01/10            mrt]
+[ ./ode/setup/luna88k_mach/setvar.csh ]
+Created
+[93/01/10            mrt]
+[ ./ode/setup/pmax_mach_X_alpha/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/pmax_mach_X_alpha/setup.sh ]
+Added some comments
+[93/01/10            mrt]
+[ ./ode/setup/pmax_mach_X_alpha/setvar.csh ]
+Added setenv for HOST_MACHINE
+[92/12/11            mrt]
+
+Fixed assignment of KERN_MACHINE_DIR
+[92/08/17            mrt]
+[ ./ode/setup/alpha_mach/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/alpha_mach/setup.sh ]
+Created.
+[93/01/10            mrt]
+[ ./ode/setup/alpha_mach/setvar.csh ]
+Created
+[93/01/10            mrt]
+[ ./ode/setup/setvar.man ]
+Created.
+[93/01/31            mrt]
+[ ./ode/setup/setvar.man ]
+Removed -coll option
+[ ./ode/bin/make/dir.c ]
+Added a printf for each stat under the -dd switch.
+[93/01/31            mrt]
+[ ./ode/bin/genpath/genpath.c ]
+Added include of strings.h and stdlib to silence gcc 
+warnings about conflicting with builtin definitions.
+[93/03/09            mrt]
+[ ./ode/bin/make/lst.lib/lstAlloc.c ]
+Added include of  stdlib.h for malloc.
+[93/03/09            mrt]
+[ ./ode/bin/make/buf.c ]
+Added include of stdlib.h for realloc
+and make.h for emalloc.
+[93/03/08            mrt]
+[ ./ode/bin/make/Makefile ]
+Corrected spelling of NO_STRERROR
+[93/03/18            mrt]
+[ ./ode/bin/make/hash.c ]
+Added includes of strings.h and make.h to
+shutup warnings on alpha.
+[93/03/09            mrt]
+[ ./ode/bin/make/job.c ]
+Picked up OSF mckeen's change to add code
+	to JobStart to prevent abort if keepgoing is defined
+	and no rules are found for a target.  This fixes the -k switch.
+[93/03/08            mrt]
+[ ./ode/bin/make/sprite.h ]
+Added a conditional defintion of NIL for __alpha.
+[93/03/08            mrt]
+[ ./ode/bin/make/str.c ]
+Added include of strings.h for strerror and stdlib for realloc.
+Picked up OSF mhicky's change to
+	close open comment in brk_string that was preventing
+	leading whitespace from being stripped from command line.
+[93/03/08            mrt]
+[ ./ode/bin/make/var.c ]
+Added include of stdlib.h for realloc.
+[93/03/08            mrt]
+[ ./ode/bin/makepath/Makefile ]
+Changed to use PORTING_FLAGS.
+[ ./ode/bin/makepath/makepath.c ]
+Added strerror code for porting.
+Added include of strings.h to quiet gcc warnings.
+[93/03/09            mrt]
+[ ./ode/bin/md/md.c ]
+Added include of strings.h to quiet gcc warnings.
+[93/03/09            mrt]
+[ ./ode/bin/release/release.c ]
+Added include of strings.h to quiet gcc warnings.
+[93/03/09            mrt]
+[ ./ode/bin/wh/wh.c ]
+Added code for searchp which is a libcmucs invention.
+Added include of strings.h to quiet gcc warnings.
+[93/03/09            mrt]
+[ ./ode/mk/osf.mig.mk ]
+Fixed USEMIGGCPP for gcc.2.3.2
+[93/01/10            mrt]
+
+Created
+[92/08/14            mrt]
+[ ./ode/mk/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/i386_mach/setup.sh ]
+Added NO_STRERROR for i386 Tahoe release
+[93/03/13            mrt]
+[ ./ode/setup/i386_mach/setvar.csh ]
+Added NO_STRERROR for i386 Tahoe release.
+[93/03/13            mrt]
+[ ./ode/setup/pmax_mach/setup.sh ]
+Changed default CC to cc.
+[93/03/18            mrt]
+[ ./ode/setup/i386_bnr/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/setup.sh ]
+Change INCDIRS for  expdir/usr/include to expdir/include.
+[93/03/13            mrt]
+[ ./ode/setup/setvar.csh ]
+setenv DEFCPATH 
+Changed -mastersrc argument to -masterbase.
+[93/02/06            mrt]
+
+Wrapped optional `(cd $dir; pwd)` checks with 'if -d $dir'.
+Removed superfluous () from inside `( ... )`
+Replaced `unalias cd; cd ...` with `chdir`
+[93/02/02            jfriedl]
+
+Fixed for cross building. Removed setting of CPP, CC and
+ASCPP. They are now set in osf.mach3.mk.
+[92/12/16            mrt]
+[ ./ode/setup/alpha_mach/setup.sh ]
+Set NO_STRERROR on.
+[93/03/09            mrt]
+[ ./ode/setup/alpha_mach/setvar.csh ]
+Set NO_STRERROR on.
+[93/03/09            mrt]
+[ ./ode/setup/parisc_mach/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./ode/setup/parisc_mach/setup.sh ]
+<<<log message for ./ode/setup/parisc_mach/setup.sh>>>
+47,49d46
+< # Revision 2.1  93/03/20  00:14:52  mrt
+< # Created.
+< # 
+[ ./ode/setup/parisc_mach/setvar.csh ]
+Created
+
+[ ./ode/Makefile ]
+Created.
+[93/01/10            mrt]
+[ ./ode/setup/parisc_mach/setup.sh ]
+Fixed up log messages.
+[93/03/20            mrt]
+[ ./ode/setup/parisc_mach/setvar.csh ]
+Fixed up log entries.
+[93/03/20            mrt]
+[ ./ode/setup/pmax_mach/setvar.csh ]
+Did a setenv of PORTING_FLAGS so it can be used in Makefiles.
+[93/03/19            mrt]
+[ ./ode/mk/makefiles.man ]
+ 	First checkin.
+[93/03/20            mrt]
+[ ./ode/mk/osf.mach3.mk ]
+Added -P to ASCPP definitions. With gcc this makes output that
+the assembler can read. (no #line directives ).
+Added CPATH and _MDFLAGS_ to print_makevars
+[93/02/21            mrt]
+
+Added definitions of libraries and library dependency generating
+rules. Moved mig rules to osf.mig.mk. Defined the compiler 
+programs, from Rich's Makefile-common. Added definitions for
+WH and XSTRIP
+[92/08/14            mrt]
+[ ./ode/mk/osf.depend.mk ]
+Jan-6-93  Mary Thompson (mrt) at Carnegie-Mellon University
+Created a .depend link to depend.mk since md and make
+don't use the same defaults.
+Added the -I flags to MD_FLAGS and made sure that these
+directories were also added to VPATH so that make could
+find the relative dependencies.
+[ ./ode/mk/osf.lib.mk ]
+Added rule for LIB_LONG_NAMES case for use by most Mach
+libaries.
+[92/12/31            mrt]
+[ ./ode/mk/osf.rules.mk ]
+Added include of osf.mig.mk
+[92/08/14            mrt]
+[ ./ode/mk/osf.mach3.passes.mk ]
+Added the setup targets from ODE 2.1.1
+[93/01/08            mrt]
+[ ./ode/mk/osf.obj.mk ]
+Added an echo "" to the rules so that long log files
+could be read easier.
+[93/01/07            mrt]
+[ ./ode/mk/osf.prog.mk ]
+Added an echo "" to make long log files more readable.
+[93/01/07            mrt]
+[ ./ode/mk/osf.ode.passes.mk ]
+Updated to ODE 2.1.1 to get setup passes.
+[93/01/08            mrt]
+[ ./ode/mk/osf.std.mk ]
+Jan-6-93  Mary Thompson (mrt) at Carnegie-Mellon University
+Rewrote conditional assigments as :U modifiers.
+Made all assigments conditional, so that defaults could
+be overridden in the project.mk file.
+Added setup rules from ODE2.1.1
+[ ./ode/bin/make/bootstrap.sh ]
+Added alpha_mach and parisc_mach cases.
+[93/03/08            mrt]
+[ ./ode/bin/make/porting/waitpid.c ]
+Added include of stdlib.h to quiet warnings.
+[93/03/09            mrt]
+[ ./ode/bin/md/Makefile ]
+Changed to use PORTING_FLAGS
+[ ./ode/bin/release/Makefile ]
+Added ${PORTING_FLAGS} to CFLAGS
+[93/03/19            mrt]
+[ ./ode/bin/wh/Makefile ]
+Used ${PORTING_FLAGS} instead of -DNO_DIRENT
+[93/03/19            mrt]
+[ ./ode/setup/sun3_mach/setvar.csh ]
+Made PORTING_FLAGS and environment variable so it could be
+used by Makefiles.
+[93/03/19            mrt]
+[ ./ode/setup/vax_mach/setvar.csh ]
+Made PORTING_FLAGS and environment variable so it could be
+used by Makefiles.
+[93/03/19            mrt]
+[ ./ode/setup/luna88k_mach/setvar.csh ]
+Made PORTING_FLAGS and environment variable so it could be
+used by Makefiles.
+[93/03/19            mrt]
+[ ./ode/setup/pmax_mach_X_alpha/setvar.csh ]
+Made PORTING_FLAGS and environment variable so it could be
+used by Makefiles.
+[93/03/19            mrt]
+[ ./ode/setup/setvar.man ]
+Changed meaning of -systembase
+[93/03/20            mrt]
+[ ./ode/setup/sun4_mach/setvar.csh ]
+Made PORTING_FLAGS and environment variable so it could be
+used by Makefiles.
+[93/03/19            mrt]
+[ ./bin/xstrip/xstrip.c ]
+Added sun4
+[93/02/05            mrt]
+[ ./bin/Makefile ]
+Created
+[93/01/14            mrt]
+[ ./bin/xstrip/ccdep.h ]
+Added Sandro's fix to lookfor __GNUC__=2
+[93/03/20            mrt]
+[ ./bin/xstrip/xstrip.c ]
+Picked up Sandro's changes for alpha.
+[93/03/20            mrt]
+[ ./bin/xstrip/xstrip_aout.c ]
+Added conditional defintions of SEEK_CUR and SEEK_SET
+so that we can compile with older versios of stdio.h
+[93/03/20            mrt]
+[ ./ode/setup/i386_mach/setup.sh ]
+Add /lib to DEFLPATH for Tahoe environment.
+[93/03/20            mrt]
+[ ./ode/setup/i386_mach/setvar.csh ]
+Added /lib to DEFLPATH for i386 tahoe release.
+[93/03/20            mrt]
+[ ./gnu/bison/Makefile.in ]
+updated to gcc 2.3.3
+[ ./gnu/gnumake/Makefile ]
+Modified install command to ignore failure of chgrp/chmod
+ commands. 
+[92/12/15            danner]
+Picked up gcc 2.3.3 
+(lots and lots  of files )
+[ ./gnu/gcc/config/pmax-mach.h ]
+Fix to export calls to bcopy
+[ ./gnu/gcc/ultrix-include/stsupport.h ]
+[ ./gnu/gcc/config/alpha.c ]
+Fixed broken varargs and stdargs, now they both work properly
+and for any number of mandatory arguments.
+Disabled alpha_gp_dead_after(), the whole idea is a
+misunderstanding of how the GP register is used.
+Fixed register moves to use register zero as one
+of the two (OR) operands.
+[93/02/26            af]
+[ ./gnu/gcc/config/alpha.c ]
+This is a test
+[93/03/18            mrt]
+[ ./gnu/gcc/config/alpha.md ]
+Fixed register moves to tie up only one src register.
+[93/02/26            af]
+[ ./gnu/gcc/config/alpha-bsd.h ]
+13-Mar-93 Sandro Forin (af) at Carnegie Mellon University
+Modifed the alpha.h file for Mach
+[ ./gnu/gcc/configure ]
+Added target alpha-*-bsd.
+[93/02/26            af]
+[ ./gnu/gcc/va-alpha.h ]
+Fixed indexing in bigger-than-one word branch.
+Added va_arg_sub(), lessee if they like the idea.
+[93/02/26            af]
+[ ./gnu/bootgcc.csh ]
+Created
+[93/02/02            danner]
+[ ./gnu/bootbison.csh ]
+Created
+[93/02/02            danner]
+[ ./gnu/bootstrap.csh ]
+Created
+[93/02/02            danner]
+[ ./gnu/bootpaths.csh ]
+Created
+[93/02/02            danner]
+[ ./gnu/bootgnumake.csh ]
+Created
+[93/02/02            danner]
+[ ./gnu/gcc/enquire.c ]
+In fake_f_rep(), zero u structure explicitly because four ints
+might be (usually are) more bytes than one double.
+[93/02/26            af]
+    
+    
+    
+==========================================================================
+   ***** BUILDTOOLS Version BUILDTOOLS2  (mrt) *****
+    
+    
+New features:
+--- --------
+Added a libdivide.a for the alpha only
+
+Added alpha_osf1 environment from Michael Uhlenberg
+
+Added pc532 environment from Ian Dall
+
+Added  NOT_USING_GCC2 and NO_UX environment variables.
+
+Updated and tested the i386_bnr environment. The tools
+kernel and BSDSS all build under a Jolitz release BNR2 
+environment. Note: we are using the "native gcc 1.39".
+We have not built our gcc 2.3.3 for that environment.
+
+Bug fixes:
+--- -----
+Added .ORDER to the ${LIBRARIES} rule to get the ranlibs
+serialized on multi-processor builds.
+
+Set ode/bin/release to strip code on releasing.
+
+******** CUT HERE ******** summary of log messages ******** CUT HERE ********
+[ ./conf/version.edit ]
+2
+[ ./bin/xstrip/Makefile ]
+Added DEPENDENCIES. Assume this is built after the ode tools.
+[93/03/23            mrt]
+[ ./bin/xstrip/xstrip.c ]
+Moved definition of XSTRIP_AOUT_TOO before include of xstrip_alpha.c
+which uses it.
+[93/03/22            mrt]
+[ ./bin/xstrip/xstrip_alpha.c ]
+Added include of stdlib.h and recasts of the uses of malloc.
+[93/03/22            mrt]
+[ ./bin/xstrip/xstrip_aout.c ]
+Added keeping of N_FRAME symbols, if defined.
+Print out how big the file would be if "stripped =",
+coherent with the original intent (and mips version).
+Works on alpha (native).  Spots. Made pds's changes
+64-bit safe. (size_t is not the same as int)
+[93/02/22            af]
+[ ./Makefile ]
+Created
+[93/01/14            mrt]
+[ ./gnu/gcc/cccp.c ]
+Changes for Ansi and removed bound on line_cmd_buffer.
+[93/04/07            danner]
+[ ./gnu/gcc/Makefile.in ]
+Made install of c++ and g++ ignorable.
+[92/12/16            danner]
+
+Added LIBGCCCC technology
+[92/12/15            danner]
+
+Added FLOAT_H target to make float.h. Should be set to null on 
+machines for which enquire is unsafe. Currently the luna and i386
+ are unsafe.
+[92/12/15            danner]
+[ ./Makeconf ]
+First Checkin
+[93/04/22            mrt]
+[ ./ode/setup/pc532_mach/Makefile ]
+Created.
+[93/05/07            mrt]
+[ ./ode/setup/pc532_mach/setup.sh ]
+Created by Ian Dall
+[93/04/29            mrt]
+[ ./ode/setup/pc532_mach/setvar.sh ]
+Created by Ian Dall
+[93/04/29            mrt]
+[ ./ode/setup/i386_bnr/setup.sh ]
+Changed the DEFPATH. Defined NOT_USING_GCC2
+[93/05/07            mrt]
+[ ./ode/setup/alpha_mach/setvar.csh ]
+Added setenv of host_machine
+Defined YACC to be bison, since CS version of yacc was broken
+Defined NROFF to be echo, since our NROFF sources are not 64-bit safe
+[93/04/09            mrt]
+[ ./ode/setup/alpha_osf1/Makefile ]
+Created by Michael Ulenberg
+[93/04/30            mrt]
+[ ./ode/setup/alpha_osf1/setup.sh ]
+Created by Michael Uhlenberg
+[93/04/30            mrt]
+[ ./ode/setup/sun4_mach/setvar.csh ]
+Define NO_UX environment variable to avoid compiling user
+programs that depend on the Unix Server.
+[93/04/15            mrt]
+[ ./ode/setup/Makefile ]
+Made SUBDIRS dependent on host_machine, so we no longer
+export all contexts on all platforms, but only the ones
+that might be used there.
+[93/04/28            mrt]
+[ ./ode/setup/setup.sh ]
+Added expdir/buildtools/include to INCDIRS as a place to put
+include files to override the standard system ones if necessary.
+[93/05/07            mrt]
+[ ./ode/bin/genpath/Makefile ]
+Added CCTYPE = host. Sometimes it makes a difference.
+[93/05/07            mrt]
+[ ./ode/bin/make/Makefile ]
+Changed the -DMACHINE flag to main to be -DHOST_MACHINE
+Added CCTYPE = host. Sometimes it makes a difference.
+[93/04/30            mrt]
+[ ./ode/bin/makepath/Makefile ]
+Added CCTYPE = host. Sometimes it makes a difference.
+[93/05/07            mrt]
+[ ./ode/bin/md/Makefile ]
+Added CCTYPE = host. Sometimes it makes a difference.
+[93/05/07            mrt]
+[ ./ode/bin/release/Makefile ]
+Added CCTYPE = host. Sometimes it makes a difference.
+[93/05/07            mrt]
+[ ./ode/bin/wh/Makefile ]
+Added CCTYPE = host. Sometimes it makes a difference.
+[93/05/07            mrt]
+[ ./ode/bin/md/md.c ]
+Renamed max name in struct table to maxargc to avoid conflict
+with BNR2 param.h file.
+[93/05/04            mrt]
+[ ./ode/bin/release/release.c ]
+Changed to strip files on release even when built with _BLD.
+For now we always build that way.
+[93/05/08            mrt]
+[ ./ode/bin/make/porting/ffs.c ]
+Changed include of string.h to strings.h
+[93/05/07            mrt]
+[ ./ode/bin/make/porting/getopt.c ]
+Changed string.h to strings.h
+[93/05/07            mrt]
+[ ./ode/bin/make/porting/strdup.c ]
+Changed string.h to strings.h
+[93/05/07            mrt]
+[ ./ode/bin/make/porting/strerror.c ]
+Changed string.h to strings.h
+[93/05/07            mrt]
+[ ./ode/bin/make/porting/waitpid.c ]
+Put a conditional around defintiton of pid_t as BNR2
+sys/types.h also defines it.
+[93/05/04            mrt]
+[ ./ode/bin/make/porting/strings.mk.h ]
+Checked in
+[ ./ode/bin/make/bootstrap.sh ]
+Changed MACHINE for i386_bnr to I386. 
+Added exportbase/buildtools/include to -I flags
+[93/05/07            mrt]
+
+Changed -DMACHINE flag to main.c to -DHOST_MACHINE.
+[93/04/30            mrt]
+[ ./ode/bin/make/job.c ]
+changed string.h to strings.h
+[93/05/07            mrt]
+[ ./ode/bin/make/make.h ]
+Changed string.h to strings.h
+[93/05/07            mrt]
+[ ./ode/bin/make/odemake.man ]
+Fixed missing || in precedence rules.
+[93/04/12            mrt]
+[ ./ode/bin/make/main.c ]
+Use HOST_MACHINE instead of MACHINE to set the MACHINE global
+variable, to avoid conflicts with this parameter and the value
+set in machparam.h
+[93/04/30            mrt]
+[ ./ode/include/Makefile ]
+Created.
+[93/05/07            mrt]
+[ ./ode/include/sys/Makefile ]
+BNR2 file for reference
+[ ./ode/include/sys/dir.h ]
+BNR2 file for reference
+[ ./ode/include/sys/errno.h ]
+BNR2 file for reference
+[ ./ode/include/sys/file.h ]
+BNR2 file for reference
+[ ./ode/include/sys/param.h ]
+BNR2 file for reference
+[ ./ode/include/sys/resource.h ]
+BNR2 file for reference
+[ ./ode/include/sys/signal.h ]
+BNR2 file for reference
+[ ./ode/include/sys/stat.h ]
+BNR2 file for reference
+[ ./ode/include/sys/time.h ]
+BNR2 file for reference
+[ ./ode/include/sys/types.h ]
+BNR2 file for reference
+[ ./ode/include/sys/varargs.h ]
+BNR2 file for reference
+[ ./ode/include/sys/wait.h ]
+BNR2 file for reference
+[ ./ode/include/i386/Makefile ]
+BNR2 file for reference
+[ ./ode/setup/setvar.sh ]
+Converted from setvar.csh version 2.5 by Ian Dall
+[93/05/10            mrt]
+[ ./Makefile ]
+Added lib
+[93/04/13            mrt]
+[ ./ode/mk/osf.lib.mk ]
+Added rules to build profiled libraries.
+[93/05/08            mrt]
+
+Added a .ORDER target to LIBRARIES to keep multiple ranlibs
+from being done at the same time when multiple libraries
+are being built in one directory.
+[93/04/22            mrt]
+[ ./ode/mk/osf.mach3.mk ]
+Added definition for MONCRT0.
+Removed definition of PC535_ASCPP -from Ian Dall
+Dropped -g from the default CC_OPT_LEVEL
+Made the default CC_OPT_LEVEL conditional on NOT_USING_GCC2.
+Added CC_OPT_EXTRA to CC_OPT_LEVEL for additions.
+Dumped the -e __start flag from LDFLAGS.
+Added definitions of the profiling libraries.
+[93/04/01            mrt]
+[ ./ode/mk/osf.mach3.passes.mk ]
+Changed LIBRARIES to _LIBRARIES_ which may be LIBRARIES and/or
+LIBRARIES_P. Modified EXPORT_EXPLIB_TARGETS if PROFILING is defined
+[93/05/08            mrt]
+[ ./ode/mk/osf.obj.mk ]
+Added _OFILES_P_ for profiled objects.
+[93/05/10            mrt]
+[ ./ode/mk/osf.rules.mk ]
+Added LIBRARIES_P
+[93/05/09            mrt]
+[ ./ode/mk/osf.std.mk ]
+Changed LIBRARIES to _LIBRARIES_ which may include profiled 
+libraries.  If PROFILING is set, changed ILIST to release
+only the profiled libraries.
+[93/05/08            mrt]
+[ ./ode/setup/pmax_mach_X_alpha/setvar.csh ]
+Added definition of SIZE as asize
+Set DEF_MIGFLAGS to work with acpp
+Set ALPHA_ASFLAGS to -nocpp
+Added ALPHA_LDLIBS 
+Added -Dalpha to DEF_MIGFLAGS. At least machid.defs needs this.
+Defined NOT_USING_GCC2
+[93/03/22            mrt]
+[ ./ode/setup/alpha_osf1/setvar.csh ]
+Created by Michael Uhlenberg
+[93/04/30            mrt]
+[ ./ode/README ]
+updated
+[ ./ode/bin/makepath/makepath.c ]
+Removed unconditional include of strings.h. There was aleady
+a conditional one.
+[93/05/11            mrt]
+[ ./bin/xstrip/xstrip_aout.c ]
+Added include of sys/time.h since the BNR2 version of
+sys/resouce.h uses timeval but doesn't include sys/time.h.
+Removed include of sysent.h which does not exits on BNR2
+and is not needed on the mach systems.
+[93/05/12            mrt]
+[ ./ode/mk/osf.mach3.mk ]
+Added .S.s rule for old gcc. Added .s_p.o rule for profiled
+assembly. Removed .cs.o rule.
+[93/05/14            mrt]
+[ ./ode/mk/osf.lib.mk ]
+Moved .s_p.o rule to osf.mach3.mk along with the rest of
+the assembly rules.
+[93/05/14            mrt]
+[ ./ode/setup/setvar.csh ]
+Added to evaluation of progdir so it would work with BNR2
+expr program. Exported host_context. 
+[93/05/07            mrt]
+[ ./lib/alpha/libdivide/__divl.s ]
+Created
+[93/04/13            af]
+[ ./lib/alpha/libdivide/__divlu.s ]
+Created
+[93/04/13            af]
+[ ./lib/alpha/libdivide/__divq.s ]
+Created
+[93/04/13            af]
+[ ./lib/alpha/libdivide/__divqu.s ]
+Created
+[93/04/13            af]
+[ ./lib/alpha/libdivide/__reml.s ]
+Created
+[93/04/13            af]
+[ ./lib/alpha/libdivide/__remlu.s ]
+Created
+[93/04/13            af]
+[ ./lib/alpha/libdivide/__remq.s ]
+Created
+[93/04/13            af]
+[ ./lib/alpha/libdivide/__remqu.s ]
+Created
+[93/04/13            af]
+[ ./lib/alpha/libdivide/Makefile ]
+Created
+[93/04/13            mrt]
+[ ./lib/alpha/Makefile ]
+Created
+[93/04/13            mrt]
+[ ./lib/libdivide/Makefile ]
+Created,
+[93/05/20            mrt]
+[ ./lib/Makefile ]
+Created
+[93/04/13            mrt]
+[ ./ode/setup/pmax_mach_X_alpha/setvar.csh ]
+Corrected typo.
+[93/05/20            mrt]
+[ ./ode/mk/osf.mach3.mk ]
+Corrected the .s.o ruie for old gcc (.s -> .S -> .o)
+[93/05/19            mrt]
+[ ./ode/mk/osf.std.mk ]
+Silenced part of the export rule.
+[93/05/15            mrt]
+[ ./bin/xstrip/xstrip_aout.c ]
+Added include of sys/time.h since the BNR2 version of
+sys/resouce.h uses timeval but doesn't include sys/time.h.
+Removed include of sysent.h which does not exits on BNR2
+and is not needed on the mach systems.
+[93/05/12            mrt]
+[ ./ode/mk/osf.mach3.mk ]
+	Corrected the .s.o rule for old gcc (.s -> .S -> .o)
+Removed commented out LDFLAFS.
+Added -DBYTE_MSF for Sun3 so we don't have to depend on
+compiler defining this.
+[93/05/28            mrt]
+[ ./ode/include/sys/Makefile ]
+Drop the buildtools from IDIR.
+[93/06/01            mrt]
+[ ./ode/include/i386/Makefile ]
+Drop buildtools from IDIR.
+[93/06/01            mrt]
+[ ./ode/README ]
+Added include files
+[ ./ode/include/Makefile ]
+Changed IDIR to /include/.
+[93/06/01            mrt]
+[ ./ode/setup/i386_bnr/setvar.csh ]
+Updated setting of target_machine et al. Changed DEFPATH
+Defined NOT_USING_GCC2. Added -DMACH and -DCMU to DEF_CCFLAGS
+and DEF_MIGFLAGS.
+[93/05/07            mrt]
+[ ./ode/setup/alpha_mach/setvar.csh ]
+Set ALPHA_LD to ld 
+Set ALPHA_ASCPP to /usr/bin/cpp since gcc-cpp generates
+some code that the assembler can't parse.
+[93/05/20            mrt]
+[ ./gnu/gcc/cccp.c ]
+Changes for Ansi and removed bound on line_cmd_buffer.
+[93/04/07            danner]
+[ ./gnu/gcc/Makefile.in ]
+Made install of c++ and g++ ignorable.
+[92/12/16            danner]
+
+Added LIBGCCCC technology
+[92/12/15            danner]
+
+Added FLOAT_H target to make float.h. Should be set to null on 
+machines for which enquire is unsafe. Currently the luna and i386
+ are unsafe.
+[92/12/15            danner]
+[ ./gnu/gcc/config/alpha.md ]
+Use chopping when converting from floats to ints.
+Else many Unix programs will fail in subtle ways
+[93/04/13            af]
+[ ./gnu/gcc/cccp.c ]
+Changes for Ansi and removed bound on line_cmd_buffer.
+[93/04/07            danner]
+[ ./gnu/gcc/Makefile.in ]
+Made install of c++ and g++ ignorable.
+[92/12/16            danner]
+
+Added LIBGCCCC technology
+[92/12/15            danner]
+
+Added FLOAT_H target to make float.h. Should be set to null on 
+machines for which enquire is unsafe. Currently the luna and i386
+ are unsafe.
+[92/12/15            danner]
+[ ./gnu/bootstrap.csh ]
+Changed .sh suffixes to .csh.
+[93/04/22            mrt]
+    
+    
+    
+==========================================================================
+   ***** BUILDTOOLS Version BUILDTOOLS3  (mrt) *****
+    
+    
+This release fixes a few minor bugs in compiling under a native
+BNR/Jolitz environment and the externally released Mach i386 
+environment. 
+
+There are two problems that still exist in these environments:
+
+The Jolitz BNR 1.0 version of csh does not always run the setvar
+script correctly. I have been using tcsh to get around the problem,
+but calling the script with arguments seems to help or adding blank
+lines.
+
+In the Mach i386 environment, the tar rule for moving include files around
+frequently gets and error 141 which turns out to be caused by a broken pipe.
+The files have been sucessfully copied, so runing the mk/include section
+of the make with the -k switch to ignore the errors works fine. Once the
+include files have been put in the export directory, everything should run
+smoothly.
+
+<Replace this text with any special information of interest for this version.>
+
+******** CUT HERE ******** summary of log messages ******** CUT HERE ********
+[ ./conf/version.edit ]
+3
+[ ./bin/Makefile ]
+Added bnrutils to SUBDIRS for builds on a native
+BNR environment.
+[93/06/14            mrt]
+[ ./bin/bnrutils/Makefile ]
+Created.
+[93/06/14            mrt]
+[ ./ode/bin/make/BSDARCH/arch_fmtdep.c ]
+Fixed fence-post error in ArchReadMember.
+[93/06/14            mrt]
+[ ./ode/mk/osf.mach3.mk ]
+Removed the check for NOT_USING_GCC2 from .o.s rule.
+The .s => .S could be used for other platforms as well
+if the include "" in .s files were changed to <>.
+[93/06/10            mrt]
+[ ./ode/setup/setvar.csh ]
+Added code to create all the top-level object directories
+Made definition of OWNER and GROUP conditional so it could
+be overidden by the context dependent scripts.
+[93/06/15            mrt]
+
+Added the local release directory to MAKESYSPATH and INCDIRS.
+Added a fix to create the export/../special directory.
+[93/06/10  14:46:07  mrt]
+[ ./ode/bin/make/BSDARCH/arch_fmtdep.c ]
+Fixed fence-post error in ArchReadMember.
+[93/06/17            mrt]
+[ ./ode/bin/release/Makefile ]
+Force /usr/include and /usr/cs/include to front of search path.
+the sys/exec.h that the Mach Unix server exports conflicts with
+the standard a.out.h for coff machines.
+[93/06/16            mrt]
+    
+    
+    
+==========================================================================
+   ***** BUILDTOOLS Version BUILDTOOLS4  (mrt) *****
+    
+    
+New features:
+--- --------
+  Added setup script for building on a DecStation running
+Ultrix
+
+  Defned new profiling library LIBPROF1 in the mk rules
+
+
+******** CUT HERE ******** summary of log messages ******** CUT HERE ********
+[ ./conf/version.edit ]
+4
+[ ./ode/mk/osf.mach3.mk ]
+Defined new profiling library, LIBPROF1 (libprof1.a)
+[93/07/20  15:24:15  bershad]
+[ ./ode/setup/Makefile ]
+Added pmax_ultrix to PMAX_SUBDIRS.
+[93/07/06            mrt]
+[ ./ode/setup/pmax_ultrix/setup.sh ]
+Copied this file from pmax_mach
+[93/07/07            mrt]
+[ ./ode/setup/pmax_ultrix/setvar.csh ]
+Copied the pmax_mach file and modified it.
+[93/07/07            mrt]
+[ ./ode/setup/setup.sh ]
+Added a rm of setup.sh before the copy.
+[93/08/01            mrt]
+[ ./bin/xstrip/xstrip_mips.c ]
+	Removed include of sysent.h because Ultrix does not have one.
+[93/08/02            mrt]
+[ ./ode/setup/pmax_ultrix/Makefile ]
+Created.
+[93/08/01            mrt]

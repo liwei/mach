@@ -1,0 +1,189 @@
+# 
+# Mach Operating System
+# Copyright (c) 1994,1993,1992,1991,1990,1989,1988 Carnegie Mellon University
+# All Rights Reserved.
+# 
+# Permission to use, copy, modify and distribute this software and its
+# documentation is hereby granted, provided that both the copyright
+# notice and this permission notice appear in all copies of the
+# software, derivative works or modified versions, and any portions
+# thereof, and that both notices appear in supporting documentation.
+# 
+# CARNEGIE MELLON ALLOWS FREE USE OF THIS SOFTWARE IN ITS "AS IS"
+# CONDITION.  CARNEGIE MELLON DISCLAIMS ANY LIABILITY OF ANY KIND FOR
+# ANY DAMAGES WHATSOEVER RESULTING FROM THE USE OF THIS SOFTWARE.
+# 
+# Carnegie Mellon requests users of this software to return to
+# 
+#  Software Distribution Coordinator   or   Software.Distribution@CS.CMU.EDU
+#  School of Computer Science
+#  Carnegie Mellon University
+#  Pittsburgh PA 15213-3890
+# 
+# any improvements or extensions that they made and grant Carnegie Mellon the
+# rights to redistribute these changes.
+#
+#
+#
+# Purpose:
+#	syscalls for emulation of bsd unix
+#
+# HISTORY: 
+# $Log:	bsd_emul_all,v $
+#Revision 2.9  94/07/08  16:56:06  mrt
+#	Updated copyrights.
+#
+#Revision 2.8  91/07/01  14:06:20  jms
+#	Added gettimeofday and getrusage.
+#	[91/06/16  20:56:29  dpj]
+#
+#Revision 2.7  90/12/10  09:49:04  jms
+#	 Added smmap and munmap entries.
+#	[90/11/20  11:03:27  neves]
+#	Merge for Paul Neves of neves_US31
+#	[90/12/06  17:37:45  jms]
+#
+#Revision 2.6  90/11/27  18:17:20  jms
+#	Add: getpagesize (hack) and osigcleanup syscalls entries
+#	[90/11/20  13:10:17  jms]
+#
+#Revision 2.5  90/11/10  00:37:49  dpj
+#		Added readv, writev, and utimes entires.
+#	[90/10/24  14:21:51  neves]
+#
+#	Added fchmod and fchown entries.
+#	[90/10/17  12:34:55  neves]
+#
+#Revision 2.4  90/08/13  15:43:59  jjc
+#		Added {get,set}itimer.
+#		Uncommented out osigcleanup.
+#	[90/07/23            jjc]
+#
+#Revision 2.3  90/07/09  17:01:31  dorr
+#	add:
+#	 sigvec
+#	 sigstack
+#	 sigreturn
+#	 osigcleanup
+#	 
+#	[90/02/23  14:38:01  dorr]
+#
+#	add kill.  more to come.
+#	[90/01/11  11:26:43  dorr]
+#	Add sigXXX, kill, and getdirentries emulations.
+#	[90/07/06  13:50:03  jms]
+#
+#Revision 2.2  90/01/02  21:30:57  dorr
+#	initial version.
+#
+#Revision 2.1.1.1  89/12/19  17:15:49  dorr
+#	initial version
+#
+#Revision 2.1.1.1  89/12/18  16:01:38  dorr
+#	initial checkin.
+#
+#
+
+#	General purpose syscalls
+fork
+execv
+obreak
+execve
+vfork
+sbrk
+getpagesize
+
+#	I/O syscalls
+rexit
+read
+readv
+write
+writev
+open
+close
+creat
+ostat
+lseek
+dup
+pipe
+ioctl
+umask
+fstat
+dup2
+getdtablesize
+fcntl
+select
+ftruncate
+utimes
+smmap
+munmap
+
+
+#	Name Space Syscalls
+link
+unlink
+chdir
+chmod
+chown
+fchmod
+fchown
+access
+stat
+lstat
+symlink
+readlink
+rename
+truncate
+mkdir
+rmdir
+
+#	Socket syscalls
+socket
+connect
+accept
+send
+recv
+bind
+setsockopt
+listen
+recvmsg
+sendmsg
+getsockopt
+recvfrom
+sendto
+shutdown
+socketpair
+getpeername
+getsockname
+
+
+#	Uid, signal and process group syscalls
+getpid
+getpgrp
+setpgrp
+kill
+killpg
+getuid
+getgid
+setreuid
+setregid
+getgroups
+setgroups 
+
+kill
+sigvec
+sigstack
+sigsetmask
+sigreturn
+sigblock
+sigpause
+osigcleanup
+
+wait
+getdirentries
+
+#	Timing and statistics
+getitimer
+setitimer
+gettimeofday
+getrusage
